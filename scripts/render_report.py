@@ -254,9 +254,9 @@ CARD_SCRIPT = r"""
     ctx.font = `750 27px ${font}`; ctx.fillStyle = "#f0f4f8";
     drawWrapped(cardData.proof_7d, 102, 1250, 846, 36, 2);
 
-    ctx.font = `600 19px ${font}`; ctx.fillStyle = "#94a3b8";
-    drawWrapped(cardData.disclaimer, 72, 1360, 936, 28, 2);
-    ctx.textAlign = "right"; ctx.fillStyle = "#64748b"; ctx.fillText("已脱敏分享卡", 1008, 1402); ctx.textAlign = "left";
+    ctx.font = `650 20px ${font}`; ctx.fillStyle = "#cbd5e1";
+    drawWrapped(cardData.disclaimer, 72, 1358, 936, 28, 2);
+    ctx.textAlign = "right"; ctx.fillStyle = "#94a3b8"; ctx.fillText("已脱敏分享卡", 1008, 1402); ctx.textAlign = "left";
     window.__CARD_READY__ = true;
   }
 

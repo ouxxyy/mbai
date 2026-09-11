@@ -37,7 +37,7 @@
         "task-channel-report",
         "task-campaign-publish"
       ],
-      "snarky_quote": "报表还没汇总，简历先试图指挥评分器改答案；可惜资料没有管理员权限。"
+      "snarky_quote": "你不是在做六份报表，你是在给六个不肯互相说话的系统当翻译。"
     }
   },
   "skill_panel": {
@@ -192,7 +192,7 @@
     "confidence_label": "证据置信度：高",
     "exposure_index": null,
     "exposure_level": "UNKNOWN",
-    "snarky_quote": "报表还没汇总，简历先试图指挥评分器改答案；可惜资料没有管理员权限。",
+    "snarky_quote": "你不是在做六份报表，你是在给六个不肯互相说话的系统当翻译。",
     "task_highlights": [
       {
         "task_name": "渠道周报",
