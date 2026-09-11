@@ -1,6 +1,6 @@
 ---
 name: ai-task-exposure
-description: 基于中文简历具体任务生成“工作任务 AI 暴露指数”职业诊断、离线 HTML 报告与脱敏 PNG 分享卡。用户提供 PDF、DOCX、文字简历，询问 AI 替代风险、岗位风险、职业诊断或能力升级时使用。
+description: 基于中文简历具体任务生成“工作任务 AI 替代指数”职业诊断、离线 HTML 报告与脱敏 PNG 分享卡。用户提供 PDF、DOCX、文字简历，询问 AI 替代风险、岗位风险、职业诊断或能力升级时使用。
 compatibility: Claude Code 2.1.196+；macOS Apple Silicon；Python 3.11+；文字型 PDF 需要系统 Swift/PDFKit；命令行 PNG 需要 Chrome，HTML 内仍可纯离线导出。
 allowed-tools: Read, Write, Bash, AskUserQuestion
 metadata:
@@ -8,9 +8,9 @@ metadata:
   language: zh-CN
 ---
 
-# 工作任务 AI 暴露指数
+# 工作任务 AI 替代指数
 
-把这项工作当作有趣但严肃的任务级职业诊断。指标是本工具自建解释性评分，不是失业概率、个人价值评价或研究机构预测。
+把这项工作当作有趣但严肃的任务级职业诊断。指标是本工具自建解释性评分，不是失业概率或裁员预测、个人价值评价或研究机构认证。
 
 ## 不可违反
 
@@ -95,4 +95,3 @@ python3 "${CLAUDE_SKILL_DIR}/scripts/build_report.py" --draft "<draft.json>" --o
 - 实际运行过的命令与验证结果。
 
 不要在聊天中回显完整简历、隐私实体清单或隐藏分析过程。
-

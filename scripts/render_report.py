@@ -207,7 +207,7 @@ CARD_SCRIPT = r"""
     ctx.fillStyle = glow; ctx.fillRect(500, 0, 580, 520);
 
     ctx.font = `700 24px ${font}`; ctx.fillStyle = "#38bdf8";
-    ctx.fillText("WORK TASK // AI EXPOSURE", 72, 72);
+    ctx.fillText("WORK TASK // AI REPLACEMENT", 72, 72);
     ctx.font = `500 22px ${font}`; ctx.fillStyle = "#94a3b8";
     ctx.textAlign = "right"; ctx.fillText(cardData.category, 1008, 72); ctx.textAlign = "left";
 
@@ -223,7 +223,7 @@ CARD_SCRIPT = r"""
 
     roundedRect(72, 326, 936, 230, 26, "rgba(24,32,44,.94)", "#2a3649");
     ctx.font = `800 24px ${font}`; ctx.fillStyle = "#94a3b8";
-    ctx.fillText("工作任务 AI 暴露指数", 112, 378);
+    ctx.fillText("工作任务 AI 替代指数", 112, 378);
     const indexText = cardData.exposure_index === null ? "信息不足" : String(cardData.exposure_index);
     ctx.font = cardData.exposure_index === null ? `900 74px ${font}` : `900 134px ${font}`;
     ctx.fillStyle = accent; ctx.fillText(indexText, 110, cardData.exposure_index === null ? 480 : 505);
@@ -291,7 +291,7 @@ SKILL_LABELS = {
     "accountability": "责任承担",
 }
 ACTION_LABELS = {"hand_to_ai": "交给 AI", "level_up": "强化自己", "proof_7d": "拿出证据"}
-LEVEL_LABELS = {"LOW": "低暴露", "MEDIUM": "中暴露", "HIGH": "高暴露", "UNKNOWN": "未知"}
+LEVEL_LABELS = {"LOW": "低替代", "MEDIUM": "中替代", "HIGH": "高替代", "UNKNOWN": "未知"}
 
 
 def _e(value: Any) -> str:
@@ -404,7 +404,7 @@ def render_report(report: dict[str, Any]) -> str:
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="color-scheme" content="dark">
-  <title>{_e(role['name'])}｜工作任务 AI 暴露指数</title>
+  <title>{_e(role['name'])}｜工作任务 AI 替代指数</title>
   <style>{STYLE}</style>
 </head>
 <body>
@@ -418,7 +418,7 @@ def render_report(report: dict[str, Any]) -> str:
           <div class="tags">{tags}</div>
         </div>
         <div class="metric" data-exposure-index="{_e(index_attr)}">
-          <div class="metric-label">工作任务 AI 暴露指数</div>
+          <div class="metric-label">工作任务 AI 替代指数</div>
           <div class="metric-value level-{level.lower()}" aria-label="{_e(metric_aria)}">{metric_value}</div>
           <span class="badge level-{level.lower()}">{_e(LEVEL_LABELS[level])}</span>
           <div class="confidence">证据置信度：{_e(metadata['confidence_level'])}<br>{_e(metadata['confidence_reason'])}</div>
@@ -429,7 +429,7 @@ def render_report(report: dict[str, Any]) -> str:
         <div class="takeaway"><strong>你仍然值钱的地方</strong><p>{_e(edge_text)}</p></div>
       </div>
       <blockquote class="quote">“{_e(role['snarky_quote'])}”</blockquote>
-      <p class="declaration">工作任务 AI 暴露指数自测 · 基于具体任务证据 · 本工具自建规则 · 不是失业概率预测</p>
+      <p class="declaration">工作任务 AI 替代指数自测 · 本工具自建解释性评分 · 不是失业概率或裁员预测 · 非机构认证</p>
     </section>
 
     <section id="skill-panel">

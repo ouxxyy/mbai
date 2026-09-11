@@ -17,7 +17,7 @@ from scripts.validate_report import ReportValidationError, assert_valid_report
 
 
 DEFAULT_METHODOLOGY = {
-    "custom_rules_disclaimer": "工作任务 AI 暴露指数采用本工具自建解释性规则，不是失业概率，也不是研究机构对个人的预测或认证。",
+    "custom_rules_disclaimer": "“工作任务 AI 替代指数”是本工具自建的解释性评分：不是失业概率或裁员预测，也不是研究机构对个人的预测或认证。",
     "sources": [
         {
             "organization": "ILO",

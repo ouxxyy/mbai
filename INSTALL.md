@@ -18,7 +18,7 @@ Claude Code 会从个人目录 `~/.claude/skills/<skill-name>/SKILL.md` 或项�
 /ai-task-exposure /absolute/path/to/resume.pdf
 ```
 
-也可以直接说“用这份简历做工作任务 AI 暴露指数诊断”。
+也可以直接说“用这份简历做工作任务 AI 替代指数诊断”。
 
 ## 项目内安装
 
@@ -39,4 +39,3 @@ swift --version
 ```
 
 最低要求是 Python 3.11。macOS 文字 PDF 解析依赖系统 PDFKit/Swift；没有 Chrome 时 HTML 仍能离线阅读并通过页面按钮导出分享卡，但命令行不会假装已经生成 PNG。
-

@@ -33,7 +33,7 @@ def find_ocr_privacy_leaks(text: str, privacy_entities: list[str]) -> list[str]:
 def assert_ocr_meaningful(text: str, share_card: dict) -> None:
     normalized = re.sub(r"\s+", "", text).casefold()
     role = re.sub(r"\s+", "", str(share_card.get("role_name", ""))).casefold()
-    marker = "工作任务ai暴露指数"
+    marker = "工作任务ai替代指数"
     if len(normalized) < 10 or (role not in normalized and marker not in normalized):
         raise OcrVerificationError("PNG OCR 未识别出角色或指标标题，拒绝将空扫描视为隐私通过")
 
