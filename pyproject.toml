@@ -1,0 +1,9 @@
+[project]
+name = "ai-task-exposure-skill"
+version = "0.1.0"
+description = "Claude Code skill for a task-level AI exposure self-assessment"
+requires-python = ">=3.11"
+dependencies = []
+
+[tool.unittest]
+start-directory = "tests"
