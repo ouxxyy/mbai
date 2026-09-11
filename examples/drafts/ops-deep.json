@@ -1,0 +1,211 @@
+{
+  "schema_version": "1.0.0",
+  "rule_version": "1.0.0",
+  "report_metadata": {
+    "report_id": "ops-deep",
+    "generated_at": "2026-09-11T20:00:00+08:00",
+    "confidence_level": "HIGH",
+    "confidence_reason": "同岗位明确提供策略判断、资源协调和留存责任。",
+    "questions_asked": [
+      "活动策略和执行各占多少时间？",
+      "资源冲突与留存目标由谁负责？"
+    ],
+    "questions_skipped": false
+  },
+  "source": {
+    "input_type": "TEXT",
+    "input_name": "ops-deep.txt",
+    "privacy_entities": [
+      "苏然",
+      "澄海社区服务有限公司",
+      "澄海社区"
+    ],
+    "extraction_status": "OK"
+  },
+  "profile": {
+    "sanitized_category": "互联网 / 用户运营",
+    "role": {
+      "code": "COORDINATION_TRANSLATOR",
+      "name": "多方协同译码员",
+      "tags": [
+        "策略判断",
+        "目标负责"
+      ],
+      "source_task_ids": [
+        "task-strategy",
+        "task-resource-conflict"
+      ],
+      "snarky_quote": "同样叫用户运营，一个在点发布，一个要在留存掉下去前决定今天到底推不推。"
+    }
+  },
+  "skill_panel": {
+    "execution": {
+      "score": 75,
+      "evidence": "任务流程与数字化交付证据：活动配置与常规复盘、制定分群与触达策略",
+      "is_known": true,
+      "source_task_ids": [
+        "task-campaign-review",
+        "task-strategy"
+      ]
+    },
+    "discretion": {
+      "score": 83,
+      "evidence": "模糊情境中的判断证据：活动配置与常规复盘、制定分群与触达策略",
+      "is_known": true,
+      "source_task_ids": [
+        "task-campaign-review",
+        "task-strategy",
+        "task-resource-conflict"
+      ]
+    },
+    "coordination": {
+      "score": 75,
+      "evidence": "跨角色协调证据：制定分群与触达策略、协调资源冲突并承担留存目标",
+      "is_known": true,
+      "source_task_ids": [
+        "task-strategy",
+        "task-resource-conflict"
+      ]
+    },
+    "accountability": {
+      "score": 83,
+      "evidence": "结果责任证据：活动配置与常规复盘、制定分群与触达策略",
+      "is_known": true,
+      "source_task_ids": [
+        "task-campaign-review",
+        "task-strategy",
+        "task-resource-conflict"
+      ]
+    }
+  },
+  "tasks": [
+    {
+      "task_id": "task-campaign-review",
+      "task_name": "活动配置与常规复盘",
+      "time_share_percent": 35,
+      "exposure_level": "HIGH",
+      "ai_can_do": "生成配置、汇总常规指标和复盘初稿。",
+      "human_must_do": "核对异常和发布口径。",
+      "evidence": "负责活动配置与常规复盘。",
+      "reason": "常规部分规则稳定且数字化。",
+      "confidence": "HIGH",
+      "signals": {
+        "judgment": 1,
+        "coordination": 0,
+        "physical_presence": 0,
+        "accountability": 1,
+        "repeatability": 2,
+        "digital_input_output": 2
+      }
+    },
+    {
+      "task_id": "task-strategy",
+      "task_name": "制定分群与触达策略",
+      "time_share_percent": 35,
+      "exposure_level": "MEDIUM",
+      "ai_can_do": "分析分群、提出策略候选并模拟指标。",
+      "human_must_do": "结合实验语境决定触达节奏。",
+      "evidence": "根据用户分群和历史实验结果制定活动策略，决定触达节奏。",
+      "reason": "AI 可辅助分析，但策略取舍依赖业务判断。",
+      "confidence": "HIGH",
+      "signals": {
+        "judgment": 2,
+        "coordination": 1,
+        "physical_presence": 0,
+        "accountability": 2,
+        "repeatability": 1,
+        "digital_input_output": 2
+      }
+    },
+    {
+      "task_id": "task-resource-conflict",
+      "task_name": "协调资源冲突并承担留存目标",
+      "time_share_percent": 30,
+      "exposure_level": "LOW",
+      "ai_can_do": "整理依赖和备选方案。",
+      "human_must_do": "协调产品、客服与市场，调整方案并对目标负责。",
+      "evidence": "资源冲突时协调产品、客服与市场，调整方案并对留存目标负责。",
+      "reason": "核心是跨团队博弈与结果责任。",
+      "confidence": "HIGH",
+      "signals": {
+        "judgment": 2,
+        "coordination": 2,
+        "physical_presence": 0,
+        "accountability": 2,
+        "repeatability": 0,
+        "digital_input_output": 1
+      }
+    }
+  ],
+  "human_edge": [
+    {
+      "summary": "能把用户证据、资源现实和留存责任放进同一个策略决定。",
+      "source_task_ids": [
+        "task-strategy",
+        "task-resource-conflict"
+      ]
+    }
+  ],
+  "action_plan": {
+    "hand_to_ai": {
+      "title": "把常规复盘交给 AI",
+      "action": "自动汇总指标、生成初稿并标出异常分群。",
+      "deliverable": "复盘初稿 + 异常清单",
+      "acceptance_criteria": "所有数字可追溯，人工只处理解释和策略。",
+      "human_checkpoint": "发布前确认实验口径与异常原因。",
+      "grounded_evidence": "已有活动配置与复盘任务。",
+      "source_task_ids": [
+        "task-campaign-review"
+      ]
+    },
+    "level_up": {
+      "title": "强化策略取舍记录",
+      "action": "为三次触达决定写用户证据、资源约束和目标预期。",
+      "deliverable": "三张策略决策卡",
+      "acceptance_criteria": "每张含至少两个备选方案和结果回看。",
+      "human_checkpoint": "区分相关性、假设和已验证结果。",
+      "grounded_evidence": "已有分群策略和节奏决定经验。",
+      "source_task_ids": [
+        "task-strategy"
+      ]
+    },
+    "proof_7d": {
+      "title": "做一份分群策略作品",
+      "action": "用虚构数据设计触达实验并说明资源冲突处理。",
+      "deliverable": "实验方案 + 分群表 + 决策说明",
+      "acceptance_criteria": "7 天内含假设、样本、指标、停损线和资源方案。",
+      "human_checkpoint": "所有数据与组织名称均虚构。",
+      "grounded_evidence": "来自策略与资源协调经历。",
+      "source_task_ids": [
+        "task-strategy",
+        "task-resource-conflict"
+      ]
+    }
+  },
+  "share_card": {
+    "category": "互联网 / 用户运营",
+    "role_name": "多方协同译码员",
+    "role_tags": [
+      "策略判断",
+      "目标负责"
+    ],
+    "confidence_label": "证据置信度：高",
+    "exposure_index": null,
+    "exposure_level": "UNKNOWN",
+    "snarky_quote": "同样叫用户运营，一个在点发布，一个要在留存掉下去前决定今天到底推不推。",
+    "task_highlights": [
+      {
+        "task_name": "活动复盘",
+        "ai_part": "汇总指标与初稿",
+        "human_part": "确认异常和口径"
+      },
+      {
+        "task_name": "触达策略",
+        "ai_part": "分析分群与模拟方案",
+        "human_part": "决定节奏并承担留存目标"
+      }
+    ],
+    "proof_7d": "实验方案 + 分群表 + 决策说明；7 天内含假设、样本、指标、停损线和资源方案。",
+    "disclaimer": "本卡反映工作任务与 AI 能力的重合度，不是个人失业概率。"
+  }
+}

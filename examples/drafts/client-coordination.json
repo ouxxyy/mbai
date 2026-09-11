@@ -1,0 +1,213 @@
+{
+  "schema_version": "1.0.0",
+  "rule_version": "1.0.0",
+  "report_metadata": {
+    "report_id": "client-coordination",
+    "generated_at": "2026-09-11T20:00:00+08:00",
+    "confidence_level": "HIGH",
+    "confidence_reason": "材料、访谈和范围协商均有占比与责任边界。",
+    "questions_asked": [
+      "会前材料与客户协商各占多少时间？",
+      "范围与时间承诺由谁确认？"
+    ],
+    "questions_skipped": false
+  },
+  "source": {
+    "input_type": "TEXT",
+    "input_name": "client-coordination.txt",
+    "privacy_entities": [
+      "顾宁",
+      "远帆软件服务有限公司",
+      "远帆软件",
+      "西桥大学",
+      "松林制造",
+      "罗盘续约"
+    ],
+    "extraction_status": "OK"
+  },
+  "profile": {
+    "sanitized_category": "企业服务 / 客户成功",
+    "role": {
+      "code": "COORDINATION_TRANSLATOR",
+      "name": "多方协同译码员",
+      "tags": [
+        "需求翻译",
+        "冲突协商"
+      ],
+      "source_task_ids": [
+        "task-stakeholder-interview",
+        "task-scope-negotiate"
+      ],
+      "snarky_quote": "会议纪要能自动生成，但‘大家都同意’和‘大家只是没反对’还得你来分。"
+    }
+  },
+  "skill_panel": {
+    "execution": {
+      "score": 100,
+      "evidence": "任务流程与数字化交付证据：汇总客户复盘材料",
+      "is_known": true,
+      "source_task_ids": [
+        "task-review-material"
+      ]
+    },
+    "discretion": {
+      "score": 83,
+      "evidence": "模糊情境中的判断证据：汇总客户复盘材料、访谈并识别流程冲突",
+      "is_known": true,
+      "source_task_ids": [
+        "task-review-material",
+        "task-stakeholder-interview",
+        "task-scope-negotiate"
+      ]
+    },
+    "coordination": {
+      "score": 100,
+      "evidence": "跨角色协调证据：访谈并识别流程冲突、协商交付范围与时间",
+      "is_known": true,
+      "source_task_ids": [
+        "task-stakeholder-interview",
+        "task-scope-negotiate"
+      ]
+    },
+    "accountability": {
+      "score": 67,
+      "evidence": "结果责任证据：汇总客户复盘材料、访谈并识别流程冲突",
+      "is_known": true,
+      "source_task_ids": [
+        "task-review-material",
+        "task-stakeholder-interview",
+        "task-scope-negotiate"
+      ]
+    }
+  },
+  "tasks": [
+    {
+      "task_id": "task-review-material",
+      "task_name": "汇总客户复盘材料",
+      "time_share_percent": 25,
+      "exposure_level": "HIGH",
+      "ai_can_do": "自动汇总使用数据并生成固定结构材料。",
+      "human_must_do": "确认异常解释与可公开口径。",
+      "evidence": "会前汇总使用数据并生成固定复盘材料。",
+      "reason": "固定数字材料适合自动化。",
+      "confidence": "HIGH",
+      "signals": {
+        "judgment": 1,
+        "coordination": 0,
+        "physical_presence": 0,
+        "accountability": 1,
+        "repeatability": 2,
+        "digital_input_output": 2
+      }
+    },
+    {
+      "task_id": "task-stakeholder-interview",
+      "task_name": "访谈并识别流程冲突",
+      "time_share_percent": 35,
+      "exposure_level": "LOW",
+      "ai_can_do": "准备访谈提纲、转写和聚类观点。",
+      "human_must_do": "识别各部门未明说的利益与真实约束。",
+      "evidence": "访谈多个部门，识别表面需求背后的流程冲突。",
+      "reason": "核心来自关系、情境和对矛盾信息的判断。",
+      "confidence": "HIGH",
+      "signals": {
+        "judgment": 2,
+        "coordination": 2,
+        "physical_presence": 1,
+        "accountability": 1,
+        "repeatability": 0,
+        "digital_input_output": 1
+      }
+    },
+    {
+      "task_id": "task-scope-negotiate",
+      "task_name": "协商交付范围与时间",
+      "time_share_percent": 40,
+      "exposure_level": "LOW",
+      "ai_can_do": "列出方案、依赖和谈判准备材料。",
+      "human_must_do": "处理冲突、交换承诺并确认双方责任。",
+      "evidence": "在客户、销售和交付意见冲突时协商范围与时间，最终确认双方承诺。",
+      "reason": "多方博弈和承诺责任不能直接交给 AI。",
+      "confidence": "HIGH",
+      "signals": {
+        "judgment": 2,
+        "coordination": 2,
+        "physical_presence": 1,
+        "accountability": 2,
+        "repeatability": 0,
+        "digital_input_output": 1
+      }
+    }
+  ],
+  "human_edge": [
+    {
+      "summary": "能识别不同部门口中的同一个词其实指向不同利益，并把冲突变成可执行承诺。",
+      "source_task_ids": [
+        "task-stakeholder-interview",
+        "task-scope-negotiate"
+      ]
+    }
+  ],
+  "action_plan": {
+    "hand_to_ai": {
+      "title": "把会前材料交给 AI",
+      "action": "用脱敏数据生成客户复盘初稿和异常问题清单。",
+      "deliverable": "复盘初稿 + 追问清单",
+      "acceptance_criteria": "数据有来源，所有异常都标记待人工确认。",
+      "human_checkpoint": "不让 AI 推断客户情绪或续约意愿。",
+      "grounded_evidence": "已有固定复盘材料任务。",
+      "source_task_ids": [
+        "task-review-material"
+      ]
+    },
+    "level_up": {
+      "title": "训练利益冲突地图",
+      "action": "每次访谈后分别记录诉求、约束、筹码和不可退让项。",
+      "deliverable": "一张三方冲突地图",
+      "acceptance_criteria": "至少覆盖客户、销售、交付三方及两个可交换条件。",
+      "human_checkpoint": "用事实区分明确表达与个人推测。",
+      "grounded_evidence": "已有多部门访谈和协商经验。",
+      "source_task_ids": [
+        "task-stakeholder-interview",
+        "task-scope-negotiate"
+      ]
+    },
+    "proof_7d": {
+      "title": "做一份范围谈判案例",
+      "action": "用虚构场景呈现从分歧到承诺的完整过程。",
+      "deliverable": "6 页案例演示稿",
+      "acceptance_criteria": "7 天内包含冲突、两个方案、交换条件和最终承诺表。",
+      "human_checkpoint": "所有组织和项目名称使用类别词。",
+      "grounded_evidence": "源于范围与时间协商责任。",
+      "source_task_ids": [
+        "task-scope-negotiate"
+      ]
+    }
+  },
+  "share_card": {
+    "category": "企业服务 / 客户成功",
+    "role_name": "多方协同译码员",
+    "role_tags": [
+      "需求翻译",
+      "冲突协商"
+    ],
+    "confidence_label": "证据置信度：高",
+    "exposure_index": null,
+    "exposure_level": "UNKNOWN",
+    "snarky_quote": "会议纪要能自动生成，但‘大家都同意’和‘大家只是没反对’还得你来分。",
+    "task_highlights": [
+      {
+        "task_name": "复盘材料",
+        "ai_part": "汇总数据与生成初稿",
+        "human_part": "确认异常解释"
+      },
+      {
+        "task_name": "范围协商",
+        "ai_part": "列方案与依赖",
+        "human_part": "处理冲突并确认承诺"
+      }
+    ],
+    "proof_7d": "6 页案例演示稿；7 天内包含冲突、两个方案、交换条件和最终承诺表。",
+    "disclaimer": "本卡反映工作任务与 AI 能力的重合度，不是个人失业概率。"
+  }
+}

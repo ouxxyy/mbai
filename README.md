@@ -6,7 +6,7 @@
 
 ## 当前状态
 
-分析规则与中间数据接口已冻结；实现代码将在该契约之上逐项补齐。渲染器只能消费结构化结果，不得重新推断分数、角色或行动建议。
+分析规则与中间数据接口冻结为 1.0.0。确定性评分、三类输入解析、语义/隐私门禁、离线 HTML、Canvas 分享卡和 Chrome PNG 导出已经实现；渲染器只能消费结构化结果，不得重新推断分数、角色或行动建议。
 
 ## 技术与目录
 
@@ -23,7 +23,7 @@
 
 ## 安装与命令
 
-依赖安装、报告生成、完整验收命令会随实现一并补入。目前可运行：
+安装与测试：
 
 ```bash
 python3 -m venv .venv
@@ -31,7 +31,19 @@ python3 -m venv .venv
 python3 -m unittest discover -s tests -v
 ```
 
-当前未配置 Lint、独立类型检查、部署或 CI。首版不建设在线网站。
+从 Claude 生成的 draft JSON 构建全套产物：
+
+```bash
+python3 -m scripts.build_report --draft path/to/draft.json --output-dir path/to/output
+```
+
+仅重渲染最终 JSON：
+
+```bash
+python3 -m scripts.render_report --input path/to/report.json --output path/to/report.html
+```
+
+当前未配置第三方 Lint、独立类型检查、部署或 CI；`compileall` 与完整 `unittest` 用于基础验证。首版不建设在线网站。
 
 ## 已知边界
 

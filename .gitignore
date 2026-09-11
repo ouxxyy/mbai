@@ -6,6 +6,7 @@ __pycache__/
 *.py[cod]
 *.log
 .coverage
+.debug/
 htmlcov/
 build/
 dist/
@@ -16,4 +17,3 @@ dist/
 *.key
 examples/output/
 docs/acceptance/artifacts/
-

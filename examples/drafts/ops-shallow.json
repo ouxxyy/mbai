@@ -1,0 +1,179 @@
+{
+  "schema_version": "1.0.0",
+  "rule_version": "1.0.0",
+  "report_metadata": {
+    "report_id": "ops-shallow",
+    "generated_at": "2026-09-11T20:00:00+08:00",
+    "confidence_level": "HIGH",
+    "confidence_reason": "明确说明全部任务按模板执行且不承担策略和结果。",
+    "questions_asked": [
+      "是否负责活动策略或异常处理？"
+    ],
+    "questions_skipped": false
+  },
+  "source": {
+    "input_type": "TEXT",
+    "input_name": "ops-shallow.txt",
+    "privacy_entities": [
+      "唐宁",
+      "逐浪社区有限公司",
+      "逐浪社区"
+    ],
+    "extraction_status": "OK"
+  },
+  "profile": {
+    "sanitized_category": "互联网 / 用户运营",
+    "role": {
+      "code": "FLOW_ORCHESTRATOR",
+      "name": "流程编排员",
+      "tags": [
+        "模板执行",
+        "固定复盘"
+      ],
+      "source_task_ids": [
+        "task-template-campaign",
+        "task-fixed-review"
+      ],
+      "snarky_quote": "岗位名里有‘运营’，实际每天做的是给模板按时续命。"
+    }
+  },
+  "skill_panel": {
+    "execution": {
+      "score": 100,
+      "evidence": "任务流程与数字化交付证据：按模板配置活动与推送、生成固定活动复盘表",
+      "is_known": true,
+      "source_task_ids": [
+        "task-template-campaign",
+        "task-fixed-review"
+      ]
+    },
+    "discretion": {
+      "score": null,
+      "evidence": "简历未提及",
+      "is_known": false,
+      "source_task_ids": []
+    },
+    "coordination": {
+      "score": null,
+      "evidence": "简历未提及",
+      "is_known": false,
+      "source_task_ids": []
+    },
+    "accountability": {
+      "score": null,
+      "evidence": "简历未提及",
+      "is_known": false,
+      "source_task_ids": []
+    }
+  },
+  "tasks": [
+    {
+      "task_id": "task-template-campaign",
+      "task_name": "按模板配置活动与推送",
+      "time_share_percent": 60,
+      "exposure_level": "HIGH",
+      "ai_can_do": "按规则生成配置、排期并执行常规检查。",
+      "human_must_do": "确认权限及将异常升级给主管。",
+      "evidence": "按总部模板配置用户活动与消息推送，异常提交主管处理。",
+      "reason": "高度模板化，本人不承担策略或异常决定。",
+      "confidence": "HIGH",
+      "signals": {
+        "judgment": 0,
+        "coordination": 0,
+        "physical_presence": 0,
+        "accountability": 0,
+        "repeatability": 2,
+        "digital_input_output": 2
+      }
+    },
+    {
+      "task_id": "task-fixed-review",
+      "task_name": "生成固定活动复盘表",
+      "time_share_percent": 40,
+      "exposure_level": "HIGH",
+      "ai_can_do": "导出、汇总并根据模板生成结论。",
+      "human_must_do": "核对数据是否完整。",
+      "evidence": "导出活动数据并生成固定复盘表，结论按模板选择。",
+      "reason": "输入、输出和结论选项均固定。",
+      "confidence": "HIGH",
+      "signals": {
+        "judgment": 0,
+        "coordination": 0,
+        "physical_presence": 0,
+        "accountability": 0,
+        "repeatability": 2,
+        "digital_input_output": 2
+      }
+    }
+  ],
+  "human_edge": [
+    {
+      "summary": "能稳定完成高频流程，但当前简历尚未显示策略、协商或结果责任。",
+      "source_task_ids": [
+        "task-template-campaign",
+        "task-fixed-review"
+      ]
+    }
+  ],
+  "action_plan": {
+    "hand_to_ai": {
+      "title": "把活动配置初稿交给 AI",
+      "action": "由活动清单生成配置草稿和字段校验结果。",
+      "deliverable": "配置草稿 + 校验日志",
+      "acceptance_criteria": "连续三次无漏字段，异常全部进入人工队列。",
+      "human_checkpoint": "真正发布前由本人核对权限、时间和库存。",
+      "grounded_evidence": "已有模板化配置任务。",
+      "source_task_ids": [
+        "task-template-campaign"
+      ]
+    },
+    "level_up": {
+      "title": "练习处理一个非模板异常",
+      "action": "跟随主管复盘一次异常，记录判断依据和升级路径。",
+      "deliverable": "异常处理观察卡",
+      "acceptance_criteria": "写清触发信号、三个询问和最终决定人。",
+      "human_checkpoint": "不要把旁观经历写成本人拍板。",
+      "grounded_evidence": "当前异常均提交主管。",
+      "source_task_ids": [
+        "task-template-campaign"
+      ]
+    },
+    "proof_7d": {
+      "title": "做一个复盘自动化样例",
+      "action": "用虚构数据自动生成活动复盘表并标记异常。",
+      "deliverable": "表格 + 自动化脚本 + 使用说明",
+      "acceptance_criteria": "7 天内一键运行，至少识别两类异常。",
+      "human_checkpoint": "示例不含原公司模板和数据。",
+      "grounded_evidence": "已有固定复盘任务。",
+      "source_task_ids": [
+        "task-fixed-review"
+      ]
+    }
+  },
+  "share_card": {
+    "category": "互联网 / 用户运营",
+    "role_name": "流程编排员",
+    "role_tags": [
+      "模板执行",
+      "固定复盘"
+    ],
+    "confidence_label": "证据置信度：高",
+    "exposure_index": null,
+    "exposure_level": "UNKNOWN",
+    "snarky_quote": "岗位名里有‘运营’，实际每天做的是给模板按时续命。",
+    "task_highlights": [
+      {
+        "task_name": "模板活动配置",
+        "ai_part": "生成配置与排期",
+        "human_part": "确认权限并升级异常"
+      },
+      {
+        "task_name": "固定复盘",
+        "ai_part": "汇总数据与套结论",
+        "human_part": "核对数据完整性"
+      }
+    ],
+    "proof_7d": "表格 + 自动化脚本 + 使用说明；7 天内一键运行，至少识别两类异常。",
+    "disclaimer": "本卡反映工作任务与 AI 能力的重合度，不是个人失业概率。"
+  }
+}

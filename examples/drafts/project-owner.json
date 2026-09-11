@@ -1,0 +1,239 @@
+{
+  "schema_version": "1.0.0",
+  "rule_version": "1.0.0",
+  "report_metadata": {
+    "report_id": "project-owner",
+    "generated_at": "2026-09-11T20:00:00+08:00",
+    "confidence_level": "HIGH",
+    "confidence_reason": "计划、决策和突发事件均有占比与最终责任证据。",
+    "questions_asked": [
+      "状态汇总和项目决策各占多少时间？",
+      "预算与上线窗口由谁拍板？"
+    ],
+    "questions_skipped": false
+  },
+  "source": {
+    "input_type": "TEXT",
+    "input_name": "project-owner.txt",
+    "privacy_entities": [
+      "许舟",
+      "启明工业系统有限公司",
+      "启明工业",
+      "北河学院",
+      "穹顶升级",
+      "峰石能源"
+    ],
+    "extraction_status": "OK"
+  },
+  "profile": {
+    "sanitized_category": "工业软件 / 项目管理",
+    "role": {
+      "code": "PROJECT_RISK_NAVIGATOR",
+      "name": "项目风险领航员",
+      "tags": [
+        "风险取舍",
+        "结果兜底"
+      ],
+      "source_task_ids": [
+        "task-plan-review",
+        "task-owner-decision",
+        "task-vendor-incident"
+      ],
+      "snarky_quote": "甘特图能自动更新，供应商晚三周时谁去把不可能改成可交付，图表不负责。"
+    }
+  },
+  "skill_panel": {
+    "execution": {
+      "score": 75,
+      "evidence": "任务流程与数字化交付证据：汇总项目状态、评审并调整交付计划",
+      "is_known": true,
+      "source_task_ids": [
+        "task-status-rollup",
+        "task-plan-review"
+      ]
+    },
+    "discretion": {
+      "score": 88,
+      "evidence": "模糊情境中的判断证据：汇总项目状态、评审并调整交付计划",
+      "is_known": true,
+      "source_task_ids": [
+        "task-status-rollup",
+        "task-plan-review",
+        "task-owner-decision",
+        "task-vendor-incident"
+      ]
+    },
+    "coordination": {
+      "score": 88,
+      "evidence": "跨角色协调证据：汇总项目状态、评审并调整交付计划",
+      "is_known": true,
+      "source_task_ids": [
+        "task-status-rollup",
+        "task-plan-review",
+        "task-owner-decision",
+        "task-vendor-incident"
+      ]
+    },
+    "accountability": {
+      "score": 88,
+      "evidence": "结果责任证据：汇总项目状态、评审并调整交付计划",
+      "is_known": true,
+      "source_task_ids": [
+        "task-status-rollup",
+        "task-plan-review",
+        "task-owner-decision",
+        "task-vendor-incident"
+      ]
+    }
+  },
+  "tasks": [
+    {
+      "task_id": "task-status-rollup",
+      "task_name": "汇总项目状态",
+      "time_share_percent": 20,
+      "exposure_level": "HIGH",
+      "ai_can_do": "自动聚合里程碑、风险和资源状态。",
+      "human_must_do": "核验异常与对外叙述口径。",
+      "evidence": "每周汇总里程碑、风险和资源状态。",
+      "reason": "结构固定、数字化程度高。",
+      "confidence": "HIGH",
+      "signals": {
+        "judgment": 1,
+        "coordination": 1,
+        "physical_presence": 0,
+        "accountability": 1,
+        "repeatability": 2,
+        "digital_input_output": 2
+      }
+    },
+    {
+      "task_id": "task-plan-review",
+      "task_name": "评审并调整交付计划",
+      "time_share_percent": 25,
+      "exposure_level": "MEDIUM",
+      "ai_can_do": "生成依赖图、模拟排期和提示历史偏差。",
+      "human_must_do": "结合团队能力和承诺决定调整路径。",
+      "evidence": "组织计划评审，依据依赖与历史偏差调整交付路径。",
+      "reason": "AI 可做计算和方案生成，人需做组织情境取舍。",
+      "confidence": "HIGH",
+      "signals": {
+        "judgment": 2,
+        "coordination": 2,
+        "physical_presence": 0,
+        "accountability": 2,
+        "repeatability": 1,
+        "digital_input_output": 2
+      }
+    },
+    {
+      "task_id": "task-owner-decision",
+      "task_name": "取舍预算、质量与上线窗口",
+      "time_share_percent": 30,
+      "exposure_level": "LOW",
+      "ai_can_do": "量化选项影响并列出风险。",
+      "human_must_do": "承担最终选择及管理层解释责任。",
+      "evidence": "对预算、质量门槛和上线窗口做取舍并向管理层负责。",
+      "reason": "核心是多目标决策和责任背书。",
+      "confidence": "HIGH",
+      "signals": {
+        "judgment": 2,
+        "coordination": 2,
+        "physical_presence": 0,
+        "accountability": 2,
+        "repeatability": 0,
+        "digital_input_output": 1
+      }
+    },
+    {
+      "task_id": "task-vendor-incident",
+      "task_name": "处置供应商突发延误",
+      "time_share_percent": 25,
+      "exposure_level": "LOW",
+      "ai_can_do": "整理替代方案和受影响清单。",
+      "human_must_do": "现场确认、协调资源并承担客户沟通。",
+      "evidence": "供应商突发延误时到现场确认影响，协调替代方案并承担客户沟通。",
+      "reason": "需要现场信息、多方协调和结果责任。",
+      "confidence": "HIGH",
+      "signals": {
+        "judgment": 2,
+        "coordination": 2,
+        "physical_presence": 2,
+        "accountability": 2,
+        "repeatability": 0,
+        "digital_input_output": 1
+      }
+    }
+  ],
+  "human_edge": [
+    {
+      "summary": "能在预算、质量、时间和客户承诺同时冲突时做可追责的选择。",
+      "source_task_ids": [
+        "task-plan-review",
+        "task-owner-decision",
+        "task-vendor-incident"
+      ]
+    }
+  ],
+  "action_plan": {
+    "hand_to_ai": {
+      "title": "让 AI 维护状态初稿",
+      "action": "把脱敏任务表转成里程碑、风险和待决策清单。",
+      "deliverable": "周状态初稿 + 变更摘要",
+      "acceptance_criteria": "每个数字可回到任务源，每项异常标明负责人。",
+      "human_checkpoint": "人工确认依赖、承诺和升级级别。",
+      "grounded_evidence": "已有固定项目状态汇总任务。",
+      "source_task_ids": [
+        "task-status-rollup"
+      ]
+    },
+    "level_up": {
+      "title": "强化取舍可解释性",
+      "action": "为三次计划变更写选项、代价、决定与验证指标。",
+      "deliverable": "三张项目取舍卡",
+      "acceptance_criteria": "每张至少比较时间、质量和成本三个维度。",
+      "human_checkpoint": "区分已知事实、预测和管理判断。",
+      "grounded_evidence": "已有预算、质量和上线窗口取舍经验。",
+      "source_task_ids": [
+        "task-plan-review",
+        "task-owner-decision"
+      ]
+    },
+    "proof_7d": {
+      "title": "做一个风险决策作品",
+      "action": "用虚构供应商延误案例展示应对流程。",
+      "deliverable": "风险登记表 + 两页决策备忘录",
+      "acceptance_criteria": "7 天内包含影响、两套方案、升级路径和客户沟通稿。",
+      "human_checkpoint": "移除供应商、客户与项目标识。",
+      "grounded_evidence": "已有供应商延误现场处置经验。",
+      "source_task_ids": [
+        "task-vendor-incident"
+      ]
+    }
+  },
+  "share_card": {
+    "category": "工业软件 / 项目管理",
+    "role_name": "项目风险领航员",
+    "role_tags": [
+      "风险取舍",
+      "结果兜底"
+    ],
+    "confidence_label": "证据置信度：高",
+    "exposure_index": null,
+    "exposure_level": "UNKNOWN",
+    "snarky_quote": "甘特图能自动更新，供应商晚三周时谁去把不可能改成可交付，图表不负责。",
+    "task_highlights": [
+      {
+        "task_name": "状态汇总",
+        "ai_part": "聚合里程碑与风险",
+        "human_part": "核验异常和口径"
+      },
+      {
+        "task_name": "项目取舍",
+        "ai_part": "量化方案影响",
+        "human_part": "平衡约束并承担最终选择"
+      }
+    ],
+    "proof_7d": "风险登记表 + 两页决策备忘录；7 天内包含影响、两套方案、升级路径和客户沟通稿。",
+    "disclaimer": "本卡反映工作任务与 AI 能力的重合度，不是个人失业概率。"
+  }
+}

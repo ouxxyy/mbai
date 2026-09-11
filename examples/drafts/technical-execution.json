@@ -1,0 +1,216 @@
+{
+  "schema_version": "1.0.0",
+  "rule_version": "1.0.0",
+  "report_metadata": {
+    "report_id": "technical-execution",
+    "generated_at": "2026-09-11T20:00:00+08:00",
+    "confidence_level": "HIGH",
+    "confidence_reason": "开发、文档与故障处置均有时间和责任说明。",
+    "questions_asked": [
+      "常规开发和故障值班各占多少时间？",
+      "故障时谁决定回滚？"
+    ],
+    "questions_skipped": false
+  },
+  "source": {
+    "input_type": "PDF",
+    "input_name": "technical-execution.pdf",
+    "privacy_entities": [
+      "陈默",
+      "北辰云数有限公司",
+      "北辰云数",
+      "东岭理工大学",
+      "山谷零售",
+      "星门迁移",
+      "chenmo@beichen.example"
+    ],
+    "extraction_status": "OK"
+  },
+  "profile": {
+    "sanitized_category": "企业软件 / 后端研发",
+    "role": {
+      "code": "SYSTEM_BOUNDARY_GUARD",
+      "name": "系统边界守门人",
+      "tags": [
+        "边界把关",
+        "故障处置"
+      ],
+      "source_task_ids": [
+        "task-api",
+        "task-incident"
+      ],
+      "snarky_quote": "代码初稿越来越便宜，凌晨两点决定回滚的那五分钟反而越来越贵。"
+    }
+  },
+  "skill_panel": {
+    "execution": {
+      "score": 75,
+      "evidence": "任务流程与数字化交付证据：实现常规 API 与数据校验、编写测试与接口文档",
+      "is_known": true,
+      "source_task_ids": [
+        "task-api",
+        "task-tests-docs"
+      ]
+    },
+    "discretion": {
+      "score": 83,
+      "evidence": "模糊情境中的判断证据：实现常规 API 与数据校验、编写测试与接口文档",
+      "is_known": true,
+      "source_task_ids": [
+        "task-api",
+        "task-tests-docs",
+        "task-incident"
+      ]
+    },
+    "coordination": {
+      "score": 75,
+      "evidence": "跨角色协调证据：实现常规 API 与数据校验、生产故障判断与处置",
+      "is_known": true,
+      "source_task_ids": [
+        "task-api",
+        "task-incident"
+      ]
+    },
+    "accountability": {
+      "score": 83,
+      "evidence": "结果责任证据：实现常规 API 与数据校验、编写测试与接口文档",
+      "is_known": true,
+      "source_task_ids": [
+        "task-api",
+        "task-tests-docs",
+        "task-incident"
+      ]
+    }
+  },
+  "tasks": [
+    {
+      "task_id": "task-api",
+      "task_name": "实现常规 API 与数据校验",
+      "time_share_percent": 45,
+      "exposure_level": "MEDIUM",
+      "ai_can_do": "生成接口骨架、常见校验与代码初稿。",
+      "human_must_do": "确认领域边界、兼容性与合并质量。",
+      "evidence": "依据产品需求实现常规 API 与数据校验，合并前本人负责边界检查。",
+      "reason": "AI 可完成大量技术执行，但领域约束与质量责任需要人。",
+      "confidence": "HIGH",
+      "signals": {
+        "judgment": 2,
+        "coordination": 1,
+        "physical_presence": 0,
+        "accountability": 2,
+        "repeatability": 1,
+        "digital_input_output": 2
+      }
+    },
+    {
+      "task_id": "task-tests-docs",
+      "task_name": "编写测试与接口文档",
+      "time_share_percent": 25,
+      "exposure_level": "HIGH",
+      "ai_can_do": "根据代码生成常规单测、接口说明和迁移草稿。",
+      "human_must_do": "补齐真实边界用例并验证执行结果。",
+      "evidence": "编写单元测试、接口文档和迁移说明。",
+      "reason": "结构化且与代码互相映射，大部分可自动生成。",
+      "confidence": "HIGH",
+      "signals": {
+        "judgment": 1,
+        "coordination": 0,
+        "physical_presence": 0,
+        "accountability": 1,
+        "repeatability": 2,
+        "digital_input_output": 2
+      }
+    },
+    {
+      "task_id": "task-incident",
+      "task_name": "生产故障判断与处置",
+      "time_share_percent": 30,
+      "exposure_level": "LOW",
+      "ai_can_do": "聚合日志、提出故障假设和生成排查清单。",
+      "human_must_do": "结合业务影响决定回滚或热修复并承担结果。",
+      "evidence": "值班处理生产故障，结合日志决定回滚或热修复并向业务说明影响。",
+      "reason": "核心发生在动态环境中的判断、沟通和责任。",
+      "confidence": "HIGH",
+      "signals": {
+        "judgment": 2,
+        "coordination": 2,
+        "physical_presence": 1,
+        "accountability": 2,
+        "repeatability": 0,
+        "digital_input_output": 2
+      }
+    }
+  ],
+  "human_edge": [
+    {
+      "summary": "能把日志证据、系统边界和业务损失放进同一个故障决定里。",
+      "source_task_ids": [
+        "task-api",
+        "task-incident"
+      ]
+    }
+  ],
+  "action_plan": {
+    "hand_to_ai": {
+      "title": "让 AI 先写接口测试矩阵",
+      "action": "输入接口契约，让 AI 生成正常、边界和失败路径清单。",
+      "deliverable": "测试矩阵与首版用例",
+      "acceptance_criteria": "人工补入至少 3 个真实领域边界后全部运行通过。",
+      "human_checkpoint": "必须实际运行，不能只审阅生成文本。",
+      "grounded_evidence": "已有接口测试与文档任务。",
+      "source_task_ids": [
+        "task-tests-docs",
+        "task-api"
+      ]
+    },
+    "level_up": {
+      "title": "强化故障决策复盘",
+      "action": "为三次虚构故障写回滚阈值、证据和事后验证。",
+      "deliverable": "三张故障决策卡",
+      "acceptance_criteria": "每张含观测信号、两个选项、决定和恢复指标。",
+      "human_checkpoint": "明确哪些信息不足时必须升级。",
+      "grounded_evidence": "已有值班回滚与业务说明经验。",
+      "source_task_ids": [
+        "task-incident"
+      ]
+    },
+    "proof_7d": {
+      "title": "做一个可复现的边界项目",
+      "action": "实现一个小型 API，并展示 AI 初稿与人工边界修订。",
+      "deliverable": "代码仓库 + README + 测试日志",
+      "acceptance_criteria": "7 天内可本机运行，含 8 个边界测试和一次差异说明。",
+      "human_checkpoint": "移除任何原项目代码和客户信息。",
+      "grounded_evidence": "已有 API 实现和边界检查经验。",
+      "source_task_ids": [
+        "task-api",
+        "task-tests-docs"
+      ]
+    }
+  },
+  "share_card": {
+    "category": "企业软件 / 后端研发",
+    "role_name": "系统边界守门人",
+    "role_tags": [
+      "边界把关",
+      "故障处置"
+    ],
+    "confidence_label": "证据置信度：高",
+    "exposure_index": null,
+    "exposure_level": "UNKNOWN",
+    "snarky_quote": "代码初稿越来越便宜，凌晨两点决定回滚的那五分钟反而越来越贵。",
+    "task_highlights": [
+      {
+        "task_name": "常规 API",
+        "ai_part": "骨架、校验与初稿",
+        "human_part": "领域边界和合并质量"
+      },
+      {
+        "task_name": "生产故障",
+        "ai_part": "日志聚合与排查假设",
+        "human_part": "决定回滚并承担业务结果"
+      }
+    ],
+    "proof_7d": "代码仓库 + README + 测试日志；7 天内可本机运行，含 8 个边界测试和一次差异说明。",
+    "disclaimer": "本卡反映工作任务与 AI 能力的重合度，不是个人失业概率。"
+  }
+}

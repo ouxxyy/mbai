@@ -1,0 +1,210 @@
+{
+  "schema_version": "1.0.0",
+  "rule_version": "1.0.0",
+  "report_metadata": {
+    "report_id": "writing-detailed",
+    "generated_at": "2026-09-11T20:00:00+08:00",
+    "confidence_level": "HIGH",
+    "confidence_reason": "任务频率、占比、协作对象和责任边界均明确。",
+    "questions_asked": [],
+    "questions_skipped": false
+  },
+  "source": {
+    "input_type": "TEXT",
+    "input_name": "writing-detailed.txt",
+    "privacy_entities": [
+      "沈禾",
+      "纸舟消费品有限公司",
+      "纸舟消费品"
+    ],
+    "extraction_status": "OK"
+  },
+  "profile": {
+    "sanitized_category": "消费品牌 / 内容运营",
+    "role": {
+      "code": "CONTENT_CALIBRATOR",
+      "name": "内容校准师",
+      "tags": [
+        "语境校准",
+        "事实把关"
+      ],
+      "source_task_ids": [
+        "task-article-draft",
+        "task-fact-calibration",
+        "task-interview"
+      ],
+      "snarky_quote": "初稿像流水线，真正费脑的是哪一句会让法务半夜给你打电话。"
+    }
+  },
+  "skill_panel": {
+    "execution": {
+      "score": 75,
+      "evidence": "任务流程与数字化交付证据：按选题卡撰写文章初稿、事实核查与品牌语气校准",
+      "is_known": true,
+      "source_task_ids": [
+        "task-article-draft",
+        "task-fact-calibration"
+      ]
+    },
+    "discretion": {
+      "score": 83,
+      "evidence": "模糊情境中的判断证据：按选题卡撰写文章初稿、事实核查与品牌语气校准",
+      "is_known": true,
+      "source_task_ids": [
+        "task-article-draft",
+        "task-fact-calibration",
+        "task-interview"
+      ]
+    },
+    "coordination": {
+      "score": 75,
+      "evidence": "跨角色协调证据：事实核查与品牌语气校准、采访并追问矛盾信息",
+      "is_known": true,
+      "source_task_ids": [
+        "task-fact-calibration",
+        "task-interview"
+      ]
+    },
+    "accountability": {
+      "score": 67,
+      "evidence": "结果责任证据：按选题卡撰写文章初稿、事实核查与品牌语气校准",
+      "is_known": true,
+      "source_task_ids": [
+        "task-article-draft",
+        "task-fact-calibration",
+        "task-interview"
+      ]
+    }
+  },
+  "tasks": [
+    {
+      "task_id": "task-article-draft",
+      "task_name": "按选题卡撰写文章初稿",
+      "time_share_percent": 50,
+      "exposure_level": "HIGH",
+      "ai_can_do": "生成结构、标题和完整初稿。",
+      "human_must_do": "确认选题意图与材料真实性。",
+      "evidence": "每周按品牌选题表完成 3 篇初稿，约占 50%。",
+      "reason": "文本输入输出和常见结构高度适配生成式 AI。",
+      "confidence": "HIGH",
+      "signals": {
+        "judgment": 1,
+        "coordination": 0,
+        "physical_presence": 0,
+        "accountability": 1,
+        "repeatability": 2,
+        "digital_input_output": 2
+      }
+    },
+    {
+      "task_id": "task-fact-calibration",
+      "task_name": "事实核查与品牌语气校准",
+      "time_share_percent": 30,
+      "exposure_level": "MEDIUM",
+      "ai_can_do": "列出待核事实、建议改写和语气偏差。",
+      "human_must_do": "判断争议表达、核实来源并签字确认发布。",
+      "evidence": "对照产品资料核查功效表述，发现争议时与法务确认并决定改写，约占 30%。",
+      "reason": "AI 可辅助比对与改写，但真实来源和发布责任留在人。",
+      "confidence": "HIGH",
+      "signals": {
+        "judgment": 2,
+        "coordination": 1,
+        "physical_presence": 0,
+        "accountability": 2,
+        "repeatability": 1,
+        "digital_input_output": 2
+      }
+    },
+    {
+      "task_id": "task-interview",
+      "task_name": "采访并追问矛盾信息",
+      "time_share_percent": 20,
+      "exposure_level": "LOW",
+      "ai_can_do": "准备问题、整理录音和标记矛盾点。",
+      "human_must_do": "建立信任、临场追问并理解未明说的上下文。",
+      "evidence": "采访门店员工并根据现场反馈调整故事角度，约占 20%。",
+      "reason": "核心价值来自现场互动、判断和信任。",
+      "confidence": "HIGH",
+      "signals": {
+        "judgment": 2,
+        "coordination": 2,
+        "physical_presence": 1,
+        "accountability": 1,
+        "repeatability": 0,
+        "digital_input_output": 1
+      }
+    }
+  ],
+  "human_edge": [
+    {
+      "summary": "能为一段可生成的文字补上真实来源、语境边界和发布责任。",
+      "source_task_ids": [
+        "task-article-draft",
+        "task-fact-calibration",
+        "task-interview"
+      ]
+    }
+  ],
+  "action_plan": {
+    "hand_to_ai": {
+      "title": "把文章骨架交给 AI",
+      "action": "先给素材清单和禁写边界，让 AI 生成两版结构。",
+      "deliverable": "两版文章骨架与选择说明",
+      "acceptance_criteria": "每版均标记素材来源，人工选出一版后才扩写。",
+      "human_checkpoint": "不得让 AI 补造采访事实或引语。",
+      "grounded_evidence": "已有从选题卡形成初稿的工作。",
+      "source_task_ids": [
+        "task-article-draft"
+      ]
+    },
+    "level_up": {
+      "title": "训练争议表达判断",
+      "action": "收集 10 个真实删改点，写清风险、取舍和最终版本。",
+      "deliverable": "内容判断案例册",
+      "acceptance_criteria": "每例都有原句、风险类型、修改与理由。",
+      "human_checkpoint": "隐去采访对象和内部栏目。",
+      "grounded_evidence": "已有争议表达删改和发布签字经验。",
+      "source_task_ids": [
+        "task-fact-calibration"
+      ]
+    },
+    "proof_7d": {
+      "title": "做一份事实核查演示",
+      "action": "用公开材料完成一篇短稿及逐句来源表。",
+      "deliverable": "短文 + 来源核查表",
+      "acceptance_criteria": "7 天内完成，所有事实可点击回到公开来源。",
+      "human_checkpoint": "公开前再次检查引用和授权范围。",
+      "grounded_evidence": "已有采访事实核查经验。",
+      "source_task_ids": [
+        "task-fact-calibration",
+        "task-interview"
+      ]
+    }
+  },
+  "share_card": {
+    "category": "消费品牌 / 内容运营",
+    "role_name": "内容校准师",
+    "role_tags": [
+      "语境校准",
+      "事实把关"
+    ],
+    "confidence_label": "证据置信度：高",
+    "exposure_index": null,
+    "exposure_level": "UNKNOWN",
+    "snarky_quote": "初稿像流水线，真正费脑的是哪一句会让法务半夜给你打电话。",
+    "task_highlights": [
+      {
+        "task_name": "文章初稿",
+        "ai_part": "结构与文本生成",
+        "human_part": "确认选题意图"
+      },
+      {
+        "task_name": "事实与语气校准",
+        "ai_part": "标记疑点与改写建议",
+        "human_part": "核实来源并承担发布责任"
+      }
+    ],
+    "proof_7d": "短文 + 来源核查表；7 天内完成，所有事实可点击回到公开来源。",
+    "disclaimer": "本卡反映工作任务与 AI 能力的重合度，不是个人失业概率。"
+  }
+}

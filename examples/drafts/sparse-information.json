@@ -1,0 +1,186 @@
+{
+  "schema_version": "1.0.0",
+  "rule_version": "1.0.0",
+  "report_metadata": {
+    "report_id": "sparse-information",
+    "generated_at": "2026-09-11T20:00:00+08:00",
+    "confidence_level": "LOW",
+    "confidence_reason": "用户跳过补问，三项描述均缺少任务边界。",
+    "questions_asked": [
+      "日常运营具体包含哪些任务和时间占比？",
+      "哪些结果需要你本人判断或承担？",
+      "最关键贡献具体是什么？"
+    ],
+    "questions_skipped": true
+  },
+  "source": {
+    "input_type": "TEXT",
+    "input_name": "sparse-information.txt",
+    "privacy_entities": [
+      "赵一",
+      "云杉网络有限公司",
+      "云杉网络"
+    ],
+    "extraction_status": "OK"
+  },
+  "profile": {
+    "sanitized_category": "互联网 / 产品运营",
+    "role": {
+      "code": "LOCKED_ROLE",
+      "name": "待解锁职业角色",
+      "tags": [
+        "证据待补充"
+      ],
+      "source_task_ids": [],
+      "snarky_quote": "这份简历把三年的工作压成了十二个字，连 AI 都不知道该先替哪一段。"
+    }
+  },
+  "skill_panel": {
+    "execution": {
+      "score": null,
+      "evidence": "简历未提及",
+      "is_known": false,
+      "source_task_ids": []
+    },
+    "discretion": {
+      "score": null,
+      "evidence": "简历未提及",
+      "is_known": false,
+      "source_task_ids": []
+    },
+    "coordination": {
+      "score": null,
+      "evidence": "简历未提及",
+      "is_known": false,
+      "source_task_ids": []
+    },
+    "accountability": {
+      "score": null,
+      "evidence": "简历未提及",
+      "is_known": false,
+      "source_task_ids": []
+    }
+  },
+  "tasks": [
+    {
+      "task_id": "task-daily-ops",
+      "task_name": "日常运营",
+      "time_share_percent": null,
+      "exposure_level": "UNKNOWN",
+      "ai_can_do": "信息不足，不能判断。",
+      "human_must_do": "信息不足，不能判断。",
+      "evidence": "负责日常运营。",
+      "reason": "缺少输入、输出、频率和责任边界。",
+      "confidence": "LOW",
+      "signals": {
+        "judgment": 0,
+        "coordination": 0,
+        "physical_presence": 0,
+        "accountability": 0,
+        "repeatability": 0,
+        "digital_input_output": 0
+      }
+    },
+    {
+      "task_id": "task-cross-team",
+      "task_name": "跨部门沟通",
+      "time_share_percent": null,
+      "exposure_level": "UNKNOWN",
+      "ai_can_do": "信息不足，不能判断。",
+      "human_must_do": "信息不足，不能判断。",
+      "evidence": "跨部门沟通。",
+      "reason": "缺少沟通对象、冲突类型和本人责任。",
+      "confidence": "LOW",
+      "signals": {
+        "judgment": 0,
+        "coordination": 0,
+        "physical_presence": 0,
+        "accountability": 0,
+        "repeatability": 0,
+        "digital_input_output": 0
+      }
+    },
+    {
+      "task_id": "task-data-analysis",
+      "task_name": "数据分析",
+      "time_share_percent": null,
+      "exposure_level": "UNKNOWN",
+      "ai_can_do": "信息不足，不能判断。",
+      "human_must_do": "信息不足，不能判断。",
+      "evidence": "数据分析。",
+      "reason": "缺少分析目的、方法和决策用途。",
+      "confidence": "LOW",
+      "signals": {
+        "judgment": 0,
+        "coordination": 0,
+        "physical_presence": 0,
+        "accountability": 0,
+        "repeatability": 0,
+        "digital_input_output": 0
+      }
+    }
+  ],
+  "human_edge": [
+    {
+      "summary": "现有证据不足以定位个人价值；先补任务和责任，再谈结论。",
+      "source_task_ids": [
+        "task-daily-ops"
+      ]
+    }
+  ],
+  "action_plan": {
+    "hand_to_ai": {
+      "title": "先列出一周任务清单",
+      "action": "连续五个工作日记录任务、耗时、输入与输出。",
+      "deliverable": "一张五日任务日志",
+      "acceptance_criteria": "至少记录 10 条任务且总耗时可核对。",
+      "human_checkpoint": "只记录事实，不先贴高低风险标签。",
+      "grounded_evidence": "当前只有“日常运营”的宽泛描述。",
+      "source_task_ids": [
+        "task-daily-ops"
+      ]
+    },
+    "level_up": {
+      "title": "补写一次真实判断",
+      "action": "选择一次跨部门沟通，写清分歧、你的判断和结果。",
+      "deliverable": "一张责任边界卡",
+      "acceptance_criteria": "能区分你做的、他人做的和最终由谁负责。",
+      "human_checkpoint": "无法回忆时明确写未知，不补造。",
+      "grounded_evidence": "简历提到跨部门沟通但缺少边界。",
+      "source_task_ids": [
+        "task-cross-team"
+      ]
+    },
+    "proof_7d": {
+      "title": "做一页任务证据表",
+      "action": "把一项数据分析补成问题、数据、方法、结论和决策。",
+      "deliverable": "一页脱敏案例表",
+      "acceptance_criteria": "7 天内五栏齐全，并由一个不了解背景的人读懂。",
+      "human_checkpoint": "不得加入未发生的业务结果。",
+      "grounded_evidence": "简历提到数据分析但没有交付证据。",
+      "source_task_ids": [
+        "task-data-analysis"
+      ]
+    }
+  },
+  "share_card": {
+    "category": "互联网 / 产品运营",
+    "role_name": "待解锁职业角色",
+    "role_tags": [
+      "证据待补充"
+    ],
+    "confidence_label": "证据置信度：低",
+    "exposure_index": null,
+    "exposure_level": "UNKNOWN",
+    "snarky_quote": "这份简历把三年的工作压成了十二个字，连 AI 都不知道该先替哪一段。",
+    "task_highlights": [
+      {
+        "task_name": "日常运营",
+        "ai_part": "待补充后判断",
+        "human_part": "待补充责任边界"
+      }
+    ],
+    "proof_7d": "一页脱敏案例表；7 天内五栏齐全，并由一个不了解背景的人读懂。",
+    "disclaimer": "本卡反映工作任务与 AI 能力的重合度，不是个人失业概率。"
+  }
+}

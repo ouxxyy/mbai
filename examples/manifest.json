@@ -1,0 +1,223 @@
+{
+  "generated_at": "2026-09-11T20:00:00+08:00",
+  "rule_version": "1.0.0",
+  "fictional_data_only": true,
+  "cases": [
+    {
+      "slug": "operations-repetitive",
+      "scenario": "运营专员",
+      "input_type": "TEXT",
+      "resume_path": "resumes/operations-repetitive.txt",
+      "resume_sha256": "30b23cd7b2d984ccad413af7978edd03229733ba921f9708dd2a3e5720c3fd3e",
+      "source_text_path": "source-texts/operations-repetitive.txt",
+      "draft_path": "drafts/operations-repetitive.json",
+      "expected_index": 90,
+      "expected_level": "HIGH",
+      "is_sufficient_info": true,
+      "artifacts": {
+        "report_json": "output/operations-repetitive/report.json",
+        "report_html": "output/operations-repetitive/report.html",
+        "share_png": "output/operations-repetitive/share-card.png",
+        "ocr_text": "output/operations-repetitive/share-card.ocr.txt"
+      }
+    },
+    {
+      "slug": "content-calibrator",
+      "scenario": "内容编辑",
+      "input_type": "DOCX",
+      "resume_path": "resumes/content-calibrator.docx",
+      "resume_sha256": "d9b4119c8507fae9b04e59b1d79f1915ae7b5b6c377acab52265bad17fce3640",
+      "source_text_path": "source-texts/content-calibrator.txt",
+      "draft_path": "drafts/content-calibrator.json",
+      "expected_index": 60,
+      "expected_level": "MEDIUM",
+      "is_sufficient_info": true,
+      "artifacts": {
+        "report_json": "output/content-calibrator/report.json",
+        "report_html": "output/content-calibrator/report.html",
+        "share_png": "output/content-calibrator/share-card.png",
+        "ocr_text": "output/content-calibrator/share-card.ocr.txt"
+      }
+    },
+    {
+      "slug": "technical-execution",
+      "scenario": "后端开发工程师",
+      "input_type": "PDF",
+      "resume_path": "resumes/technical-execution.pdf",
+      "resume_sha256": "61f6c8609ab100cf71a0d81984dfe47fc2aec9b070de088f72d5efea9f5ffb4e",
+      "source_text_path": "source-texts/technical-execution.txt",
+      "draft_path": "drafts/technical-execution.json",
+      "expected_index": 50,
+      "expected_level": "MEDIUM",
+      "is_sufficient_info": true,
+      "artifacts": {
+        "report_json": "output/technical-execution/report.json",
+        "report_html": "output/technical-execution/report.html",
+        "share_png": "output/technical-execution/share-card.png",
+        "ocr_text": "output/technical-execution/share-card.ocr.txt"
+      }
+    },
+    {
+      "slug": "client-coordination",
+      "scenario": "客户成功顾问",
+      "input_type": "TEXT",
+      "resume_path": "resumes/client-coordination.txt",
+      "resume_sha256": "40699c556e081845bec2d3040bca2cf5ebf73fe4daa49786ad4c40a116309188",
+      "source_text_path": "source-texts/client-coordination.txt",
+      "draft_path": "drafts/client-coordination.json",
+      "expected_index": 25,
+      "expected_level": "LOW",
+      "is_sufficient_info": true,
+      "artifacts": {
+        "report_json": "output/client-coordination/report.json",
+        "report_html": "output/client-coordination/report.html",
+        "share_png": "output/client-coordination/share-card.png",
+        "ocr_text": "output/client-coordination/share-card.ocr.txt"
+      }
+    },
+    {
+      "slug": "project-owner",
+      "scenario": "项目经理",
+      "input_type": "TEXT",
+      "resume_path": "resumes/project-owner.txt",
+      "resume_sha256": "b7db59ae73d7cc60a9730215794835d43274984d8b2eaba3c0eab917f0e2d862",
+      "source_text_path": "source-texts/project-owner.txt",
+      "draft_path": "drafts/project-owner.json",
+      "expected_index": 35,
+      "expected_level": "LOW",
+      "is_sufficient_info": true,
+      "artifacts": {
+        "report_json": "output/project-owner/report.json",
+        "report_html": "output/project-owner/report.html",
+        "share_png": "output/project-owner/share-card.png",
+        "ocr_text": "output/project-owner/share-card.ocr.txt"
+      }
+    },
+    {
+      "slug": "sparse-information",
+      "scenario": "产品运营",
+      "input_type": "TEXT",
+      "resume_path": "resumes/sparse-information.txt",
+      "resume_sha256": "8f42ade2126685a3f14f6e3e219de3e10e0d72654e1c4a94db8e6d320e36d3eb",
+      "source_text_path": "source-texts/sparse-information.txt",
+      "draft_path": "drafts/sparse-information.json",
+      "expected_index": null,
+      "expected_level": "UNKNOWN",
+      "is_sufficient_info": false,
+      "artifacts": {
+        "report_json": "output/sparse-information/report.json",
+        "report_html": "output/sparse-information/report.html",
+        "share_png": "output/sparse-information/share-card.png",
+        "ocr_text": "output/sparse-information/share-card.ocr.txt"
+      }
+    },
+    {
+      "slug": "ops-shallow",
+      "scenario": "用户运营",
+      "input_type": "TEXT",
+      "resume_path": "resumes/ops-shallow.txt",
+      "resume_sha256": "50e8166fc19a4b5b315439cb27504608261447f11d447d54b1fe3041c61406c0",
+      "source_text_path": "source-texts/ops-shallow.txt",
+      "draft_path": "drafts/ops-shallow.json",
+      "expected_index": 100,
+      "expected_level": "HIGH",
+      "is_sufficient_info": true,
+      "artifacts": {
+        "report_json": "output/ops-shallow/report.json",
+        "report_html": "output/ops-shallow/report.html",
+        "share_png": "output/ops-shallow/share-card.png",
+        "ocr_text": "output/ops-shallow/share-card.ocr.txt"
+      }
+    },
+    {
+      "slug": "ops-deep",
+      "scenario": "用户运营",
+      "input_type": "TEXT",
+      "resume_path": "resumes/ops-deep.txt",
+      "resume_sha256": "b95286d58f177e537f0317b5c03ca7808c178084a909e6530e3f8526d9f22f15",
+      "source_text_path": "source-texts/ops-deep.txt",
+      "draft_path": "drafts/ops-deep.json",
+      "expected_index": 55,
+      "expected_level": "MEDIUM",
+      "is_sufficient_info": true,
+      "artifacts": {
+        "report_json": "output/ops-deep/report.json",
+        "report_html": "output/ops-deep/report.html",
+        "share_png": "output/ops-deep/share-card.png",
+        "ocr_text": "output/ops-deep/share-card.ocr.txt"
+      }
+    },
+    {
+      "slug": "writing-detailed",
+      "scenario": "品牌内容专员",
+      "input_type": "TEXT",
+      "resume_path": "resumes/writing-detailed.txt",
+      "resume_sha256": "7feddeeec99cc18688c269b7942c7bf91269bc2039c4e1a3c9c41efc64ef6a08",
+      "source_text_path": "source-texts/writing-detailed.txt",
+      "draft_path": "drafts/writing-detailed.json",
+      "expected_index": 65,
+      "expected_level": "MEDIUM",
+      "is_sufficient_info": true,
+      "artifacts": {
+        "report_json": "output/writing-detailed/report.json",
+        "report_html": "output/writing-detailed/report.html",
+        "share_png": "output/writing-detailed/share-card.png",
+        "ocr_text": "output/writing-detailed/share-card.ocr.txt"
+      }
+    },
+    {
+      "slug": "writing-concise",
+      "scenario": "品牌内容专员",
+      "input_type": "TEXT",
+      "resume_path": "resumes/writing-concise.txt",
+      "resume_sha256": "06c467cc12ad926f3b58d06976326f098a59033f93738f52136ade8b476481cc",
+      "source_text_path": "source-texts/writing-concise.txt",
+      "draft_path": "drafts/writing-concise.json",
+      "expected_index": 65,
+      "expected_level": "MEDIUM",
+      "is_sufficient_info": true,
+      "artifacts": {
+        "report_json": "output/writing-concise/report.json",
+        "report_html": "output/writing-concise/report.html",
+        "share_png": "output/writing-concise/share-card.png",
+        "ocr_text": "output/writing-concise/share-card.ocr.txt"
+      }
+    },
+    {
+      "slug": "operations-injection",
+      "scenario": "运营专员",
+      "input_type": "TEXT",
+      "resume_path": "resumes/operations-injection.txt",
+      "resume_sha256": "0f5b763949d113c0a6d60952bd706b462fed2910dee4f644446b921400ffc0dd",
+      "source_text_path": "source-texts/operations-injection.txt",
+      "draft_path": "drafts/operations-injection.json",
+      "expected_index": 90,
+      "expected_level": "HIGH",
+      "is_sufficient_info": true,
+      "artifacts": {
+        "report_json": "output/operations-injection/report.json",
+        "report_html": "output/operations-injection/report.html",
+        "share_png": "output/operations-injection/share-card.png",
+        "ocr_text": "output/operations-injection/share-card.ocr.txt"
+      }
+    },
+    {
+      "slug": "operations-demographics",
+      "scenario": "运营专员",
+      "input_type": "TEXT",
+      "resume_path": "resumes/operations-demographics.txt",
+      "resume_sha256": "d36fcdaa402236f9c4a85e81bd45e84c59dfd345918ff4e327faf979e02d130f",
+      "source_text_path": "source-texts/operations-demographics.txt",
+      "draft_path": "drafts/operations-demographics.json",
+      "expected_index": 90,
+      "expected_level": "HIGH",
+      "is_sufficient_info": true,
+      "artifacts": {
+        "report_json": "output/operations-demographics/report.json",
+        "report_html": "output/operations-demographics/report.html",
+        "share_png": "output/operations-demographics/share-card.png",
+        "ocr_text": "output/operations-demographics/share-card.ocr.txt"
+      }
+    }
+  ]
+}
