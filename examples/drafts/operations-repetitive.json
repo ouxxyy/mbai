@@ -37,7 +37,7 @@
         "task-channel-report",
         "task-campaign-publish"
       ],
-      "snarky_quote": "你不是在做六份报表，你是在给六个不肯互相说话的系统当翻译。"
+      "snarky_quote": "六个平台互不相通，全靠你本人兼容。"
     }
   },
   "skill_panel": {
@@ -85,8 +85,8 @@
       "task_name": "汇总多渠道固定周报",
       "time_share_percent": 45,
       "exposure_level": "HIGH",
-      "ai_can_do": "自动导入、清洗、汇总并套用周报模板。",
-      "human_must_do": "确认异常值和对外口径。",
+      "ai_can_do": "导数据、清洗、合并、填模板——周报流程中的机械部分。",
+      "human_must_do": "判断哪些数字是异常、这份周报能不能原样发出去。",
       "evidence": "每周从 6 个渠道导出数据，清洗后填入固定周报模板。",
       "reason": "数字化输入输出、频率稳定且模板固定。",
       "confidence": "HIGH",
@@ -104,7 +104,7 @@
       "task_name": "按排期配置活动内容",
       "time_share_percent": 30,
       "exposure_level": "HIGH",
-      "ai_can_do": "根据结构化清单生成配置并检查常规字段。",
+      "ai_can_do": "按排期清单生成配置，检查链接、库存这类常规字段。",
       "human_must_do": "处理权限、库存或上线异常。",
       "evidence": "按排期在后台配置并发布活动内容，检查链接和库存字段。",
       "reason": "规则明确、重复度高，常规步骤可直接自动化。",
@@ -123,8 +123,8 @@
       "task_name": "协调活动数据异常",
       "time_share_percent": 25,
       "exposure_level": "MEDIUM",
-      "ai_can_do": "初步定位异常、整理相关数据和候选原因。",
-      "human_must_do": "联系销售和产品确认真实原因并形成处理建议。",
+      "ai_can_do": "先把异常数据和可能原因整理好，让你带着材料去问。",
+      "human_must_do": "找销售和产品确认真实原因，处理方案给负责人拍板。",
       "evidence": "活动数据异常时联系销售和产品确认原因，整理处理方案给负责人决定。",
       "reason": "AI 可做诊断准备，但跨角色确认仍依赖人。",
       "confidence": "HIGH",
@@ -140,7 +140,7 @@
   ],
   "human_edge": [
     {
-      "summary": "能把渠道异常翻译成销售、产品都能执行的处理信息。",
+      "summary": "把“数据对不上”翻译成销售和产品都能动手处理的信息。",
       "source_task_ids": [
         "task-channel-report",
         "task-campaign-publish"
@@ -149,10 +149,10 @@
   ],
   "action_plan": {
     "hand_to_ai": {
-      "title": "让 AI 生成渠道周报初稿",
-      "action": "用脱敏 CSV 自动完成合并、异常标色和固定模板填充。",
+      "title": "把周报的机械环节还给脚本",
+      "action": "用脱敏 CSV 跑脚本，自动完成合并、异常标色、填模板。",
       "deliverable": "一份自动周报和人工改动记录",
-      "acceptance_criteria": "连续两周字段齐全，人工只处理异常与口径。",
+      "acceptance_criteria": "连续两周字段齐全，你只处理异常和口径；第 7 天先检查第一周的结果。",
       "human_checkpoint": "发布前核对源数据、异常原因和敏感字段。",
       "grounded_evidence": "已有每周固定模板汇总任务。",
       "source_task_ids": [
@@ -160,19 +160,19 @@
       ]
     },
     "level_up": {
-      "title": "建立异常归因小账本",
-      "action": "每次异常记录信号、询问对象、真实原因和处理结果。",
+      "title": "建一本异常归因账",
+      "action": "每次异常记四样——信号、问了谁、真实原因、处理结果。",
       "deliverable": "5 张异常归因卡",
       "acceptance_criteria": "每张都能从最初信号追到最终原因和负责方。",
-      "human_checkpoint": "不得把相关性直接写成因果。",
+      "human_checkpoint": "不把“同时发生”写成“因为所以”。",
       "grounded_evidence": "已有跨销售与产品确认异常的经验。",
       "source_task_ids": [
         "task-anomaly-coordinate"
       ]
     },
     "proof_7d": {
-      "title": "做一份运营自动化前后对照",
-      "action": "用虚构数据演示手工周报与自动周报的差异。",
+      "title": "做一份周报自动化前后对照",
+      "action": "用虚构数据演示手工周报和自动周报的差别。",
       "deliverable": "一页说明 + 可运行脚本 + 示例 CSV",
       "acceptance_criteria": "7 天内可复现，并列出 3 个必须人工核验的点。",
       "human_checkpoint": "示例数据完全虚构，不带原公司字段。",
@@ -192,16 +192,16 @@
     "confidence_label": "证据置信度：高",
     "exposure_index": null,
     "exposure_level": "UNKNOWN",
-    "snarky_quote": "你不是在做六份报表，你是在给六个不肯互相说话的系统当翻译。",
+    "snarky_quote": "六个平台互不相通，全靠你本人兼容。",
     "task_highlights": [
       {
         "task_name": "渠道周报",
-        "ai_part": "导入、清洗与套模板",
-        "human_part": "确认异常和发布口径"
+        "ai_part": "导数据、合并、填模板",
+        "human_part": "管异常与发布口径"
       },
       {
         "task_name": "活动异常",
-        "ai_part": "定位线索与整理数据",
+        "ai_part": "整理异常线索与候选原因",
         "human_part": "跨团队确认真实原因"
       }
     ],
