@@ -20,5 +20,21 @@ class ScaffoldTest(unittest.TestCase):
         self.assertTrue((ROOT / "docs" / "SOURCES.md").is_file())
 
 
+class ActionDeadlineWordingTest(unittest.TestCase):
+    """冻结规则 9 的行动口径在全部生成契约文档中保持一致，防止回退成"7 天内完成"。"""
+
+    def test_proof_action_wording_matches_frozen_rule_9_everywhere(self):
+        sources = {
+            "SCORING_RULES §7": (ROOT / "docs" / "SCORING_RULES.md").read_text(encoding="utf-8"),
+            "SKILL.md": (ROOT / "SKILL.md").read_text(encoding="utf-8"),
+            "content-baseline": (ROOT / "references" / "content-baseline.md").read_text(encoding="utf-8"),
+        }
+        for name, text in sources.items():
+            self.assertIn("7 天内可启动", text, name)
+            self.assertIn("观察窗", text, name)
+            self.assertIn("第 7 天", text, name)
+            self.assertNotIn("7 天内完成的求职作品", text, name)
+
+
 if __name__ == "__main__":
     unittest.main()
