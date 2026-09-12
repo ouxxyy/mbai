@@ -193,7 +193,7 @@ def generate_examples(root: str | Path, *, build_outputs: bool = False, run_ocr:
 
     manifest = {
         "generated_at": "2026-09-11T20:00:00+08:00",
-        "rule_version": "1.0.0",
+        "rule_version": "2.0.0",
         "fictional_data_only": True,
         "cases": manifest_cases,
     }

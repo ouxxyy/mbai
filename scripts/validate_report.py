@@ -1,4 +1,4 @@
-"""Semantic validation for the frozen report contract."""
+"""Semantic validation for the frozen report contract (schema 2.0.0)."""
 
 from __future__ import annotations
 
@@ -13,17 +13,9 @@ if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from scripts.privacy import PrivacyLeakError, assert_share_card_private
+from scripts.role_match import ROLE_NAMES, analyze_roles, match_task_roles
 from scripts.score_report import aggregate_tasks
 
-
-ROLE_NAMES = {
-    "FLOW_ORCHESTRATOR": "流程编排员",
-    "CONTENT_CALIBRATOR": "内容校准师",
-    "SYSTEM_BOUNDARY_GUARD": "系统边界守门人",
-    "COORDINATION_TRANSLATOR": "多方协同译码员",
-    "PROJECT_RISK_NAVIGATOR": "项目风险领航员",
-    "LOCKED_ROLE": "待解锁职业角色",
-}
 ROOT_KEYS = {
     "schema_version",
     "rule_version",
@@ -68,13 +60,16 @@ def assert_valid_report(report: dict[str, Any]) -> None:
     if errors:
         raise ReportValidationError(errors)
 
-    if report.get("schema_version") != "1.0.0" or report.get("rule_version") != "1.0.0":
-        errors.append("schema_version 与 rule_version 必须为 1.0.0")
+    if report.get("schema_version") != "2.0.0" or report.get("rule_version") != "2.0.0":
+        errors.append("schema_version 与 rule_version 必须为 2.0.0")
 
     metadata = report["report_metadata"]
     questions = metadata.get("questions_asked", [])
     if not isinstance(questions, list) or len(questions) > 3:
         errors.append("补问最多 3 个")
+
+    profile = report["profile"]
+    _check_required_text(errors, profile, ["sanitized_category", "situation_paragraph", "index_note"], "profile")
 
     tasks = report["tasks"]
     if not isinstance(tasks, list) or not tasks:
@@ -101,6 +96,8 @@ def assert_valid_report(report: dict[str, Any]) -> None:
                 errors.append(f"{prefix} UNKNOWN 任务的 score/effective_weight 必须为 null")
             if item.get("weight_source") != "NOT_APPLICABLE":
                 errors.append(f"{prefix} UNKNOWN 任务权重来源必须为 NOT_APPLICABLE")
+            if item.get("role_codes"):
+                errors.append(f"{prefix} UNKNOWN 任务不得命中角色")
         elif level in {"LOW", "MEDIUM", "HIGH"}:
             expected_score = {"LOW": 0, "MEDIUM": 50, "HIGH": 100}[level]
             if item.get("score") != expected_score:
@@ -129,15 +126,38 @@ def assert_valid_report(report: dict[str, Any]) -> None:
         expected_sufficient = False
 
     sufficient = bool(expected_sufficient)
+
+    # —— 角色侧（R1–R4 双门槛）：重算命中并与报告核对 ——
+    role_analysis = analyze_roles(tasks)
+    role_sufficient = bool(role_analysis["is_role_sufficient"])
+    expected_main = role_analysis["main_role"]
+    for index, expected_roles in enumerate(role_analysis["task_roles"]):
+        if tasks[index].get("role_codes") != expected_roles:
+            errors.append(f"tasks[{index}].role_codes 与命中引擎不一致")
+    if actual_metrics.get("task_count_role_evaluable") != role_analysis["role_evaluable"]:
+        errors.append("metrics.task_count_role_evaluable 与命中引擎不一致")
     if metadata.get("is_sufficient_info") is not sufficient:
         errors.append("report_metadata.is_sufficient_info 与任务可判断比例不一致")
+    if metadata.get("is_role_sufficient_info") is not role_sufficient:
+        errors.append("report_metadata.is_role_sufficient_info 与主角色门槛不一致")
 
-    role = report["profile"].get("role", {})
+    role = profile.get("role", {})
     role_code = role.get("code")
     if ROLE_NAMES.get(role_code) != role.get("name"):
         errors.append("角色 code/name 不符合冻结映射")
-    if not sufficient and role_code != "LOCKED_ROLE":
-        errors.append("信息不足时角色必须为 LOCKED_ROLE")
+    if role_sufficient:
+        if role_code != expected_main:
+            errors.append(f"主角色门槛已过，主角色必须为引擎判定结果 {expected_main}")
+    elif role_code != "SHADOW_BEAST":
+        errors.append("主角色门槛未过时角色必须为 SHADOW_BEAST（影子兽）")
+    if role_code == "SHADOW_BEAST":
+        if _refs(role):
+            errors.append("影子兽不得引用任务作为角色来源")
+        if role.get("tags") != ["证据待补充"]:
+            errors.append("影子兽标签必须为 [证据待补充]")
+    # R4 不变量：命中任务 ⊆ 暴露可判任务，因此“无指数却有主角色”不允许出现。
+    if role_code != "SHADOW_BEAST" and not sufficient:
+        errors.append("指数门槛未过时不允许出现主角色（无指数却有主角色）")
 
     task_id_set = set(task_ids)
     grounded_values: list[tuple[str, dict[str, Any]]] = [("profile.role", role)]
@@ -149,8 +169,12 @@ def assert_valid_report(report: dict[str, Any]) -> None:
             if task_id not in task_id_set:
                 errors.append(f"{prefix} 引用了不存在的任务 {task_id}")
 
-    if sufficient and not _refs(role):
-        errors.append("信息充分时角色必须引用任务证据")
+    if role_sufficient and role_code != "SHADOW_BEAST":
+        expected_sources = [
+            task["task_id"] for task in tasks if role_code in match_task_roles(task)
+        ]
+        if _refs(role) != expected_sources:
+            errors.append("主角色 source_task_ids 必须恰好等于该角色命中的任务")
 
     for key in ("execution", "discretion", "coordination", "accountability"):
         item = report["skill_panel"].get(key, {})

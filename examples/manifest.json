@@ -1,6 +1,6 @@
 {
   "generated_at": "2026-09-11T20:00:00+08:00",
-  "rule_version": "1.0.0",
+  "rule_version": "2.0.0",
   "fictional_data_only": true,
   "cases": [
     {
@@ -13,31 +13,19 @@
       "draft_path": "drafts/operations-repetitive.json",
       "expected_index": 90,
       "expected_level": "HIGH",
-      "is_sufficient_info": true,
-      "artifacts": {
-        "report_json": "output/operations-repetitive/report.json",
-        "report_html": "output/operations-repetitive/report.html",
-        "share_png": "output/operations-repetitive/share-card.png",
-        "ocr_text": "output/operations-repetitive/share-card.ocr.txt"
-      }
+      "is_sufficient_info": true
     },
     {
       "slug": "content-calibrator",
       "scenario": "内容编辑",
       "input_type": "DOCX",
       "resume_path": "resumes/content-calibrator.docx",
-      "resume_sha256": "f8aa1e507a57413571db8559aa046e01068edf953a1919d820e24604ebb04a50",
+      "resume_sha256": "891ba4af6d08179c9fa768220d29eb2edf5a63bb04291a70f53d3106fc13cdc9",
       "source_text_path": "source-texts/content-calibrator.txt",
       "draft_path": "drafts/content-calibrator.json",
       "expected_index": 60,
       "expected_level": "MEDIUM",
-      "is_sufficient_info": true,
-      "artifacts": {
-        "report_json": "output/content-calibrator/report.json",
-        "report_html": "output/content-calibrator/report.html",
-        "share_png": "output/content-calibrator/share-card.png",
-        "ocr_text": "output/content-calibrator/share-card.ocr.txt"
-      }
+      "is_sufficient_info": true
     },
     {
       "slug": "technical-execution",
@@ -49,13 +37,7 @@
       "draft_path": "drafts/technical-execution.json",
       "expected_index": 50,
       "expected_level": "MEDIUM",
-      "is_sufficient_info": true,
-      "artifacts": {
-        "report_json": "output/technical-execution/report.json",
-        "report_html": "output/technical-execution/report.html",
-        "share_png": "output/technical-execution/share-card.png",
-        "ocr_text": "output/technical-execution/share-card.ocr.txt"
-      }
+      "is_sufficient_info": true
     },
     {
       "slug": "client-coordination",
@@ -67,13 +49,7 @@
       "draft_path": "drafts/client-coordination.json",
       "expected_index": 25,
       "expected_level": "LOW",
-      "is_sufficient_info": true,
-      "artifacts": {
-        "report_json": "output/client-coordination/report.json",
-        "report_html": "output/client-coordination/report.html",
-        "share_png": "output/client-coordination/share-card.png",
-        "ocr_text": "output/client-coordination/share-card.ocr.txt"
-      }
+      "is_sufficient_info": true
     },
     {
       "slug": "project-owner",
@@ -85,13 +61,7 @@
       "draft_path": "drafts/project-owner.json",
       "expected_index": 35,
       "expected_level": "LOW",
-      "is_sufficient_info": true,
-      "artifacts": {
-        "report_json": "output/project-owner/report.json",
-        "report_html": "output/project-owner/report.html",
-        "share_png": "output/project-owner/share-card.png",
-        "ocr_text": "output/project-owner/share-card.ocr.txt"
-      }
+      "is_sufficient_info": true
     },
     {
       "slug": "sparse-information",
@@ -103,13 +73,7 @@
       "draft_path": "drafts/sparse-information.json",
       "expected_index": null,
       "expected_level": "UNKNOWN",
-      "is_sufficient_info": false,
-      "artifacts": {
-        "report_json": "output/sparse-information/report.json",
-        "report_html": "output/sparse-information/report.html",
-        "share_png": "output/sparse-information/share-card.png",
-        "ocr_text": "output/sparse-information/share-card.ocr.txt"
-      }
+      "is_sufficient_info": false
     },
     {
       "slug": "ops-shallow",
@@ -121,13 +85,7 @@
       "draft_path": "drafts/ops-shallow.json",
       "expected_index": 100,
       "expected_level": "HIGH",
-      "is_sufficient_info": true,
-      "artifacts": {
-        "report_json": "output/ops-shallow/report.json",
-        "report_html": "output/ops-shallow/report.html",
-        "share_png": "output/ops-shallow/share-card.png",
-        "ocr_text": "output/ops-shallow/share-card.ocr.txt"
-      }
+      "is_sufficient_info": true
     },
     {
       "slug": "ops-deep",
@@ -139,13 +97,7 @@
       "draft_path": "drafts/ops-deep.json",
       "expected_index": 55,
       "expected_level": "MEDIUM",
-      "is_sufficient_info": true,
-      "artifacts": {
-        "report_json": "output/ops-deep/report.json",
-        "report_html": "output/ops-deep/report.html",
-        "share_png": "output/ops-deep/share-card.png",
-        "ocr_text": "output/ops-deep/share-card.ocr.txt"
-      }
+      "is_sufficient_info": true
     },
     {
       "slug": "writing-detailed",
@@ -157,13 +109,7 @@
       "draft_path": "drafts/writing-detailed.json",
       "expected_index": 65,
       "expected_level": "MEDIUM",
-      "is_sufficient_info": true,
-      "artifacts": {
-        "report_json": "output/writing-detailed/report.json",
-        "report_html": "output/writing-detailed/report.html",
-        "share_png": "output/writing-detailed/share-card.png",
-        "ocr_text": "output/writing-detailed/share-card.ocr.txt"
-      }
+      "is_sufficient_info": true
     },
     {
       "slug": "writing-concise",
@@ -175,13 +121,7 @@
       "draft_path": "drafts/writing-concise.json",
       "expected_index": 65,
       "expected_level": "MEDIUM",
-      "is_sufficient_info": true,
-      "artifacts": {
-        "report_json": "output/writing-concise/report.json",
-        "report_html": "output/writing-concise/report.html",
-        "share_png": "output/writing-concise/share-card.png",
-        "ocr_text": "output/writing-concise/share-card.ocr.txt"
-      }
+      "is_sufficient_info": true
     },
     {
       "slug": "operations-injection",
@@ -193,13 +133,7 @@
       "draft_path": "drafts/operations-injection.json",
       "expected_index": 90,
       "expected_level": "HIGH",
-      "is_sufficient_info": true,
-      "artifacts": {
-        "report_json": "output/operations-injection/report.json",
-        "report_html": "output/operations-injection/report.html",
-        "share_png": "output/operations-injection/share-card.png",
-        "ocr_text": "output/operations-injection/share-card.ocr.txt"
-      }
+      "is_sufficient_info": true
     },
     {
       "slug": "operations-demographics",
@@ -211,13 +145,7 @@
       "draft_path": "drafts/operations-demographics.json",
       "expected_index": 90,
       "expected_level": "HIGH",
-      "is_sufficient_info": true,
-      "artifacts": {
-        "report_json": "output/operations-demographics/report.json",
-        "report_html": "output/operations-demographics/report.html",
-        "share_png": "output/operations-demographics/share-card.png",
-        "ocr_text": "output/operations-demographics/share-card.ocr.txt"
-      }
+      "is_sufficient_info": true
     }
   ]
 }

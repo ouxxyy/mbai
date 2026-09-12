@@ -1,173 +1,293 @@
-"""Pure presentation renderer for a validated final report JSON."""
+"""Pure presentation renderer for a validated final report JSON.
+
+B 方向（新瑞士式黑黄撞色态度海报）呈现，规范：docs/DESIGN_SYSTEM_B_POSTER.md。
+渲染器只消费最终 JSON；角色素材按 ROLE_TABLE 解析为 data URI 内嵌，
+每份报告只内嵌主角色（或影子兽）＋影子兽兜底两张，断网可看、可导出。
+"""
 
 from __future__ import annotations
 
 import argparse
+import base64
 import html
 import json
+import sys
 from pathlib import Path
 from typing import Any
+
+if __package__ in {None, ""}:
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
+from scripts.role_match import ROLE_BY_CODE, SHADOW_BEAST
+
+ASSET_DIR = Path(__file__).resolve().parents[1] / "assets" / "characters"
+
+LEVEL_LABELS = {"LOW": "低替代", "MEDIUM": "中替代", "HIGH": "高替代", "UNKNOWN": "未知"}
+SKILL_LABELS = {
+    "execution": "任务执行",
+    "discretion": "判断决策",
+    "coordination": "协作协调",
+    "accountability": "责任承担",
+}
+ACTION_LABELS = {"hand_to_ai": "交给 AI", "level_up": "强化自己", "proof_7d": "拿出证据"}
+
+
+def _e(value: Any) -> str:
+    return html.escape(str(value), quote=True)
+
+
+def _json_for_script(value: Any) -> str:
+    return (
+        json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+        .replace("<", "\\u003c")
+        .replace(">", "\\u003e")
+        .replace("&", "\\u0026")
+        .replace("\u2028", "\\u2028")
+        .replace("\u2029", "\\u2029")
+    )
+
+
+def _asset_data_uri(filename: str) -> str:
+    path = ASSET_DIR / filename
+    if not path.is_file():
+        raise RuntimeError(f"角色素材缺失，拒绝渲染缺角色的报告：{path}")
+    encoded = base64.b64encode(path.read_bytes()).decode("ascii")
+    return f"data:image/webp;base64,{encoded}"
+
+
+def _role_assets(report: dict[str, Any]) -> dict[str, str]:
+    """只内嵌主角色（或影子兽）＋影子兽兜底。"""
+    code = report["profile"]["role"]["code"]
+    main = ROLE_BY_CODE.get(code, SHADOW_BEAST)
+    assets = {"main": _asset_data_uri(main["asset"])}
+    if main["code"] != SHADOW_BEAST["code"]:
+        assets["shadow"] = _asset_data_uri(SHADOW_BEAST["asset"])
+    else:
+        assets["shadow"] = assets["main"]
+    assets["specimen"] = main["specimen"]
+    assets["code"] = main["code"]
+    assets["definition"] = main["definition"]
+    return assets
 
 
 STYLE = r"""
 :root {
-  color-scheme: dark;
-  --bg: #0f141c;
-  --panel: #18202c;
-  --panel-2: #111a26;
-  --line: #2a3649;
-  --text: #f0f4f8;
-  --muted: #94a3b8;
-  --cyan: #38bdf8;
-  --green: #10b981;
-  --amber: #f59e0b;
-  --red: #f43f5e;
-  --unknown: #64748b;
-  --radius: 20px;
+  --c-yellow: #EBFB3B;
+  --c-black: #0D0D0D;
+  --c-orange: #FF4A00;
+  --c-gray-light: #F4F4F0;
+  --c-white: #FFFFFF;
+  --c-dark-card: #1A1A1A;
+  --c-border: #0D0D0D;
+  --font-heavy: "Impact", "Arial Black", -apple-system, BlinkMacSystemFont, "PingFang SC", "Heiti SC", sans-serif;
+  --font-sans: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  --font-mono: "SF Mono", "Consolas", "Monaco", "Courier New", monospace;
+  color-scheme: light;
 }
-* { box-sizing: border-box; }
-html { background: var(--bg); overflow-x: hidden; }
+* { box-sizing: border-box; min-width: 0; }
+html { background: var(--c-gray-light); overflow-x: hidden; }
 body {
   margin: 0;
   min-width: 0;
   overflow-x: hidden;
-  color: var(--text);
-  background:
-    radial-gradient(circle at 85% 0%, rgba(56, 189, 248, .12), transparent 28rem),
-    linear-gradient(rgba(42, 54, 73, .13) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(42, 54, 73, .13) 1px, transparent 1px),
-    var(--bg);
-  background-size: auto, 36px 36px, 36px 36px, auto;
-  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", "Segoe UI", Roboto, sans-serif;
+  color: var(--c-black);
+  background: var(--c-gray-light);
+  font-family: var(--font-sans);
+  line-height: 1.65;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  line-height: 1.65;
-  letter-spacing: .01em;
 }
-a { color: var(--cyan); }
-.report-shell { width: min(1120px, calc(100% - 40px)); margin: 0 auto; padding: 34px 0 72px; }
-.topline { display: flex; justify-content: space-between; gap: 16px; align-items: center; margin-bottom: 18px; }
-.eyebrow { margin: 0; color: var(--cyan); font-size: 12px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; }
-.version { color: var(--muted); font-size: 12px; }
-.panel {
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  background: linear-gradient(145deg, rgba(24,32,44,.98), rgba(17,26,38,.96));
-  box-shadow: 0 24px 80px rgba(0,0,0,.24), inset 0 1px rgba(255,255,255,.035);
+a { color: var(--c-black); text-decoration: underline; }
+.report-shell { width: min(1160px, calc(100% - 40px)); margin: 0 auto; padding: 30px 0 70px; }
+.poster-ticker {
+  display: flex; flex-wrap: wrap; gap: 6px 18px; align-items: center; justify-content: space-between;
+  min-height: 44px; padding: 8px 16px; margin-bottom: 22px;
+  background: var(--c-black); color: var(--c-yellow);
+  font: 700 13px/1.35 var(--font-mono); letter-spacing: .06em;
 }
-.hero { position: relative; overflow: hidden; padding: clamp(24px, 5vw, 58px); }
-.hero::after { content: ""; position: absolute; width: 280px; height: 280px; border: 1px solid rgba(56,189,248,.14); border-radius: 50%; right: -90px; top: -110px; box-shadow: 0 0 90px rgba(56,189,248,.08); }
-.hero-grid { display: grid; grid-template-columns: 1.25fr .75fr; gap: 42px; align-items: start; position: relative; z-index: 1; }
-.role-kicker { color: var(--muted); font-size: 13px; }
-h1 { margin: 8px 0 14px; font-size: clamp(34px, 6vw, 68px); line-height: 1.03; letter-spacing: -.04em; }
-.tags, .task-meta { display: flex; flex-wrap: wrap; gap: 8px; }
-.tag, .badge { display: inline-flex; align-items: center; min-height: 30px; padding: 5px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; border: 1px solid var(--line); color: var(--muted); background: rgba(15,20,28,.55); }
-.metric { border-left: 1px solid var(--line); padding-left: 36px; }
-.metric-label { color: var(--muted); font-size: 13px; }
-.metric-value { margin: 8px 0 4px; font-size: clamp(46px, 7vw, 78px); font-weight: 900; line-height: 1; letter-spacing: -.05em; }
-.metric-value small { color: var(--muted); font-size: 18px; letter-spacing: 0; }
-.level-low { color: var(--green); } .level-medium { color: var(--amber); } .level-high { color: var(--red); } .level-unknown { color: var(--unknown); }
-.confidence { margin-top: 18px; color: var(--muted); font-size: 13px; }
-.declaration { margin: 30px 0 0; padding: 12px 14px; border: 1px solid rgba(56,189,248,.28); border-radius: 12px; color: #c7eefe; background: rgba(56,189,248,.07); font-size: 13px; }
-.takeaways { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 24px; }
-.takeaway { padding: 18px; border: 1px solid var(--line); border-radius: 14px; background: rgba(15,20,28,.54); }
-.takeaway strong { display: block; margin-bottom: 8px; font-size: 13px; color: var(--cyan); }
-.takeaway p { margin: 0; }
-.quote { margin: 22px 0 0; padding: 22px 24px; border-left: 3px solid var(--cyan); background: rgba(56,189,248,.06); font-size: clamp(18px, 2.5vw, 25px); font-weight: 730; }
+.poster-ticker .ticker-secondary { color: var(--c-gray-light); }
+.hero-grid { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 28px; align-items: stretch; }
+.attitude-block {
+  position: relative; display: flex; flex-direction: column; justify-content: flex-end;
+  padding: 34px 34px 30px;
+  background: var(--c-black); color: var(--c-white);
+  border: 3.5px solid var(--c-border); box-shadow: 10px 10px 0 rgba(0,0,0,.15);
+}
+.attitude-index-row { display: flex; align-items: flex-end; gap: 18px; flex-wrap: wrap; }
+.giant-index {
+  font-family: var(--font-heavy); font-weight: 900; font-size: 168px; line-height: .82;
+  color: var(--c-yellow); letter-spacing: -.02em;
+}
+.giant-index.unknown { font-size: 96px; line-height: 1; padding-bottom: 10px; }
+.level-chip {
+  display: inline-block; margin-bottom: 14px; padding: 8px 18px;
+  background: var(--c-orange); color: var(--c-black);
+  border: 3px solid var(--c-black); box-shadow: 6px 6px 0 rgba(235,251,59,.35);
+  font: 900 40px/1 var(--font-heavy); letter-spacing: .02em;
+}
+.level-chip.level-unknown { background: var(--c-gray-light); }
+.index-caption { margin: 14px 0 0; color: var(--c-gray-light); font-size: 14px; }
+.character-title {
+  margin: 26px 0 0; font: 900 34px/1.2 var(--font-sans); color: var(--c-white);
+  overflow-wrap: anywhere;
+}
+.character-definition { margin: 8px 0 0; color: var(--c-gray-light); font-size: 16px; }
+.snarky-banner {
+  margin: 22px 0 0; padding: 16px 20px; transform: rotate(-.5deg);
+  background: var(--c-yellow); color: var(--c-black);
+  border: 3.5px solid var(--c-black); box-shadow: 8px 8px 0 rgba(0,0,0,.35);
+  font: 900 26px/1.35 var(--font-heavy); overflow-wrap: anywhere;
+}
+.stage-block {
+  display: flex; flex-direction: column; align-items: center; justify-content: space-between;
+  padding: 22px; background: var(--c-yellow); border: 3.5px solid var(--c-border);
+  box-shadow: 10px 10px 0 rgba(0,0,0,.15);
+}
+.specimen-capsule {
+  align-self: stretch; display: flex; flex-wrap: wrap; gap: 4px 12px; justify-content: space-between;
+  padding: 8px 14px; background: var(--c-black); color: var(--c-yellow);
+  font: 700 13px/1.4 var(--font-mono);
+}
+.character-stage { position: relative; width: 100%; display: flex; flex-direction: column; align-items: center; }
+.character-figure { width: min(460px, 100%); height: auto; display: block; }
+.character-plinth { width: 62%; height: 26px; margin-top: -18px; background: var(--c-black); border-radius: 50%; }
+.stage-nameplate {
+  align-self: stretch; margin-top: 18px; padding: 14px 18px; background: var(--c-white);
+  border: 3px solid var(--c-black); font-size: 14px;
+}
+.stage-nameplate strong { display: block; margin-bottom: 4px; font-size: 15px; }
+.situation-paper {
+  margin-top: 28px; padding: 26px 30px; background: var(--c-white);
+  border: 3.5px solid var(--c-black); box-shadow: 10px 10px 0 rgba(0,0,0,.15);
+}
+.situation-paper p { margin: 0; font-size: 16px; line-height: 1.65; overflow-wrap: anywhere; }
+.takeaway-row { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin-top: 28px; }
+.takeaway { padding: 18px 20px; background: var(--c-white); border: 3px solid var(--c-black); box-shadow: 8px 8px 0 rgba(0,0,0,.12); }
+.takeaway strong { display: block; margin-bottom: 8px; font: 700 13px/1.2 var(--font-mono); letter-spacing: .08em; }
+.takeaway p { margin: 0; font-size: 15px; overflow-wrap: anywhere; }
 section { margin-top: 56px; scroll-margin-top: 24px; }
 .section-head { display: flex; align-items: end; justify-content: space-between; gap: 20px; margin-bottom: 18px; }
-.section-no { color: var(--cyan); font: 800 12px/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .14em; }
-h2 { margin: 6px 0 0; font-size: clamp(26px, 4vw, 38px); letter-spacing: -.03em; }
-.section-note { max-width: 520px; margin: 0; color: var(--muted); font-size: 14px; }
-.skill-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
-.skill-card { min-width: 0; padding: 20px; }
-.skill-card h3 { margin: 0 0 16px; font-size: 15px; }
-.skill-score { font-size: 34px; font-weight: 850; line-height: 1; }
-.meter { height: 5px; margin: 13px 0 14px; overflow: hidden; border-radius: 99px; background: var(--line); }
-.meter > span { display: block; height: 100%; background: linear-gradient(90deg, var(--cyan), #818cf8); }
-.evidence { margin: 0; color: var(--muted); font-size: 13px; overflow-wrap: anywhere; }
-.task-list { display: grid; gap: 14px; }
-details.task { overflow: hidden; }
-details.task summary { min-height: 72px; padding: 18px 22px; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+.section-no { color: var(--c-black); font: 800 13px/1 var(--font-mono); letter-spacing: .14em; }
+h2 { margin: 6px 0 0; font: 900 28px/1.3 var(--font-sans); letter-spacing: -.01em; }
+.section-note { max-width: 540px; margin: 0; font-size: 14px; overflow-wrap: anywhere; }
+.skill-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.skill-card { padding: 18px; background: var(--c-white); border: 3px solid var(--c-black); box-shadow: 8px 8px 0 rgba(0,0,0,.12); }
+.skill-card h3 { margin: 0 0 12px; font-size: 15px; }
+.skill-score { font: 900 34px/1 var(--font-heavy); }
+.skill-score small { font: 700 13px/1 var(--font-sans); }
+.skill-meter { height: 8px; margin: 12px 0; background: var(--c-gray-light); border: 2px solid var(--c-black); }
+.skill-meter > span { display: block; height: 100%; background: var(--c-orange); }
+.skill-evidence { margin: 0; font-size: 13px; overflow-wrap: anywhere; }
+.task-list { display: grid; gap: 16px; }
+details.task { background: var(--c-white); border: 3px solid var(--c-black); box-shadow: 8px 8px 0 rgba(0,0,0,.12); }
+details.task summary { min-height: 68px; padding: 16px 20px; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 14px; }
 details.task summary::-webkit-details-marker { display: none; }
-.task-title { font-size: 17px; font-weight: 750; }
-.task-body { border-top: 1px solid var(--line); padding: 22px; }
+.task-title { font-weight: 800; font-size: 17px; overflow-wrap: anywhere; }
+.task-meta { display: flex; flex-wrap: wrap; gap: 8px; }
+.badge { display: inline-flex; align-items: center; min-height: 26px; padding: 4px 10px; border: 2px solid var(--c-black); font: 700 12px/1.2 var(--font-sans); background: var(--c-gray-light); }
+.badge.level-LOW { background: var(--c-yellow); }
+.badge.level-MEDIUM { background: var(--c-white); }
+.badge.level-HIGH { background: var(--c-orange); }
+.badge.level-UNKNOWN { background: var(--c-gray-light); color: #555; }
+.task-body { border-top: 3px solid var(--c-black); padding: 20px; }
 .task-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-.machine, .human { padding: 18px; border-radius: 14px; background: rgba(15,20,28,.58); }
+.machine, .human { padding: 16px; border: 3px solid var(--c-black); overflow-wrap: anywhere; }
+.machine { background: var(--c-yellow); }
 .machine h3, .human h3 { margin: 0 0 8px; font-size: 14px; }
-.machine h3 { color: var(--cyan); } .human h3 { color: #c4b5fd; }
-.reason { margin: 16px 0 0; color: var(--muted); }
-.raw-evidence { margin-top: 14px; padding: 14px; border-left: 2px solid var(--line); color: #cbd5e1; background: rgba(15,20,28,.4); overflow-wrap: anywhere; }
-.edge-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
-.edge { padding: 22px; font-size: 17px; font-weight: 650; }
-.action-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
-.action { padding: 24px; display: flex; flex-direction: column; }
-.action-label { color: var(--cyan); font: 800 12px/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .12em; }
-.action h3 { margin: 14px 0 10px; font-size: 21px; line-height: 1.25; }
-.action p { color: var(--muted); }
-.action dl { margin: auto 0 0; }
-.action dt { margin-top: 13px; color: #cbd5e1; font-size: 12px; font-weight: 800; }
-.action dd { margin: 4px 0 0; font-size: 13px; }
-.share-copy { padding: 22px; margin-bottom: 18px; color: var(--muted); }
-.share-export-stage { width: min(540px, calc(100% - 40px)); margin: 0 auto 56px; }
-#share-card-canvas { display: block; width: 100%; height: auto; border-radius: 18px; box-shadow: 0 25px 80px rgba(0,0,0,.38); background: var(--bg); }
-.download-button { width: 100%; min-height: 48px; margin-top: 14px; border: 0; border-radius: 12px; color: #06111a; background: var(--cyan); font: inherit; font-weight: 850; cursor: pointer; }
-.download-button:focus-visible { outline: 3px solid white; outline-offset: 3px; }
-.method { padding: 24px; }
-.method p, .method li { color: var(--muted); }
-.method strong { color: var(--text); }
-.methodology-shell { width: min(1120px, calc(100% - 40px)); margin: 0 auto 70px; }
-html.share-only, html.share-only body { width: 1080px; height: 1440px; overflow: hidden; background: #0f141c; }
+.human { background: var(--c-black); color: var(--c-white); }
+.task-reason { margin: 16px 0 0; font-size: 14px; overflow-wrap: anywhere; }
+.raw-evidence { margin-top: 12px; padding: 12px 14px; border-left: 6px solid var(--c-orange); background: var(--c-gray-light); font-size: 13px; overflow-wrap: anywhere; }
+.role-hit-chips { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 8px; }
+.role-hit-chips .badge { background: var(--c-white); font-family: var(--font-mono); }
+.edge-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.edge { padding: 20px; background: var(--c-black); color: var(--c-yellow); border: 3px solid var(--c-black); box-shadow: 8px 8px 0 rgba(0,0,0,.15); font-size: 16px; font-weight: 650; overflow-wrap: anywhere; }
+.action-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.action { padding: 22px; display: flex; flex-direction: column; background: var(--c-white); border: 3px solid var(--c-black); box-shadow: 8px 8px 0 rgba(0,0,0,.12); }
+.action-label { font: 800 12px/1 var(--font-mono); letter-spacing: .12em; background: var(--c-black); color: var(--c-yellow); align-self: flex-start; padding: 6px 10px; }
+.action h3 { margin: 14px 0 10px; font-size: 20px; line-height: 1.3; overflow-wrap: anywhere; }
+.action p { margin: 0; font-size: 14px; overflow-wrap: anywhere; }
+.action dl { margin: 14px 0 0; }
+.action dt { margin-top: 10px; font: 800 12px/1.2 var(--font-mono); letter-spacing: .06em; }
+.action dd { margin: 4px 0 0; font-size: 13px; overflow-wrap: anywhere; }
+.share-copy { padding: 20px; margin-bottom: 18px; background: var(--c-white); border: 3px solid var(--c-black); font-size: 14px; }
+.share-export-stage { width: min(560px, calc(100% - 40px)); margin: 0 auto 60px; }
+#share-card-canvas { display: block; width: 100%; height: auto; background: var(--c-yellow); border: 3.5px solid var(--c-black); box-shadow: 10px 10px 0 rgba(0,0,0,.2); }
+.download-button {
+  width: 100%; min-height: 48px; margin-top: 14px; padding: 12px;
+  background: var(--c-black); color: var(--c-yellow);
+  border: 3px solid var(--c-black); box-shadow: 6px 6px 0 rgba(0,0,0,.25);
+  font: 900 16px/1.3 var(--font-sans); cursor: pointer;
+}
+.download-button:focus-visible { outline: 3px solid var(--c-orange); outline-offset: 3px; }
+.download-button[disabled] { background: var(--c-orange); color: var(--c-black); cursor: not-allowed; }
+.method { padding: 24px; background: var(--c-white); border: 3px solid var(--c-black); box-shadow: 8px 8px 0 rgba(0,0,0,.12); }
+.method p, .method li { font-size: 14px; }
+.methodology-shell { width: min(1160px, calc(100% - 40px)); margin: 0 auto 70px; }
+html.share-only, html.share-only body { width: 1080px; height: 1440px; overflow: hidden; background: var(--c-yellow); }
 html.share-only .report-shell, html.share-only .methodology-shell { display: none; }
 html.share-only .share-export-stage { width: 1080px; height: 1440px; margin: 0; }
-html.share-only #share-card-canvas { width: 1080px; height: 1440px; border-radius: 0; box-shadow: none; }
+html.share-only #share-card-canvas { width: 1080px; height: 1440px; border: 0; box-shadow: none; }
 html.share-only .download-button { display: none; }
 @media (max-width: 860px) {
   .hero-grid { grid-template-columns: 1fr; }
-  .metric { border-left: 0; border-top: 1px solid var(--line); padding: 26px 0 0; }
   .skill-grid { grid-template-columns: 1fr 1fr; }
   .action-grid { grid-template-columns: 1fr; }
+  .edge-grid { grid-template-columns: 1fr; }
+  .takeaway-row { grid-template-columns: 1fr; }
 }
 @media (max-width: 680px) {
-  .report-shell, .methodology-shell { width: min(100% - 24px, 1120px); padding-top: 16px; }
-  .hero { padding: 22px 18px; border-radius: 16px; }
-  .topline, .section-head { align-items: flex-start; flex-direction: column; }
-  .takeaways, .skill-grid, .task-columns, .edge-grid { grid-template-columns: 1fr; }
-  details.task summary { min-height: 64px; padding: 15px 16px; align-items: flex-start; flex-direction: column; }
-  .task-body { padding: 16px; }
+  .report-shell, .methodology-shell { width: calc(100% - 24px); padding-top: 14px; }
+  .poster-ticker { font-size: 11px; }
+  .attitude-block { padding: 24px 20px; }
+  .giant-index { font-size: 120px; }
+  .giant-index.unknown { font-size: 56px; }
+  .level-chip { font-size: 28px; }
+  .character-title { font-size: 26px; }
+  .snarky-banner { font-size: 19px; }
+  .character-figure { width: min(240px, 100%); }
+  h2 { font-size: 22px; }
+  details.task summary { align-items: flex-start; flex-direction: column; }
+  .task-columns { grid-template-columns: 1fr; }
+  .takeaway, .situation-paper { word-break: break-word; overflow-wrap: anywhere; }
+  .situation-paper { padding: 18px; }
   section { margin-top: 42px; }
   .download-button { min-height: 44px; }
 }
 @media print {
-  body { background: white; color: #111827; }
-  .panel { box-shadow: none; }
+  body { background: white; }
   .download-button { display: none; }
 }
 """
-
 
 CARD_SCRIPT = r"""
 (() => {
   const cardData = __CARD_DATA__;
   const reportId = __REPORT_ID__;
+  const roleCode = __ROLE_CODE__;
+  const roleDefinition = __ROLE_DEFINITION__;
+  const specimen = __SPECIMEN__;
+  const assetMain = __ASSET_MAIN__;
+  const assetShadow = __ASSET_SHADOW__;
   const params = new URLSearchParams(window.location.search);
   if (params.get("share") === "1") document.documentElement.classList.add("share-only");
 
   const canvas = document.getElementById("share-card-canvas");
   const ctx = canvas.getContext("2d");
-  const colors = { LOW: "#10b981", MEDIUM: "#f59e0b", HIGH: "#f43f5e", UNKNOWN: "#64748b" };
-  const accent = colors[cardData.exposure_level] || colors.UNKNOWN;
-  const font = '-apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif';
+  const colors = { LOW: "#0D0D0D", MEDIUM: "#FF4A00", HIGH: "#FF4A00", UNKNOWN: "#555555" };
+  const heavy = '"Arial Black", "Impact", "PingFang SC", sans-serif';
+  const sans = '-apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif';
+  const mono = '"SF Mono", "Consolas", "Monaco", monospace';
+  const YELLOW = "#EBFB3B", BLACK = "#0D0D0D", ORANGE = "#FF4A00", WHITE = "#FFFFFF", GRAY = "#F4F4F0";
 
-  function roundedRect(x, y, w, h, r, fill, stroke = null) {
+  function roundedRect(x, y, w, h, r, fill, stroke = null, strokeWidth = 3) {
     ctx.beginPath();
     ctx.roundRect(x, y, w, h, r);
     ctx.fillStyle = fill;
     ctx.fill();
-    if (stroke) { ctx.strokeStyle = stroke; ctx.lineWidth = 2; ctx.stroke(); }
+    if (stroke) { ctx.strokeStyle = stroke; ctx.lineWidth = strokeWidth; ctx.stroke(); }
   }
 
-  function wrapLines(text, maxWidth, maxLines = 4) {
+  function wrapLines(text, maxWidth, maxLines = 3) {
     const chars = Array.from(String(text));
     const lines = [];
     let line = "";
@@ -188,76 +308,117 @@ CARD_SCRIPT = r"""
     return lines;
   }
 
-  function drawWrapped(text, x, y, maxWidth, lineHeight, maxLines = 4) {
+  function drawWrapped(text, x, y, maxWidth, lineHeight, maxLines = 3) {
     const lines = wrapLines(text, maxWidth, maxLines);
     lines.forEach((line, index) => ctx.fillText(line, x, y + index * lineHeight));
     return y + lines.length * lineHeight;
   }
 
-  function draw() {
+  function drawCard(image) {
     ctx.clearRect(0, 0, 1080, 1440);
-    const bg = ctx.createLinearGradient(0, 0, 1080, 1440);
-    bg.addColorStop(0, "#0f141c"); bg.addColorStop(1, "#131d2a");
-    ctx.fillStyle = bg; ctx.fillRect(0, 0, 1080, 1440);
-    ctx.strokeStyle = "rgba(42,54,73,.35)"; ctx.lineWidth = 1;
-    for (let x = 0; x <= 1080; x += 54) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, 1440); ctx.stroke(); }
-    for (let y = 0; y <= 1440; y += 54) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(1080, y); ctx.stroke(); }
-    const glow = ctx.createRadialGradient(920, 80, 0, 920, 80, 420);
-    glow.addColorStop(0, "rgba(56,189,248,.18)"); glow.addColorStop(1, "rgba(56,189,248,0)");
-    ctx.fillStyle = glow; ctx.fillRect(500, 0, 580, 520);
+    ctx.fillStyle = YELLOW; ctx.fillRect(0, 0, 1080, 1440);
+    ctx.strokeStyle = BLACK; ctx.lineWidth = 14; ctx.strokeRect(20, 20, 1040, 1400);
 
-    ctx.font = `700 24px ${font}`; ctx.fillStyle = "#38bdf8";
-    ctx.fillText("WORK TASK // AI REPLACEMENT", 72, 72);
-    ctx.font = `500 22px ${font}`; ctx.fillStyle = "#94a3b8";
-    ctx.textAlign = "right"; ctx.fillText(cardData.category, 1008, 72); ctx.textAlign = "left";
+    // 顶部公告条
+    ctx.fillStyle = BLACK; ctx.fillRect(20, 20, 1040, 72);
+    ctx.fillStyle = YELLOW; ctx.font = `700 26px ${mono}`;
+    ctx.fillText("AI TASK REPLACEMENT INDEX · 职业体检报告", 56, 68);
+    ctx.textAlign = "right"; ctx.fillText("ROUND_HALF_UP_TO_5", 1024, 68); ctx.textAlign = "left";
 
-    ctx.font = `900 62px ${font}`; ctx.fillStyle = "#f0f4f8";
-    drawWrapped(cardData.role_name, 72, 170, 900, 74, 2);
-    let tagX = 72;
-    ctx.font = `700 22px ${font}`;
-    for (const tag of cardData.role_tags.slice(0, 3)) {
-      const width = ctx.measureText(tag).width + 40;
-      roundedRect(tagX, 246, width, 44, 22, "rgba(15,20,28,.72)", "#2a3649");
-      ctx.fillStyle = "#cbd5e1"; ctx.fillText(tag, tagX + 20, 276); tagX += width + 12;
+    // 指数与角色立像（上 60%）
+    ctx.fillStyle = BLACK; ctx.font = `700 24px ${mono}`;
+    ctx.fillText(cardData.category, 56, 136);
+    ctx.font = `800 28px ${sans}`;
+    ctx.fillText("工作任务 AI 替代指数", 56, 186);
+    const known = cardData.exposure_index !== null && cardData.exposure_index !== undefined;
+    if (known) {
+      ctx.font = `900 250px ${heavy}`;
+      const numberText = String(cardData.exposure_index);
+      ctx.fillText(numberText, 52, 445);
+      const numberWidth = ctx.measureText(numberText).width;
+      ctx.font = `900 42px ${heavy}`;
+      ctx.fillText("/ 100", 52 + numberWidth + 24, 445);
+    } else {
+      ctx.font = `900 110px ${heavy}`;
+      ctx.fillText("暂无指数", 56, 400);
+      ctx.font = `700 30px ${sans}`;
+      ctx.fillStyle = "#444444";
+      ctx.fillText("证据不够，不下结论", 60, 455);
+    }
+    const levelText = { LOW: "LOW · 低替代", MEDIUM: "MEDIUM · 中替代", HIGH: "HIGH · 高替代", UNKNOWN: "UNKNOWN" }[cardData.exposure_level] || "UNKNOWN";
+    ctx.font = `900 34px ${heavy}`;
+    const chipWidth = ctx.measureText(levelText).width + 48;
+    roundedRect(56, 490, chipWidth, 62, 0, cardData.exposure_level === "HIGH" || cardData.exposure_level === "MEDIUM" ? ORANGE : BLACK, BLACK, 4);
+    ctx.fillStyle = BLACK; ctx.fillText(levelText, 80, 533);
+
+    if (image) {
+      ctx.drawImage(image, 560, 120, 440, 440);
+      ctx.fillStyle = BLACK;
+      ctx.beginPath(); ctx.ellipse(780, 578, 208, 30, 0, 0, Math.PI * 2); ctx.fill();
     }
 
-    roundedRect(72, 326, 936, 230, 26, "rgba(24,32,44,.94)", "#2a3649");
-    ctx.font = `800 24px ${font}`; ctx.fillStyle = "#94a3b8";
-    ctx.fillText("工作任务 AI 替代指数", 112, 378);
-    const indexText = cardData.exposure_index === null ? "信息不足" : String(cardData.exposure_index);
-    ctx.font = cardData.exposure_index === null ? `900 74px ${font}` : `900 134px ${font}`;
-    ctx.fillStyle = accent; ctx.fillText(indexText, 110, cardData.exposure_index === null ? 480 : 505);
-    if (cardData.exposure_index !== null) {
-      ctx.font = `700 30px ${font}`; ctx.fillStyle = "#64748b"; ctx.fillText("/ 100", 340, 493);
-    }
-    ctx.font = `650 22px ${font}`; ctx.fillStyle = "#cbd5e1"; ctx.textAlign = "right";
-    ctx.fillText(cardData.confidence_label, 964, 382);
-    ctx.fillStyle = accent; ctx.fillText(cardData.exposure_level, 964, 426); ctx.textAlign = "left";
+    // 角色名条（含定义句；影子兽时定义句即“证据不够，不下结论”）
+    ctx.fillStyle = BLACK; ctx.fillRect(56, 640, 968, 128);
+    ctx.fillStyle = WHITE; ctx.font = `900 52px ${sans}`;
+    drawWrapped(cardData.role_name, 88, 700, 900, 60, 1);
+    ctx.fillStyle = YELLOW; ctx.font = `600 26px ${sans}`;
+    drawWrapped(roleDefinition, 88, 744, 830, 32, 1);
 
-    roundedRect(72, 586, 936, 188, 24, "rgba(56,189,248,.075)", "rgba(56,189,248,.32)");
-    ctx.font = `800 33px ${font}`; ctx.fillStyle = "#f0f4f8";
-    drawWrapped(`“${cardData.snarky_quote}”`, 112, 646, 856, 46, 3);
+    // 嘴替横幅
+    roundedRect(56, 800, 968, 150, 0, WHITE, BLACK, 6);
+    ctx.fillStyle = BLACK; ctx.font = `900 44px ${heavy}`;
+    drawWrapped(`“${cardData.snarky_quote}”`, 92, 866, 896, 56, 2);
 
-    ctx.font = `800 22px ${font}`; ctx.fillStyle = "#38bdf8"; ctx.fillText("人机任务切片", 72, 834);
+    // 分工速览
+    ctx.fillStyle = BLACK; ctx.font = `700 24px ${mono}`;
+    ctx.fillText("分工速览 // WHO DOES WHAT", 56, 1002);
     cardData.task_highlights.slice(0, 2).forEach((item, index) => {
-      const y = 866 + index * 142;
-      roundedRect(72, y, 936, 124, 18, "rgba(24,32,44,.92)", "#2a3649");
-      ctx.font = `800 25px ${font}`; ctx.fillStyle = "#f0f4f8"; ctx.fillText(item.task_name, 102, y + 40);
-      ctx.font = `600 20px ${font}`; ctx.fillStyle = "#38bdf8";
-      drawWrapped(`AI：${item.ai_part}`, 102, y + 76, 400, 28, 2);
-      ctx.fillStyle = "#c4b5fd";
-      drawWrapped(`人：${item.human_part}`, 548, y + 76, 420, 28, 2);
+      const y = 1018 + index * 116;
+      roundedRect(56, y, 968, 104, 0, WHITE, BLACK, 5);
+      ctx.fillStyle = BLACK; ctx.font = `800 28px ${sans}`;
+      ctx.fillText(item.task_name, 84, y + 38);
+      ctx.font = `600 24px ${sans}`;
+      ctx.fillStyle = "#333333";
+      const aiLines = wrapLines(`AI：${item.ai_part}`, 430, 1);
+      ctx.fillText(aiLines[0] || "", 84, y + 78);
+      const humanLines = wrapLines(`人：${item.human_part}`, 400, 1);
+      ctx.fillText(humanLines[0] || "", 560, y + 78);
     });
 
-    roundedRect(72, 1168, 936, 130, 20, "rgba(245,158,11,.08)", "rgba(245,158,11,.36)");
-    ctx.font = `800 21px ${font}`; ctx.fillStyle = "#f59e0b"; ctx.fillText("7 天证明动作", 102, 1208);
-    ctx.font = `750 27px ${font}`; ctx.fillStyle = "#f0f4f8";
-    drawWrapped(cardData.proof_7d, 102, 1250, 846, 36, 2);
+    // 7 天下一步
+    roundedRect(56, 1256, 968, 118, 0, WHITE, BLACK, 5);
+    ctx.fillStyle = ORANGE; ctx.fillRect(56, 1256, 18, 118);
+    ctx.fillStyle = BLACK; ctx.font = `700 20px ${mono}`;
+    ctx.fillText("7 天下一步 // NEXT MOVE", 96, 1288);
+    ctx.font = `800 30px ${sans}`;
+    drawWrapped(cardData.proof_7d, 96, 1326, 900, 36, 2);
 
-    ctx.font = `650 20px ${font}`; ctx.fillStyle = "#cbd5e1";
-    drawWrapped(cardData.disclaimer, 72, 1358, 936, 28, 2);
-    ctx.textAlign = "right"; ctx.fillStyle = "#94a3b8"; ctx.fillText("已脱敏分享卡", 1008, 1402); ctx.textAlign = "left";
-    window.__CARD_READY__ = true;
+    // 角落声明与评级代码（必须完整落在画框内：底边框内缘约 y=1413，基线留足降部空间）
+    ctx.fillStyle = BLACK; ctx.font = `700 24px ${sans}`;
+    ctx.fillText("替代指数量的是任务，不是人。", 56, 1398);
+    ctx.textAlign = "right"; ctx.font = `700 19px ${mono}`;
+    ctx.fillText(`SPECIMEN CARD // ${roleCode} // ${specimen}`, 1024, 1398);
+    ctx.textAlign = "left";
+  }
+
+  function drawFailure(reason) {
+    ctx.clearRect(0, 0, 1080, 1440);
+    ctx.fillStyle = BLACK; ctx.fillRect(0, 0, 1080, 1440);
+    ctx.fillStyle = ORANGE; ctx.font = `900 72px ${heavy}`;
+    ctx.fillText("素材加载失败", 80, 640);
+    ctx.fillStyle = YELLOW; ctx.font = `700 34px ${sans}`;
+    drawWrapped(`角色素材解码失败，已显式中止导出：${reason}`, 80, 740, 900, 48, 3);
+    ctx.font = `700 26px ${mono}`;
+    ctx.fillText("EXPORT ABORTED // NO SILENT MISSING-CHARACTER CARD", 80, 900);
+  }
+
+  function loadImage(dataUri) {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => img.decode().then(() => resolve(img)).catch(reject);
+      img.onerror = () => reject(new Error("image decode failed"));
+      img.src = dataUri;
+    });
   }
 
   function updateLayoutProbe() {
@@ -267,12 +428,28 @@ CARD_SCRIPT = r"""
     root.setAttribute("data-scroll-width", String(root.scrollWidth));
   }
 
-  draw(); updateLayoutProbe();
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { draw(); updateLayoutProbe(); });
+  async function boot() {
+    try {
+      if (document.fonts && document.fonts.ready) await document.fonts.ready;
+      const image = await loadImage(assetMain);
+      drawCard(image);
+      window.__CARD_READY__ = true;
+      window.__CARD_ERROR__ = null;
+    } catch (error) {
+      drawFailure(error && error.message ? error.message : String(error));
+      window.__CARD_READY__ = false;
+      window.__CARD_ERROR__ = String(error);
+      const button = document.getElementById("download-card");
+      if (button) { button.disabled = true; button.textContent = "素材加载失败，导出已中止"; }
+    }
+    updateLayoutProbe();
+  }
+
   window.addEventListener("resize", updateLayoutProbe);
   document.getElementById("download-card").addEventListener("click", () => {
+    if (window.__CARD_ERROR__) return;
     canvas.toBlob((blob) => {
-      if (!blob) return;
+      if (!blob || window.__CARD_ERROR__) return;
       const link = document.createElement("a");
       link.href = URL.createObjectURL(blob);
       link.download = `${reportId}-share-card.png`;
@@ -280,33 +457,10 @@ CARD_SCRIPT = r"""
       setTimeout(() => URL.revokeObjectURL(link.href), 1000);
     }, "image/png");
   });
+
+  boot();
 })();
 """
-
-
-SKILL_LABELS = {
-    "execution": "任务执行",
-    "discretion": "判断决策",
-    "coordination": "协作协调",
-    "accountability": "责任承担",
-}
-ACTION_LABELS = {"hand_to_ai": "交给 AI", "level_up": "强化自己", "proof_7d": "拿出证据"}
-LEVEL_LABELS = {"LOW": "低替代", "MEDIUM": "中替代", "HIGH": "高替代", "UNKNOWN": "未知"}
-
-
-def _e(value: Any) -> str:
-    return html.escape(str(value), quote=True)
-
-
-def _json_for_script(value: Any) -> str:
-    return (
-        json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
-        .replace("<", "\\u003c")
-        .replace(">", "\\u003e")
-        .replace("&", "\\u0026")
-        .replace("\u2028", "\\u2028")
-        .replace("\u2029", "\\u2029")
-    )
 
 
 def _skill_card(name: str, item: dict[str, Any]) -> str:
@@ -315,19 +469,22 @@ def _skill_card(name: str, item: dict[str, Any]) -> str:
     value = f"{score}" if score is not None else "未知"
     width = max(0, min(100, int(score or 0)))
     return f"""
-      <article class="skill-card panel">
+      <article class="skill-card">
         <h3>{_e(SKILL_LABELS[name])}</h3>
         <div class="skill-score">{_e(value)}{f'<small> / 100</small>' if score is not None else ''}</div>
-        <div class="meter" aria-hidden="true"><span style="width:{width}%"></span></div>
-        <p class="evidence">{_e(item.get('evidence') or '简历未提及')}</p>
+        <div class="skill-meter" aria-hidden="true"><span style="width:{width}%"></span></div>
+        <p class="skill-evidence">{_e(item.get('evidence') or '简历未提及')}</p>
       </article>"""
 
 
 def _task_card(task: dict[str, Any]) -> str:
     level = task["exposure_level"]
     time_label = f"时间占比 {_e(task['time_share_percent'])}%" if task.get("time_share_percent") is not None else "等权"
+    hit_codes = task.get("role_codes") or []
+    chips = "".join(f'<span class="badge">{_e(ROLE_BY_CODE[code]["name"])}</span>' for code in hit_codes)
+    chips_block = f'<div class="role-hit-chips"><span class="badge">角色命中</span>{chips}</div>' if chips else ""
     return f"""
-      <details class="task panel">
+      <details class="task" open>
         <summary>
           <span class="task-title">{_e(task['task_name'])}</span>
           <span class="task-meta">
@@ -338,24 +495,25 @@ def _task_card(task: dict[str, Any]) -> str:
         </summary>
         <div class="task-body">
           <div class="task-columns">
-            <div class="machine"><h3>🤖 AI 能接手</h3><div>{_e(task['ai_can_do'])}</div></div>
-            <div class="human"><h3>🧑 你仍需负责</h3><div>{_e(task['human_must_do'])}</div></div>
+            <div class="machine"><h3>AI 能接手</h3><div>{_e(task['ai_can_do'])}</div></div>
+            <div class="human"><h3>你来把关</h3><div>{_e(task['human_must_do'])}</div></div>
           </div>
-          <p class="reason"><strong>判断理由：</strong>{_e(task['reason'])}</p>
+          <p class="task-reason"><strong>判断理由：</strong>{_e(task['reason'])}</p>
           <div class="raw-evidence"><strong>证据原文：</strong>{_e(task['evidence'])}</div>
+          {chips_block}
         </div>
       </details>"""
 
 
 def _action_card(kind: str, action: dict[str, Any]) -> str:
     return f"""
-      <article class="action panel">
+      <article class="action">
         <div class="action-label">{_e(ACTION_LABELS[kind])}</div>
         <h3>{_e(action['title'])}</h3>
         <p>{_e(action['action'])}</p>
         <dl>
           <dt>交付物</dt><dd>{_e(action['deliverable'])}</dd>
-          <dt>完成标准</dt><dd>{_e(action['acceptance_criteria'])}</dd>
+          <dt>算完成</dt><dd>{_e(action['acceptance_criteria'])}</dd>
           <dt>人工检查点</dt><dd>{_e(action['human_checkpoint'])}</dd>
           <dt>经历依据</dt><dd>{_e(action['grounded_evidence'])}</dd>
         </dl>
@@ -363,16 +521,20 @@ def _action_card(kind: str, action: dict[str, Any]) -> str:
 
 
 def render_report(report: dict[str, Any]) -> str:
-    """Render exactly what final JSON says; scoring belongs upstream."""
+    """Render exactly what final JSON says; scoring and role matching belong upstream."""
     metadata = report["report_metadata"]
     profile = report["profile"]
     role = profile["role"]
     metrics = report["metrics"]
     index = metrics["exposure_index"]
     level = metrics["exposure_level"]
+    assets = _role_assets(report)
+
     index_attr = "unknown" if index is None else str(index)
-    metric_value = "信息不足" if index is None else f"{index} <small>/ 100</small>"
-    metric_aria = "信息不足" if index is None else f"{index} / 100"
+    giant = "暂无指数" if index is None else f"{index}"
+    giant_class = "unknown" if index is None else ""
+    situation = profile.get("situation_paragraph") or ""
+    index_note = profile.get("index_note") or ""
 
     evaluable = [task for task in report["tasks"] if task["exposure_level"] != "UNKNOWN"]
     affected = sorted(
@@ -383,10 +545,10 @@ def render_report(report: dict[str, Any]) -> str:
     affected_text = "；".join(f"{item['task_name']}（{LEVEL_LABELS[item['exposure_level']]}）" for item in affected) or "现有证据不足，暂不判断受影响任务。"
     edge_text = report["human_edge"][0]["summary"]
 
-    tags = "".join(f'<span class="tag">{_e(tag)}</span>' for tag in role["tags"])
+    tags = "".join(f'<span class="badge">{_e(tag)}</span>' for tag in role["tags"])
     skills = "".join(_skill_card(name, report["skill_panel"][name]) for name in SKILL_LABELS)
     tasks = "".join(_task_card(task) for task in report["tasks"])
-    edges = "".join(f'<article class="edge panel">{_e(point["summary"])}</article>' for point in report["human_edge"])
+    edges = "".join(f'<article class="edge">{_e(point["summary"])}</article>' for point in report["human_edge"])
     actions = "".join(_action_card(kind, report["action_plan"][kind]) for kind in ACTION_LABELS)
     sources = "".join(
         f'<li><strong>{_e(source["organization"])}</strong>：<a href="{_e(source["url"])}" target="_blank" rel="noreferrer">{_e(source["title"])}</a>（发布 {_e(source["publication_date"])}；访问 {_e(source["accessed_at"])}）。{_e(source["boundary"])}</li>'
@@ -396,6 +558,11 @@ def render_report(report: dict[str, Any]) -> str:
     card_script = (
         CARD_SCRIPT.replace("__CARD_DATA__", _json_for_script(report["share_card"]))
         .replace("__REPORT_ID__", _json_for_script(metadata["report_id"]))
+        .replace("__ROLE_CODE__", _json_for_script(assets["code"]))
+        .replace("__ROLE_DEFINITION__", _json_for_script(assets["definition"]))
+        .replace("__SPECIMEN__", _json_for_script(assets["specimen"]))
+        .replace("__ASSET_MAIN__", _json_for_script(assets["main"]))
+        .replace("__ASSET_SHADOW__", _json_for_script(assets["shadow"]))
     )
 
     return f"""<!doctype html>
@@ -403,58 +570,80 @@ def render_report(report: dict[str, Any]) -> str:
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="color-scheme" content="dark">
+  <meta name="color-scheme" content="light">
   <title>{_e(role['name'])}｜工作任务 AI 替代指数</title>
   <style>{STYLE}</style>
 </head>
 <body>
   <main class="report-shell">
-    <div class="topline"><p class="eyebrow">Career Audit // {_e(profile['sanitized_category'])}</p><span class="version">规则 v{_e(report['rule_version'])}</span></div>
-    <section id="hero" class="hero panel">
+    <div class="poster-ticker">
+      <span>WORK TASK // AI REPLACEMENT INDEX</span>
+      <span class="ticker-secondary">RULE v{_e(report['rule_version'])} · {_e(assets['specimen'])}</span>
+      <span class="ticker-secondary">替代指数量的是任务，不是人</span>
+    </div>
+    <section id="hero">
       <div class="hero-grid">
-        <div>
-          <div class="role-kicker">你的职场游戏角色</div>
-          <h1>{_e(role['name'])}</h1>
-          <div class="tags">{tags}</div>
+        <div class="attitude-block">
+          <div class="attitude-index-row" data-exposure-index="{_e(index_attr)}">
+            <div class="giant-index {giant_class}" aria-label="工作任务 AI 替代指数 {_e(index_attr)}">{giant}</div>
+            <div>
+              <span class="level-chip level-{level.lower()}">{_e(level)}</span>
+              <p class="index-caption">{_e(index_note)}</p>
+            </div>
+          </div>
+          <h1 class="character-title">{_e(role['name'])}</h1>
+          <p class="character-definition">{_e(assets['definition'])}</p>
+          <div class="snarky-banner">{_e(role['snarky_quote'])}</div>
         </div>
-        <div class="metric" data-exposure-index="{_e(index_attr)}">
-          <div class="metric-label">工作任务 AI 替代指数</div>
-          <div class="metric-value level-{level.lower()}" aria-label="{_e(metric_aria)}">{metric_value}</div>
-          <span class="badge level-{level.lower()}">{_e(LEVEL_LABELS[level])}</span>
-          <div class="confidence">证据置信度：{_e(metadata['confidence_level'])}<br>{_e(metadata['confidence_reason'])}</div>
+        <div class="stage-block">
+          <div class="specimen-capsule">
+            <span>{_e(assets['specimen'])}</span>
+            <span>{_e(assets['code'])}</span>
+          </div>
+          <div class="character-stage">
+            <img class="character-figure" src="{assets['main']}" alt="{_e(role['name'])} 立像">
+            <div class="character-plinth" aria-hidden="true"></div>
+          </div>
+          <div class="stage-nameplate">
+            <strong>{_e(role['name'])}</strong>
+            {_e(assets['definition'])}
+            <div class="task-meta" style="margin-top:10px">{tags}</div>
+          </div>
         </div>
       </div>
-      <div class="takeaways">
+      <div class="situation-paper">
+        <div class="section-no">01 // SITUATION</div>
+        <p>{_e(situation)}</p>
+      </div>
+      <div class="takeaway-row">
         <div class="takeaway"><strong>最受影响任务</strong><p>{_e(affected_text)}</p></div>
         <div class="takeaway"><strong>你仍然值钱的地方</strong><p>{_e(edge_text)}</p></div>
       </div>
-      <blockquote class="quote">“{_e(role['snarky_quote'])}”</blockquote>
-      <p class="declaration">工作任务 AI 替代指数自测 · 本工具自建解释性评分 · 不是失业概率或裁员预测 · 非机构认证</p>
     </section>
 
     <section id="skill-panel">
-      <div class="section-head"><div><span class="section-no">01 // ATTRIBUTES</span><h2>技能面板</h2></div><p class="section-note">四项只显示简历与补问中实际出现的证据；未知不是零分。</p></div>
+      <div class="section-head"><div><span class="section-no">02 // ATTRIBUTES</span><h2>四维任务证据</h2></div><p class="section-note">四项只显示简历与补问中实际出现的证据；未知不是零分。</p></div>
       <div class="skill-grid">{skills}</div>
     </section>
 
     <section id="task-breakdown">
-      <div class="section-head"><div><span class="section-no">02 // TASK ANATOMY</span><h2>人机任务拆解</h2></div><p class="section-note">展开每项任务，查看 AI 能做什么、你仍需负责什么，以及原文依据。</p></div>
+      <div class="section-head"><div><span class="section-no">03 // TASK ANATOMY</span><h2>哪些交给 AI、哪些还得我管</h2></div><p class="section-note">每项任务展开可见 AI 能接手的部分、你来把关的部分与原文证据。</p></div>
       <div class="task-list">{tasks}</div>
     </section>
 
     <section id="human-edge">
-      <div class="section-head"><div><span class="section-no">03 // HUMAN EDGE</span><h2>个人价值</h2></div><p class="section-note">AI 介入之后，值得保留和强化的具体贡献。</p></div>
+      <div class="section-head"><div><span class="section-no">04 // HUMAN EDGE</span><h2>AI 介入后，你仍然值钱的地方</h2></div><p class="section-note">值得保留和强化的具体贡献，全部来自任务证据。</p></div>
       <div class="edge-grid">{edges}</div>
     </section>
 
     <section id="action-plan">
-      <div class="section-head"><div><span class="section-no">04 // NEXT MOVES</span><h2>三个升级动作</h2></div><p class="section-note">全部来自你的任务证据，且有交付物、检查点和完成标准。</p></div>
+      <div class="section-head"><div><span class="section-no">05 // NEXT MOVES</span><h2>接下来做什么：三个行动</h2></div><p class="section-note">全部来自你的任务证据，7 天内可启动，完成标准可客观检验。</p></div>
       <div class="action-grid">{actions}</div>
     </section>
 
     <section id="share-export">
-      <div class="section-head"><div><span class="section-no">05 // SHARE</span><h2>脱敏分享卡</h2></div><p class="section-note">PNG 只使用独立的脱敏字段，不包含姓名、联系方式、公司、学校、客户、项目名或完整简历。</p></div>
-      <div class="share-copy panel">下方卡片由浏览器原生 Canvas 生成。点击按钮会在本机导出严格 1080 × 1440 的 PNG，无需联网。</div>
+      <div class="section-head"><div><span class="section-no">06 // SHARE</span><h2>脱敏分享卡</h2></div><p class="section-note">PNG 只使用独立的脱敏字段，不包含姓名、联系方式、公司、学校、客户、项目名或完整简历。</p></div>
+      <div class="share-copy">下方卡片由浏览器原生 Canvas 生成，角色素材以 data URI 内嵌。点击按钮会在本机导出严格 1080 × 1440 的 PNG，无需联网；素材加载失败时导出会显式中止。</div>
     </section>
   </main>
 
@@ -464,8 +653,8 @@ def render_report(report: dict[str, Any]) -> str:
   </div>
 
   <footer id="methodology" class="methodology-shell">
-    <div class="method panel">
-      <span class="section-no">06 // METHOD &amp; BOUNDARY</span><h2>方法与边界</h2>
+    <div class="method">
+      <span class="section-no">07 // METHOD &amp; BOUNDARY</span><h2>方法与边界</h2>
       <p><strong>{_e(report['methodology']['custom_rules_disclaimer'])}</strong></p>
       <ul>{sources}</ul>
     </div>

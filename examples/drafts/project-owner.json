@@ -1,6 +1,6 @@
 {
-  "schema_version": "1.0.0",
-  "rule_version": "1.0.0",
+  "schema_version": "2.0.0",
+  "rule_version": "2.0.0",
   "report_metadata": {
     "report_id": "project-owner",
     "generated_at": "2026-09-11T20:00:00+08:00",
@@ -27,9 +27,11 @@
   },
   "profile": {
     "sanitized_category": "工业软件 / 项目管理",
+    "situation_paragraph": "先把每项任务说清楚：输入是什么、输出到哪、由谁确认——证据齐了，结论才站得住。",
+    "index_note": "替代指数量的是任务，不是人。",
     "role": {
-      "code": "PROJECT_RISK_NAVIGATOR",
-      "name": "项目风险领航员",
+      "code": "ONSCENE_CHAMELEON",
+      "name": "应变兽 · 实时响应员",
       "tags": [
         "风险取舍",
         "结果兜底"
@@ -212,7 +214,7 @@
   },
   "share_card": {
     "category": "工业软件 / 项目管理",
-    "role_name": "项目风险领航员",
+    "role_name": "应变兽 · 实时响应员",
     "role_tags": [
       "风险取舍",
       "结果兜底"

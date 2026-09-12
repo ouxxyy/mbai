@@ -1,119 +1,414 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://local.example/ai-task-exposure/report-contract-1.0.0.schema.json",
+  "$id": "https://local.example/ai-task-exposure/report-contract-2.0.0.schema.json",
   "title": "Work Task AI Exposure Final Report",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schema_version", "rule_version", "report_metadata", "source", "profile", "metrics", "skill_panel", "tasks", "human_edge", "action_plan", "share_card", "methodology"],
+  "required": [
+    "schema_version",
+    "rule_version",
+    "report_metadata",
+    "source",
+    "profile",
+    "metrics",
+    "skill_panel",
+    "tasks",
+    "human_edge",
+    "action_plan",
+    "share_card",
+    "methodology"
+  ],
   "properties": {
-    "schema_version": {"const": "1.0.0"},
-    "rule_version": {"const": "1.0.0"},
+    "schema_version": {
+      "const": "2.0.0"
+    },
+    "rule_version": {
+      "const": "2.0.0"
+    },
     "report_metadata": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["report_id", "generated_at", "is_sufficient_info", "confidence_level", "confidence_reason", "questions_asked", "questions_skipped"],
+      "required": [
+        "report_id",
+        "generated_at",
+        "is_sufficient_info",
+        "confidence_level",
+        "confidence_reason",
+        "questions_asked",
+        "questions_skipped",
+        "is_role_sufficient_info"
+      ],
       "properties": {
-        "report_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]{2,63}$"},
-        "generated_at": {"type": "string", "format": "date-time"},
-        "is_sufficient_info": {"type": "boolean"},
-        "confidence_level": {"enum": ["HIGH", "MEDIUM", "LOW"]},
-        "confidence_reason": {"type": "string", "minLength": 1},
-        "questions_asked": {"type": "array", "maxItems": 3, "items": {"type": "string", "minLength": 1}},
-        "questions_skipped": {"type": "boolean"}
+        "report_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]{2,63}$"
+        },
+        "generated_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "is_sufficient_info": {
+          "type": "boolean"
+        },
+        "confidence_level": {
+          "enum": [
+            "HIGH",
+            "MEDIUM",
+            "LOW"
+          ]
+        },
+        "confidence_reason": {
+          "type": "string",
+          "minLength": 1
+        },
+        "questions_asked": {
+          "type": "array",
+          "maxItems": 3,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "questions_skipped": {
+          "type": "boolean"
+        },
+        "is_role_sufficient_info": {
+          "type": "boolean"
+        }
       }
     },
     "source": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["input_type", "input_name", "privacy_entities", "extraction_status"],
+      "required": [
+        "input_type",
+        "input_name",
+        "privacy_entities",
+        "extraction_status"
+      ],
       "properties": {
-        "input_type": {"enum": ["TEXT", "PDF", "DOCX"]},
-        "input_name": {"type": "string", "minLength": 1},
-        "privacy_entities": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 2}},
-        "extraction_status": {"enum": ["OK", "NEEDS_TEXT_FALLBACK"]}
+        "input_type": {
+          "enum": [
+            "TEXT",
+            "PDF",
+            "DOCX"
+          ]
+        },
+        "input_name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "privacy_entities": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 2
+          }
+        },
+        "extraction_status": {
+          "enum": [
+            "OK",
+            "NEEDS_TEXT_FALLBACK"
+          ]
+        }
       }
     },
     "profile": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["sanitized_category", "role"],
+      "required": [
+        "sanitized_category",
+        "situation_paragraph",
+        "index_note",
+        "role"
+      ],
       "properties": {
-        "sanitized_category": {"type": "string", "minLength": 1},
+        "sanitized_category": {
+          "type": "string",
+          "minLength": 1
+        },
         "role": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["code", "name", "tags", "source_task_ids", "snarky_quote"],
+          "required": [
+            "code",
+            "name",
+            "tags",
+            "source_task_ids",
+            "snarky_quote"
+          ],
           "properties": {
-            "code": {"enum": ["FLOW_ORCHESTRATOR", "CONTENT_CALIBRATOR", "SYSTEM_BOUNDARY_GUARD", "COORDINATION_TRANSLATOR", "PROJECT_RISK_NAVIGATOR", "LOCKED_ROLE"]},
-            "name": {"type": "string", "minLength": 1},
-            "tags": {"type": "array", "minItems": 1, "maxItems": 3, "items": {"type": "string", "minLength": 1}},
-            "source_task_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
-            "snarky_quote": {"type": "string", "minLength": 1}
+            "code": {
+              "enum": [
+                "TABLE_GOBLIN",
+                "INSPECTOR_BOT",
+                "PROOFREADER_OWL",
+                "ASSEMBLY_CRANE",
+                "ROOTCAUSE_HOUND",
+                "GATEKEEPER_BEAR",
+                "TRANSLATOR_FOX",
+                "DECONSTRUCTOR_BEAVER",
+                "PROGRESS_HERDER",
+                "MINESWEEPER_MOLE",
+                "SOLVER_OTTER",
+                "ONSCENE_CHAMELEON",
+                "SHADOW_BEAST"
+              ]
+            },
+            "name": {
+              "type": "string",
+              "minLength": 1
+            },
+            "tags": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 3,
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "source_task_ids": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "type": "string"
+              }
+            },
+            "snarky_quote": {
+              "type": "string",
+              "minLength": 1
+            }
           }
+        },
+        "situation_paragraph": {
+          "type": "string",
+          "minLength": 1
+        },
+        "index_note": {
+          "type": "string",
+          "minLength": 1
         }
       }
     },
     "metrics": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["exposure_index", "exposure_level", "task_count_total", "task_count_evaluable", "weight_mode", "rounding_mode", "raw_score"],
+      "required": [
+        "exposure_index",
+        "exposure_level",
+        "task_count_total",
+        "task_count_evaluable",
+        "weight_mode",
+        "rounding_mode",
+        "raw_score",
+        "task_count_role_evaluable"
+      ],
       "properties": {
-        "exposure_index": {"type": ["integer", "null"], "minimum": 0, "maximum": 100, "multipleOf": 5},
-        "exposure_level": {"enum": ["LOW", "MEDIUM", "HIGH", "UNKNOWN"]},
-        "task_count_total": {"type": "integer", "minimum": 0},
-        "task_count_evaluable": {"type": "integer", "minimum": 0},
-        "weight_mode": {"enum": ["USER_WEIGHTED", "EQUAL_WEIGHTED", "MIXED_WEIGHTED", "NOT_APPLICABLE"]},
-        "rounding_mode": {"const": "ROUND_HALF_UP_TO_5"},
-        "raw_score": {"type": ["number", "null"], "minimum": 0, "maximum": 100}
+        "exposure_index": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 100,
+          "multipleOf": 5
+        },
+        "exposure_level": {
+          "enum": [
+            "LOW",
+            "MEDIUM",
+            "HIGH",
+            "UNKNOWN"
+          ]
+        },
+        "task_count_total": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "task_count_evaluable": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "weight_mode": {
+          "enum": [
+            "USER_WEIGHTED",
+            "EQUAL_WEIGHTED",
+            "MIXED_WEIGHTED",
+            "NOT_APPLICABLE"
+          ]
+        },
+        "rounding_mode": {
+          "const": "ROUND_HALF_UP_TO_5"
+        },
+        "raw_score": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 100
+        },
+        "task_count_role_evaluable": {
+          "type": "integer",
+          "minimum": 0
+        }
       }
     },
     "skill_panel": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["execution", "discretion", "coordination", "accountability"],
+      "required": [
+        "execution",
+        "discretion",
+        "coordination",
+        "accountability"
+      ],
       "properties": {
-        "execution": {"$ref": "#/$defs/skillEvidence"},
-        "discretion": {"$ref": "#/$defs/skillEvidence"},
-        "coordination": {"$ref": "#/$defs/skillEvidence"},
-        "accountability": {"$ref": "#/$defs/skillEvidence"}
+        "execution": {
+          "$ref": "#/$defs/skillEvidence"
+        },
+        "discretion": {
+          "$ref": "#/$defs/skillEvidence"
+        },
+        "coordination": {
+          "$ref": "#/$defs/skillEvidence"
+        },
+        "accountability": {
+          "$ref": "#/$defs/skillEvidence"
+        }
       }
     },
-    "tasks": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/task"}},
-    "human_edge": {"type": "array", "minItems": 1, "maxItems": 3, "items": {"$ref": "#/$defs/groundedPoint"}},
+    "tasks": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/task"
+      }
+    },
+    "human_edge": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 3,
+      "items": {
+        "$ref": "#/$defs/groundedPoint"
+      }
+    },
     "action_plan": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["hand_to_ai", "level_up", "proof_7d"],
+      "required": [
+        "hand_to_ai",
+        "level_up",
+        "proof_7d"
+      ],
       "properties": {
-        "hand_to_ai": {"$ref": "#/$defs/action"},
-        "level_up": {"$ref": "#/$defs/action"},
-        "proof_7d": {"$ref": "#/$defs/action"}
+        "hand_to_ai": {
+          "$ref": "#/$defs/action"
+        },
+        "level_up": {
+          "$ref": "#/$defs/action"
+        },
+        "proof_7d": {
+          "$ref": "#/$defs/action"
+        }
       }
     },
     "share_card": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["category", "role_name", "role_tags", "confidence_label", "exposure_index", "exposure_level", "snarky_quote", "task_highlights", "proof_7d", "disclaimer"],
+      "required": [
+        "category",
+        "role_name",
+        "role_tags",
+        "confidence_label",
+        "exposure_index",
+        "exposure_level",
+        "snarky_quote",
+        "task_highlights",
+        "proof_7d",
+        "disclaimer"
+      ],
       "properties": {
-        "category": {"type": "string", "minLength": 1},
-        "role_name": {"type": "string", "minLength": 1},
-        "role_tags": {"type": "array", "minItems": 1, "maxItems": 3, "items": {"type": "string"}},
-        "confidence_label": {"type": "string", "minLength": 1},
-        "exposure_index": {"type": ["integer", "null"], "minimum": 0, "maximum": 100, "multipleOf": 5},
-        "exposure_level": {"enum": ["LOW", "MEDIUM", "HIGH", "UNKNOWN"]},
-        "snarky_quote": {"type": "string", "minLength": 1},
-        "task_highlights": {"type": "array", "minItems": 1, "maxItems": 2, "items": {"$ref": "#/$defs/shareTask"}},
-        "proof_7d": {"type": "string", "minLength": 1},
-        "disclaimer": {"type": "string", "minLength": 1}
+        "category": {
+          "type": "string",
+          "minLength": 1
+        },
+        "role_name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "role_tags": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 3,
+          "items": {
+            "type": "string"
+          }
+        },
+        "confidence_label": {
+          "type": "string",
+          "minLength": 1
+        },
+        "exposure_index": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 100,
+          "multipleOf": 5
+        },
+        "exposure_level": {
+          "enum": [
+            "LOW",
+            "MEDIUM",
+            "HIGH",
+            "UNKNOWN"
+          ]
+        },
+        "snarky_quote": {
+          "type": "string",
+          "minLength": 1
+        },
+        "task_highlights": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 2,
+          "items": {
+            "$ref": "#/$defs/shareTask"
+          }
+        },
+        "proof_7d": {
+          "type": "string",
+          "minLength": 1
+        },
+        "disclaimer": {
+          "type": "string",
+          "minLength": 1
+        }
       }
     },
     "methodology": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["custom_rules_disclaimer", "sources"],
+      "required": [
+        "custom_rules_disclaimer",
+        "sources"
+      ],
       "properties": {
-        "custom_rules_disclaimer": {"type": "string", "minLength": 1},
-        "sources": {"type": "array", "minItems": 2, "items": {"$ref": "#/$defs/sourceReference"}}
+        "custom_rules_disclaimer": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sources": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "$ref": "#/$defs/sourceReference"
+          }
+        }
       }
     }
   },
@@ -121,42 +416,190 @@
     "skillEvidence": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["score", "evidence", "is_known", "source_task_ids"],
+      "required": [
+        "score",
+        "evidence",
+        "is_known",
+        "source_task_ids"
+      ],
       "properties": {
-        "score": {"type": ["integer", "null"], "minimum": 0, "maximum": 100},
-        "evidence": {"type": "string"},
-        "is_known": {"type": "boolean"},
-        "source_task_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string"}}
+        "score": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 100
+        },
+        "evidence": {
+          "type": "string"
+        },
+        "is_known": {
+          "type": "boolean"
+        },
+        "source_task_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        }
       }
     },
     "task": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["task_id", "task_name", "time_share_percent", "weight_source", "effective_weight", "exposure_level", "score", "ai_can_do", "human_must_do", "evidence", "reason", "confidence", "signals"],
+      "required": [
+        "task_id",
+        "task_name",
+        "time_share_percent",
+        "weight_source",
+        "effective_weight",
+        "exposure_level",
+        "score",
+        "ai_can_do",
+        "human_must_do",
+        "evidence",
+        "reason",
+        "confidence",
+        "signals"
+      ],
       "properties": {
-        "task_id": {"type": "string", "pattern": "^task-[a-z0-9-]+$"},
-        "task_name": {"type": "string", "minLength": 1},
-        "time_share_percent": {"type": ["number", "null"], "exclusiveMinimum": 0, "maximum": 100},
-        "weight_source": {"enum": ["USER_CONFIRMED", "EQUAL_FALLBACK", "NOT_APPLICABLE"]},
-        "effective_weight": {"type": ["number", "null"], "exclusiveMinimum": 0},
-        "exposure_level": {"enum": ["LOW", "MEDIUM", "HIGH", "UNKNOWN"]},
-        "score": {"type": ["integer", "null"], "enum": [0, 50, 100, null]},
-        "ai_can_do": {"type": "string", "minLength": 1},
-        "human_must_do": {"type": "string", "minLength": 1},
-        "evidence": {"type": "string", "minLength": 1},
-        "reason": {"type": "string", "minLength": 1},
-        "confidence": {"enum": ["HIGH", "MEDIUM", "LOW"]},
+        "task_id": {
+          "type": "string",
+          "pattern": "^task-[a-z0-9-]+$"
+        },
+        "task_name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "time_share_percent": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "exclusiveMinimum": 0,
+          "maximum": 100
+        },
+        "weight_source": {
+          "enum": [
+            "USER_CONFIRMED",
+            "EQUAL_FALLBACK",
+            "NOT_APPLICABLE"
+          ]
+        },
+        "effective_weight": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "exclusiveMinimum": 0
+        },
+        "exposure_level": {
+          "enum": [
+            "LOW",
+            "MEDIUM",
+            "HIGH",
+            "UNKNOWN"
+          ]
+        },
+        "score": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "enum": [
+            0,
+            50,
+            100,
+            null
+          ]
+        },
+        "ai_can_do": {
+          "type": "string",
+          "minLength": 1
+        },
+        "human_must_do": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidence": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        },
+        "confidence": {
+          "enum": [
+            "HIGH",
+            "MEDIUM",
+            "LOW"
+          ]
+        },
         "signals": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["judgment", "coordination", "physical_presence", "accountability", "repeatability", "digital_input_output"],
+          "required": [
+            "judgment",
+            "coordination",
+            "physical_presence",
+            "accountability",
+            "repeatability",
+            "digital_input_output"
+          ],
           "properties": {
-            "judgment": {"type": "integer", "minimum": 0, "maximum": 2},
-            "coordination": {"type": "integer", "minimum": 0, "maximum": 2},
-            "physical_presence": {"type": "integer", "minimum": 0, "maximum": 2},
-            "accountability": {"type": "integer", "minimum": 0, "maximum": 2},
-            "repeatability": {"type": "integer", "minimum": 0, "maximum": 2},
-            "digital_input_output": {"type": "integer", "minimum": 0, "maximum": 2}
+            "judgment": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 2
+            },
+            "coordination": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 2
+            },
+            "physical_presence": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 2
+            },
+            "accountability": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 2
+            },
+            "repeatability": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 2
+            },
+            "digital_input_output": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 2
+            }
+          }
+        },
+        "role_codes": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "TABLE_GOBLIN",
+              "INSPECTOR_BOT",
+              "PROOFREADER_OWL",
+              "ASSEMBLY_CRANE",
+              "ROOTCAUSE_HOUND",
+              "GATEKEEPER_BEAR",
+              "TRANSLATOR_FOX",
+              "DECONSTRUCTOR_BEAVER",
+              "PROGRESS_HERDER",
+              "MINESWEEPER_MOLE",
+              "SOLVER_OTTER",
+              "ONSCENE_CHAMELEON"
+            ]
           }
         }
       }
@@ -164,49 +607,132 @@
     "groundedPoint": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["summary", "source_task_ids"],
+      "required": [
+        "summary",
+        "source_task_ids"
+      ],
       "properties": {
-        "summary": {"type": "string", "minLength": 1},
-        "source_task_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}}
+        "summary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_task_ids": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        }
       }
     },
     "action": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["title", "action", "deliverable", "acceptance_criteria", "human_checkpoint", "grounded_evidence", "source_task_ids"],
+      "required": [
+        "title",
+        "action",
+        "deliverable",
+        "acceptance_criteria",
+        "human_checkpoint",
+        "grounded_evidence",
+        "source_task_ids"
+      ],
       "properties": {
-        "title": {"type": "string", "minLength": 1},
-        "action": {"type": "string", "minLength": 1},
-        "deliverable": {"type": "string", "minLength": 1},
-        "acceptance_criteria": {"type": "string", "minLength": 1},
-        "human_checkpoint": {"type": "string", "minLength": 1},
-        "grounded_evidence": {"type": "string", "minLength": 1},
-        "source_task_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}}
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "action": {
+          "type": "string",
+          "minLength": 1
+        },
+        "deliverable": {
+          "type": "string",
+          "minLength": 1
+        },
+        "acceptance_criteria": {
+          "type": "string",
+          "minLength": 1
+        },
+        "human_checkpoint": {
+          "type": "string",
+          "minLength": 1
+        },
+        "grounded_evidence": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_task_ids": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        }
       }
     },
     "shareTask": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["task_name", "ai_part", "human_part"],
+      "required": [
+        "task_name",
+        "ai_part",
+        "human_part"
+      ],
       "properties": {
-        "task_name": {"type": "string", "minLength": 1},
-        "ai_part": {"type": "string", "minLength": 1},
-        "human_part": {"type": "string", "minLength": 1}
+        "task_name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "ai_part": {
+          "type": "string",
+          "minLength": 1
+        },
+        "human_part": {
+          "type": "string",
+          "minLength": 1
+        }
       }
     },
     "sourceReference": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["organization", "title", "publication_date", "accessed_at", "url", "boundary"],
+      "required": [
+        "organization",
+        "title",
+        "publication_date",
+        "accessed_at",
+        "url",
+        "boundary"
+      ],
       "properties": {
-        "organization": {"type": "string", "minLength": 1},
-        "title": {"type": "string", "minLength": 1},
-        "publication_date": {"type": "string", "format": "date"},
-        "accessed_at": {"type": "string", "format": "date"},
-        "url": {"type": "string", "format": "uri"},
-        "boundary": {"type": "string", "minLength": 1}
+        "organization": {
+          "type": "string",
+          "minLength": 1
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "publication_date": {
+          "type": "string",
+          "format": "date"
+        },
+        "accessed_at": {
+          "type": "string",
+          "format": "date"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "boundary": {
+          "type": "string",
+          "minLength": 1
+        }
       }
     }
   }
 }
-

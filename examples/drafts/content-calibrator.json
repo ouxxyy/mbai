@@ -1,6 +1,6 @@
 {
-  "schema_version": "1.0.0",
-  "rule_version": "1.0.0",
+  "schema_version": "2.0.0",
+  "rule_version": "2.0.0",
   "report_metadata": {
     "report_id": "content-calibrator",
     "generated_at": "2026-09-11T20:00:00+08:00",
@@ -27,9 +27,11 @@
   },
   "profile": {
     "sanitized_category": "文化传媒 / 内容生产",
+    "situation_paragraph": "先把每项任务说清楚：输入是什么、输出到哪、由谁确认——证据齐了，结论才站得住。",
+    "index_note": "替代指数量的是任务，不是人。",
     "role": {
-      "code": "CONTENT_CALIBRATOR",
-      "name": "内容校准师",
+      "code": "ASSEMBLY_CRANE",
+      "name": "拼装兽 · 素材组装手",
       "tags": [
         "语境校准",
         "事实把关"
@@ -189,7 +191,7 @@
   },
   "share_card": {
     "category": "文化传媒 / 内容生产",
-    "role_name": "内容校准师",
+    "role_name": "拼装兽 · 素材组装手",
     "role_tags": [
       "语境校准",
       "事实把关"

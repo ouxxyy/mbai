@@ -1,6 +1,6 @@
 {
-  "schema_version": "1.0.0",
-  "rule_version": "1.0.0",
+  "schema_version": "2.0.0",
+  "rule_version": "2.0.0",
   "report_metadata": {
     "report_id": "technical-execution",
     "generated_at": "2026-09-11T20:00:00+08:00",
@@ -28,9 +28,11 @@
   },
   "profile": {
     "sanitized_category": "企业软件 / 后端研发",
+    "situation_paragraph": "先把每项任务说清楚：输入是什么、输出到哪、由谁确认——证据齐了，结论才站得住。",
+    "index_note": "替代指数量的是任务，不是人。",
     "role": {
-      "code": "SYSTEM_BOUNDARY_GUARD",
-      "name": "系统边界守门人",
+      "code": "GATEKEEPER_BEAR",
+      "name": "守门兽 · 上线守门员",
       "tags": [
         "边界把关",
         "故障处置"
@@ -189,7 +191,7 @@
   },
   "share_card": {
     "category": "企业软件 / 后端研发",
-    "role_name": "系统边界守门人",
+    "role_name": "守门兽 · 上线守门员",
     "role_tags": [
       "边界把关",
       "故障处置"

@@ -15,6 +15,12 @@ class RoundHalfUpTest(unittest.TestCase):
         self.assertEqual(round_half_up_to_five(72.5), 75)
         self.assertEqual(round_half_up_to_five(77.5), 80)
 
+    def test_frozen_rule_12_anchors(self):
+        # 内容基线冻结版规则 12 的三个测试锚点。
+        self.assertEqual(round_half_up_to_five(87.5), 90)
+        self.assertEqual(round_half_up_to_five(85), 85)
+        self.assertEqual(round_half_up_to_five(92.5), 95)
+
 
 class AggregateTasksTest(unittest.TestCase):
     def test_mixed_weights_exclude_unknown_and_match_frozen_example(self):
@@ -65,6 +71,28 @@ class AggregateTasksTest(unittest.TestCase):
         self.assertFalse(metrics["is_sufficient_info"])
         self.assertEqual(metrics["weight_mode"], "NOT_APPLICABLE")
         self.assertIsNone(metrics["exposure_index"])
+
+    def test_anchor_875_rounds_to_90_high_through_full_aggregation(self):
+        metrics, _ = aggregate_tasks(
+            [task("HIGH", 45), task("HIGH", 30), task("MEDIUM", 25)]
+        )
+
+        self.assertEqual(metrics["raw_score"], 87.5)
+        self.assertEqual(metrics["exposure_index"], 90)
+        self.assertEqual(metrics["exposure_level"], "HIGH")
+        self.assertEqual(metrics["weight_mode"], "USER_WEIGHTED")
+
+    def test_anchor_85_stays_85_and_925_goes_95(self):
+        metrics, _ = aggregate_tasks([task("HIGH", 85), task("LOW", 15)])
+        self.assertEqual(metrics["raw_score"], 85)
+        self.assertEqual(metrics["exposure_index"], 85)
+
+        metrics, _ = aggregate_tasks([task("MEDIUM", 100)])
+        self.assertEqual(metrics["exposure_index"], 50)
+
+        metrics, _ = aggregate_tasks([task("HIGH", 85), task("MEDIUM", 15)])
+        self.assertEqual(metrics["raw_score"], 92.5)
+        self.assertEqual(metrics["exposure_index"], 95)
 
     def test_rejects_invalid_level_and_time_share(self):
         with self.assertRaisesRegex(ValueError, "exposure_level"):

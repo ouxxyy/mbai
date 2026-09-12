@@ -17,6 +17,7 @@ class CliEntrypointTest(unittest.TestCase):
             "export_png.py",
             "verify_png_privacy.py",
             "build_report.py",
+            "migrate_report.py",
         ]
         with tempfile.TemporaryDirectory() as directory:
             for script in scripts:

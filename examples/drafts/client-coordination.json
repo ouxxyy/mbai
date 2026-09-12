@@ -1,6 +1,6 @@
 {
-  "schema_version": "1.0.0",
-  "rule_version": "1.0.0",
+  "schema_version": "2.0.0",
+  "rule_version": "2.0.0",
   "report_metadata": {
     "report_id": "client-coordination",
     "generated_at": "2026-09-11T20:00:00+08:00",
@@ -27,9 +27,11 @@
   },
   "profile": {
     "sanitized_category": "企业服务 / 客户成功",
+    "situation_paragraph": "先把每项任务说清楚：输入是什么、输出到哪、由谁确认——证据齐了，结论才站得住。",
+    "index_note": "替代指数量的是任务，不是人。",
     "role": {
-      "code": "COORDINATION_TRANSLATOR",
-      "name": "多方协同译码员",
+      "code": "TRANSLATOR_FOX",
+      "name": "翻译兽 · 信息对齐官",
       "tags": [
         "需求翻译",
         "冲突协商"
@@ -186,7 +188,7 @@
   },
   "share_card": {
     "category": "企业服务 / 客户成功",
-    "role_name": "多方协同译码员",
+    "role_name": "翻译兽 · 信息对齐官",
     "role_tags": [
       "需求翻译",
       "冲突协商"

@@ -1,6 +1,6 @@
 {
-  "schema_version": "1.0.0",
-  "rule_version": "1.0.0",
+  "schema_version": "2.0.0",
+  "rule_version": "2.0.0",
   "report_metadata": {
     "report_id": "ops-deep",
     "generated_at": "2026-09-11T20:00:00+08:00",
@@ -24,9 +24,11 @@
   },
   "profile": {
     "sanitized_category": "互联网 / 用户运营",
+    "situation_paragraph": "先把每项任务说清楚：输入是什么、输出到哪、由谁确认——证据齐了，结论才站得住。",
+    "index_note": "替代指数量的是任务，不是人。",
     "role": {
-      "code": "COORDINATION_TRANSLATOR",
-      "name": "多方协同译码员",
+      "code": "SHADOW_BEAST",
+      "name": "影子兽 · 待解锁工种",
       "tags": [
         "策略判断",
         "目标负责"
@@ -184,7 +186,7 @@
   },
   "share_card": {
     "category": "互联网 / 用户运营",
-    "role_name": "多方协同译码员",
+    "role_name": "影子兽 · 待解锁工种",
     "role_tags": [
       "策略判断",
       "目标负责"

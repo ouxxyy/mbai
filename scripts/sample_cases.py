@@ -5,15 +5,9 @@ from __future__ import annotations
 from copy import deepcopy
 from typing import Any
 
+from scripts.role_match import ROLE_NAMES
 
-ROLE_NAMES = {
-    "FLOW_ORCHESTRATOR": "流程编排员",
-    "CONTENT_CALIBRATOR": "内容校准师",
-    "SYSTEM_BOUNDARY_GUARD": "系统边界守门人",
-    "COORDINATION_TRANSLATOR": "多方协同译码员",
-    "PROJECT_RISK_NAVIGATOR": "项目风险领航员",
-    "LOCKED_ROLE": "待解锁职业角色",
-}
+
 CONFIDENCE_LABELS = {"HIGH": "高", "MEDIUM": "中", "LOW": "低"}
 
 
@@ -71,27 +65,29 @@ def case_definitions() -> list[dict[str, Any]]:
 客户项目代号：灯塔增长；电话：13800001111；邮箱：linxiao@example.com。""",
         "privacy_entities": ["林晓", "海蓝互动科技有限公司", "海蓝互动", "江城大学", "灯塔增长"],
         "category": "泛互联网 / 运营执行",
-        "role_code": "FLOW_ORCHESTRATOR",
-        "role_tags": ["高频流程", "异常协同"],
+        "role_code": "TABLE_GOBLIN",
+        "role_tags": ["表格搬运", "格式转换"],
         "role_sources": ["task-channel-report", "task-campaign-publish"],
-        "snark": "你不是在做六份报表，你是在给六个不肯互相说话的系统当翻译。",
+        "snark": "六个平台互不相通，全靠你本人兼容。",
+        "situation_paragraph": "每到交周报的日子，你的日程不是一场会，是六个后台：导六份数据，清洗、合并，填进同一张模板。数据在六个地方各说各话，最后由你翻译成同一种话。表格是你的，字段是你的，对不上的数字也是你的。",
+        "index_note": "替代指数量的是任务，不是人——你每周的活里，这些动作 AI 现在就能接走。",
         "confidence": "HIGH",
         "confidence_reason": "三项任务均有时间占比、输入输出和责任边界。",
         "questions": ["三项任务大致各占多少时间？", "数据异常后由谁决定处理方式？"],
         "tasks": [
-            _task("task-channel-report", "汇总多渠道固定周报", 45, "HIGH", "自动导入、清洗、汇总并套用周报模板。", "确认异常值和对外口径。", "每周从 6 个渠道导出数据，清洗后填入固定周报模板。", "数字化输入输出、频率稳定且模板固定。", _signals(1, 0, 0, 1, 2, 2)),
-            _task("task-campaign-publish", "按排期配置活动内容", 30, "HIGH", "根据结构化清单生成配置并检查常规字段。", "处理权限、库存或上线异常。", "按排期在后台配置并发布活动内容，检查链接和库存字段。", "规则明确、重复度高，常规步骤可直接自动化。", _signals(0, 0, 0, 1, 2, 2)),
-            _task("task-anomaly-coordinate", "协调活动数据异常", 25, "MEDIUM", "初步定位异常、整理相关数据和候选原因。", "联系销售和产品确认真实原因并形成处理建议。", "活动数据异常时联系销售和产品确认原因，整理处理方案给负责人决定。", "AI 可做诊断准备，但跨角色确认仍依赖人。", _signals(1, 2, 0, 1, 1, 2)),
+            _task("task-channel-report", "汇总多渠道固定周报", 45, "HIGH", "导数据、清洗、合并、填模板，周报流程中的机械部分。", "哪些数字是异常，这份周报能不能原样发出去。", "每周从 6 个渠道导出数据，清洗后填入固定周报模板。", "数字化输入输出、频率稳定且模板固定。", _signals(1, 0, 0, 1, 2, 2)),
+            _task("task-campaign-publish", "按排期配置活动内容", 30, "HIGH", "按排期清单生成配置，检查链接、库存这类常规字段。", "权限、库存、上线出岔子时的处理。", "按排期在后台配置并发布活动内容，检查链接和库存字段。", "规则明确、重复度高，常规步骤可直接自动化。", _signals(0, 0, 0, 1, 2, 2)),
+            _task("task-anomaly-coordinate", "协调活动数据异常", 25, "MEDIUM", "先把异常数据和可能原因整理好，让你带着材料去问。", "找销售和产品确认真实原因，处理方案给负责人拍板。", "活动数据异常时联系销售和产品确认原因，整理处理方案给负责人决定。", "AI 可做诊断准备，但跨角色确认仍依赖人。", _signals(1, 2, 0, 1, 1, 2)),
         ],
-        "human_edge": "能把渠道异常翻译成销售、产品都能执行的处理信息。",
+        "human_edge": "你的手感在别处：把“数据对不上”翻译成销售和产品都能动手处理的信息——这件事目前还没轮到 AI。",
         "share_highlights": [
-            {"task_name": "渠道周报", "ai_part": "导入、清洗与套模板", "human_part": "确认异常和发布口径"},
-            {"task_name": "活动异常", "ai_part": "定位线索与整理数据", "human_part": "跨团队确认真实原因"},
+            {"task_name": "渠道周报", "ai_part": "导数据、合并、填模板", "human_part": "你管口径和发布"},
+            {"task_name": "活动异常", "ai_part": "整理线索和候选原因", "human_part": "你去问真实原因"},
         ],
         "actions": _actions(
-            ("让 AI 生成渠道周报初稿", "用脱敏 CSV 自动完成合并、异常标色和固定模板填充。", "一份自动周报和人工改动记录", "连续两周字段齐全，人工只处理异常与口径。", "发布前核对源数据、异常原因和敏感字段。", "已有每周固定模板汇总任务。", ["task-channel-report"]),
-            ("建立异常归因小账本", "每次异常记录信号、询问对象、真实原因和处理结果。", "5 张异常归因卡", "每张都能从最初信号追到最终原因和负责方。", "不得把相关性直接写成因果。", "已有跨销售与产品确认异常的经验。", ["task-anomaly-coordinate"]),
-            ("做一份运营自动化前后对照", "用虚构数据演示手工周报与自动周报的差异。", "一页说明 + 可运行脚本 + 示例 CSV", "7 天内可复现，并列出 3 个必须人工核验的点。", "示例数据完全虚构，不带原公司字段。", "周报流程具备清晰输入和输出。", ["task-channel-report"]),
+            ("把周报的机械环节还给脚本", "用脱敏 CSV 跑脚本，自动完成合并、异常标色、填模板。", "自动周报脚本 + 示例 CSV", "连续两周字段齐全，你只处理异常和口径；第 7 天先检查第一周的结果。", "发出前核对源数据、异常原因、敏感字段。", "周报流程中的机械部分已有固定输入输出。", ["task-channel-report"]),
+            ("建一本异常归因账", "每次异常记四样：信号、问了谁、真实原因、处理结果。", "5 张归因卡", "每张能从信号追到原因和责任方。", "只记事实，不把“同时发生”写成“因为所以”。", "你已经在跨销售、产品确认异常。", ["task-anomaly-coordinate"]),
+            ("周报自动化前后对照", "用虚构数据演示手工周报和自动周报的差别。", "一页说明 + 可运行脚本 + 示例 CSV", "7 天内可复现，并列出 3 个必须人工核验的点。", "数据全虚构，不带原公司字段。", "周报任务具备清晰输入输出，适合做前后对照。", ["task-channel-report"]),
         ),
     }
 
@@ -106,7 +102,7 @@ def case_definitions() -> list[dict[str, Any]]:
 内部栏目：回声计划；微信：zhoulan_works。""",
         "privacy_entities": ["周岚", "青禾文化传播有限公司", "青禾文化", "南城学院", "回声计划", "zhoulan_works"],
         "category": "文化传媒 / 内容生产",
-        "role_code": "CONTENT_CALIBRATOR",
+        "role_code": "ASSEMBLY_CRANE",
         "role_tags": ["语境校准", "事实把关"],
         "role_sources": ["task-article-draft", "task-fact-calibration", "task-interview"],
         "snark": "AI 可以十秒写完初稿，但它不会替你接那通‘这句话为什么能发’的电话。",
@@ -141,7 +137,7 @@ def case_definitions() -> list[dict[str, Any]]:
 客户：山谷零售；项目：星门迁移；邮箱：chenmo@beichen.example。""",
         "privacy_entities": ["陈默", "北辰云数有限公司", "北辰云数", "东岭理工大学", "山谷零售", "星门迁移", "chenmo@beichen.example"],
         "category": "企业软件 / 后端研发",
-        "role_code": "SYSTEM_BOUNDARY_GUARD",
+        "role_code": "GATEKEEPER_BEAR",
         "role_tags": ["边界把关", "故障处置"],
         "role_sources": ["task-api", "task-incident"],
         "snark": "代码初稿越来越便宜，凌晨两点决定回滚的那五分钟反而越来越贵。",
@@ -176,7 +172,7 @@ def case_definitions() -> list[dict[str, Any]]:
 客户：松林制造；项目：罗盘续约。""",
         "privacy_entities": ["顾宁", "远帆软件服务有限公司", "远帆软件", "西桥大学", "松林制造", "罗盘续约"],
         "category": "企业服务 / 客户成功",
-        "role_code": "COORDINATION_TRANSLATOR",
+        "role_code": "TRANSLATOR_FOX",
         "role_tags": ["需求翻译", "冲突协商"],
         "role_sources": ["task-stakeholder-interview", "task-scope-negotiate"],
         "snark": "会议纪要能自动生成，但‘大家都同意’和‘大家只是没反对’还得你来分。",
@@ -212,7 +208,7 @@ def case_definitions() -> list[dict[str, Any]]:
 项目：穹顶升级；客户：峰石能源。""",
         "privacy_entities": ["许舟", "启明工业系统有限公司", "启明工业", "北河学院", "穹顶升级", "峰石能源"],
         "category": "工业软件 / 项目管理",
-        "role_code": "PROJECT_RISK_NAVIGATOR",
+        "role_code": "ONSCENE_CHAMELEON",
         "role_tags": ["风险取舍", "结果兜底"],
         "role_sources": ["task-plan-review", "task-owner-decision", "task-vendor-incident"],
         "snark": "甘特图能自动更新，供应商晚三周时谁去把不可能改成可交付，图表不负责。",
@@ -246,7 +242,7 @@ def case_definitions() -> list[dict[str, Any]]:
 用户选择跳过补问，未提供任务频率、交付物、时间占比或责任边界。""",
         "privacy_entities": ["赵一", "云杉网络有限公司", "云杉网络"],
         "category": "互联网 / 产品运营",
-        "role_code": "LOCKED_ROLE",
+        "role_code": "SHADOW_BEAST",
         "role_tags": ["证据待补充"],
         "role_sources": [],
         "snark": "这份简历把三年的工作压成了十二个字，连 AI 都不知道该先替哪一段。",
@@ -280,7 +276,7 @@ def case_definitions() -> list[dict[str, Any]]:
 不负责活动策略、预算、跨部门协商或最终结果。""",
         "privacy_entities": ["唐宁", "逐浪社区有限公司", "逐浪社区"],
         "category": "互联网 / 用户运营",
-        "role_code": "FLOW_ORCHESTRATOR",
+        "role_code": "INSPECTOR_BOT",
         "role_tags": ["模板执行", "固定复盘"],
         "role_sources": ["task-template-campaign", "task-fixed-review"],
         "snark": "岗位名里有‘运营’，实际每天做的是给模板按时续命。",
@@ -311,7 +307,7 @@ def case_definitions() -> list[dict[str, Any]]:
 根据用户分群和历史实验结果制定活动策略，决定触达节奏，约占 35%。
 资源冲突时协调产品、客服与市场，调整方案并对留存目标负责，约占 30%。""",
         privacy_entities=["苏然", "澄海社区服务有限公司", "澄海社区"],
-        role_code="COORDINATION_TRANSLATOR",
+        role_code="SHADOW_BEAST",
         role_tags=["策略判断", "目标负责"],
         role_sources=["task-strategy", "task-resource-conflict"],
         snark="同样叫用户运营，一个在点发布，一个要在留存掉下去前决定今天到底推不推。",
@@ -415,8 +411,8 @@ def draft_for_case(case: dict[str, Any]) -> dict[str, Any]:
     extension = {"TEXT": "txt", "DOCX": "docx", "PDF": "pdf"}[case["input_type"]]
     role_code = case["role_code"]
     draft = {
-        "schema_version": "1.0.0",
-        "rule_version": "1.0.0",
+        "schema_version": "2.0.0",
+        "rule_version": "2.0.0",
         "report_metadata": {
             "report_id": case["slug"],
             "generated_at": "2026-09-11T20:00:00+08:00",
@@ -433,6 +429,11 @@ def draft_for_case(case: dict[str, Any]) -> dict[str, Any]:
         },
         "profile": {
             "sanitized_category": case["category"],
+            "situation_paragraph": case.get(
+                "situation_paragraph",
+                "先把每项任务说清楚：输入是什么、输出到哪、由谁确认——证据齐了，结论才站得住。",
+            ),
+            "index_note": case.get("index_note", "替代指数量的是任务，不是人。"),
             "role": {
                 "code": role_code,
                 "name": ROLE_NAMES[role_code],

@@ -8,6 +8,7 @@ import re
 import shutil
 import subprocess
 import sys
+import unicodedata
 from pathlib import Path
 
 if __package__ in {None, ""}:
@@ -30,9 +31,15 @@ def find_ocr_privacy_leaks(text: str, privacy_entities: list[str]) -> list[str]:
     return find_privacy_leaks({"ocr_text": text}, privacy_entities)
 
 
+def _ocr_normalize(text: str) -> str:
+    """OCR 常见误读归一：空白、全半角（NFKC）与中点变体（· / ・ / •）。"""
+    collapsed = re.sub(r"\s+", "", text).casefold()
+    return unicodedata.normalize("NFKC", collapsed).replace("•", "·").replace("\u30fb", "·")
+
+
 def assert_ocr_meaningful(text: str, share_card: dict) -> None:
-    normalized = re.sub(r"\s+", "", text).casefold()
-    role = re.sub(r"\s+", "", str(share_card.get("role_name", ""))).casefold()
+    normalized = _ocr_normalize(text)
+    role = _ocr_normalize(str(share_card.get("role_name", "")))
     marker = "工作任务ai替代指数"
     if len(normalized) < 10 or (role not in normalized and marker not in normalized):
         raise OcrVerificationError("PNG OCR 未识别出角色或指标标题，拒绝将空扫描视为隐私通过")
