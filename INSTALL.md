@@ -15,7 +15,7 @@ Claude Code 会从个人目录 `~/.claude/skills/<skill-name>/SKILL.md` 或项�
 进入 Claude Code 后运行 `/skills` 确认 `ai-task-exposure`，然后可输入：
 
 ```text
-/ai-task-exposure /absolute/path/to/resume.pdf
+/mbai /absolute/path/to/resume.pdf
 ```
 
 也可以直接说“用这份简历做工作任务 AI 不可替代指数诊断”。

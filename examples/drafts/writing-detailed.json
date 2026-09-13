@@ -24,8 +24,8 @@
     "situation_paragraph": "先把每项任务说清楚：输入是什么、输出到哪、由谁确认——证据齐了，结论才站得住。",
     "index_note": "不可替代指数量的也是任务，不是人。",
     "role": {
-      "code": "ASSEMBLY_CRANE",
-      "name": "拼装兽 · 素材组装手",
+      "code": "ASSEMBLY_WORKER",
+      "name": "拼装工",
       "tags": [
         "语境校准",
         "事实把关"
@@ -185,7 +185,7 @@
   },
   "share_card": {
     "category": "消费品牌 / 内容运营",
-    "role_name": "拼装兽 · 素材组装手",
+    "role_name": "拼装工",
     "role_tags": [
       "语境校准",
       "事实把关"

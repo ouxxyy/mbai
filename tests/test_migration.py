@@ -1,4 +1,4 @@
-"""Migration tests: 1.0.0/2.0.0 → 3.0.0 语义翻转、防双翻、读时兼容。"""
+"""Migration tests: 1.0.0/2.0.0/3.0.0 → 4.0.0 迁移、翻转保持、防双翻、读时兼容。"""
 
 import unittest
 
@@ -11,9 +11,9 @@ from tests.sample_factory import valid_draft
 
 
 ROLE_NAMES_OK = {
-    "TABLE_GOBLIN", "INSPECTOR_BOT", "PROOFREADER_OWL", "ASSEMBLY_CRANE", "ROOTCAUSE_HOUND",
-    "GATEKEEPER_BEAR", "TRANSLATOR_FOX", "DECONSTRUCTOR_BEAVER", "PROGRESS_HERDER",
-    "MINESWEEPER_MOLE", "SOLVER_OTTER", "ONSCENE_CHAMELEON", "SHADOW_BEAST",
+    "TABLE_WORKER", "INSPECTOR_WORKER", "PROOFREADER_WORKER", "ASSEMBLY_WORKER", "ROOTCAUSE_WORKER",
+    "GATEKEEPER_WORKER", "TRANSLATOR_WORKER", "DECONSTRUCTOR_WORKER", "PROGRESS_WORKER",
+    "MINESWEEPER_WORKER", "SOLVER_WORKER", "ONSCENE_WORKER", "SHADOW_WORKER",
 }
 
 
@@ -25,8 +25,8 @@ class LegacyDraftMigrationTest(unittest.TestCase):
         report = finalize_report(draft)
 
         assert_valid_report(report)
-        self.assertEqual(report["schema_version"], "3.0.0")
-        self.assertEqual(report["rule_version"], "3.0.0")
+        self.assertEqual(report["schema_version"], "4.0.0")
+        self.assertEqual(report["rule_version"], "4.0.0")
         self.assertIn(report["profile"]["role"]["code"], ROLE_NAMES_OK)
         # 任务级替代语义逐字段保留；raw_score 是翻转前的锚。
         for old, new in zip(legacy_tasks, report["tasks"]):
@@ -41,7 +41,7 @@ class LegacyDraftMigrationTest(unittest.TestCase):
 
         report = finalize_report(draft)
 
-        self.assertEqual(report["schema_version"], "3.0.0")
+        self.assertEqual(report["schema_version"], "4.0.0")
         self.assertEqual(report["metrics"]["irreplaceability_index"], 40)
 
     def test_unknown_schema_version_is_rejected(self):
@@ -105,7 +105,7 @@ class FinalReportMigrationTest(unittest.TestCase):
         migrated = migrate_report(old_final)
 
         assert_valid_report(migrated)
-        self.assertEqual(migrated["schema_version"], "3.0.0")
+        self.assertEqual(migrated["schema_version"], "4.0.0")
         # 产品决策（非回归）：旧 90/HIGH 展示为 10/LOW；raw_score 与任务等级逐字段保留。
         self.assertEqual(migrated["metrics"]["irreplaceability_index"], 10)
         self.assertEqual(migrated["metrics"]["irreplaceability_level"], "LOW")

@@ -172,7 +172,7 @@ class SampleFlipExpectationsTest(unittest.TestCase):
         report = self.reports["operations-repetitive"]
         self.assertEqual(report["metrics"]["irreplaceability_index"], 10)
         self.assertEqual(report["metrics"]["irreplaceability_level"], "LOW")
-        self.assertEqual(report["profile"]["role"]["code"], "TABLE_GOBLIN")
+        self.assertEqual(report["profile"]["role"]["code"], "TABLE_WORKER")
         self.assertEqual(report["profile"]["role"]["snarky_quote"], "六个平台互不相通，全靠你本人兼容。")
         self.assertEqual(report["metrics"]["raw_score"], 87.5)
 
@@ -180,19 +180,19 @@ class SampleFlipExpectationsTest(unittest.TestCase):
         report = self.reports["ops-deep"]
         self.assertEqual(report["metrics"]["irreplaceability_index"], 45)
         self.assertEqual(report["metrics"]["irreplaceability_level"], "MEDIUM")
-        self.assertEqual(report["profile"]["role"]["code"], "SHADOW_BEAST")
+        self.assertEqual(report["profile"]["role"]["code"], "SHADOW_WORKER")
 
     def test_insufficient_state_unchanged(self):
         report = self.reports["sparse-information"]
         self.assertIsNone(report["metrics"]["irreplaceability_index"])
         self.assertEqual(report["metrics"]["irreplaceability_level"], "UNKNOWN")
-        self.assertEqual(report["profile"]["role"]["code"], "SHADOW_BEAST")
+        self.assertEqual(report["profile"]["role"]["code"], "SHADOW_WORKER")
 
     def test_showcase_case_is_high_irreplaceability(self):
         report = self.reports["risk-owner-showcase"]
         self.assertEqual(report["metrics"]["irreplaceability_index"], 85)
         self.assertEqual(report["metrics"]["irreplaceability_level"], "HIGH")
-        self.assertEqual(report["profile"]["role"]["code"], "MINESWEEPER_MOLE")
+        self.assertEqual(report["profile"]["role"]["code"], "MINESWEEPER_WORKER")
 
     def test_responsibility_depth_now_ranks_naturally(self):
         cases = {case["slug"]: case for case in case_definitions()}
@@ -230,8 +230,8 @@ class FreshInputsPipelineTest(unittest.TestCase):
                 "situation_paragraph": "虚构输入：验证语义方向。",
                 "index_note": "不可替代指数量的也是任务，不是人。",
                 "role": {
-                    "code": "TABLE_GOBLIN",
-                    "name": "搬表兽 · 表格搬运官",
+                    "code": "TABLE_WORKER",
+                    "name": "搬表工",
                     "tags": ["表格搬运", "格式转换"],
                     "source_task_ids": [],
                     "snarky_quote": "虚构嘴替句。",
@@ -250,7 +250,7 @@ class FreshInputsPipelineTest(unittest.TestCase):
             },
             "share_card": {
                 "category": "虚构 / 方向验收",
-                "role_name": "搬表兽 · 表格搬运官",
+                "role_name": "搬表工",
                 "role_tags": ["表格搬运"],
                 "confidence_label": "证据置信度：高",
                 "irreplaceability_index": None,

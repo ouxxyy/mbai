@@ -1,14 +1,16 @@
 ---
-name: ai-task-exposure
+name: mbai
 description: 基于中文简历具体任务生成“工作任务 AI 不可替代指数”职业诊断、离线 HTML 报告与脱敏 PNG 分享卡。用户提供 PDF、DOCX、文字简历，询问 AI 替代风险、岗位风险、职业诊断或能力升级时使用。
 compatibility: Claude Code 2.1.196+；macOS Apple Silicon；Python 3.11+；文字型 PDF 需要系统 Swift/PDFKit；命令行 PNG 需要 Chrome，HTML 内仍可纯离线导出。
 allowed-tools: Read, Write, Bash, AskUserQuestion
 metadata:
-  version: 3.0.0
+  version: 4.0.0
   language: zh-CN
 ---
 
 # 工作任务 AI 不可替代指数
+
+测评品牌为小写 `mbai`（Me, Beyond AI · 我，在 AI 之上）：`mbai` 是品牌名，「工作任务 AI 不可替代指数」是正式指标名，两者并存；分享卡与报告的 Logo/锁定语露出由渲染层内嵌资产承担。角色体系自 4.0.0 起为 12+1「xx工」（code `*_WORKER`，工牌短码 TW-01…TW-00，待解锁为「神秘工 · 待解锁」）。
 
 对外指标是「工作任务 AI 不可替代指数」（3.0.0）：分数越高，表示工作任务越依赖你本人。内部仍按替代分计算（任务级 0/50/100、时间占比加权、ROUND_HALF_UP_TO_5 取整），展示层唯一换算口径为**先取整、后取补**：显示分 = 100 − 取整后替代分。方向词约定：高/低一律指不可替代程度。
 

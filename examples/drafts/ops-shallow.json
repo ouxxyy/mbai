@@ -26,8 +26,8 @@
     "situation_paragraph": "先把每项任务说清楚：输入是什么、输出到哪、由谁确认——证据齐了，结论才站得住。",
     "index_note": "不可替代指数量的也是任务，不是人。",
     "role": {
-      "code": "INSPECTOR_BOT",
-      "name": "巡检兽 · 流程巡航员",
+      "code": "INSPECTOR_WORKER",
+      "name": "巡检工",
       "tags": [
         "模板执行",
         "固定复盘"
@@ -154,7 +154,7 @@
   },
   "share_card": {
     "category": "互联网 / 用户运营",
-    "role_name": "巡检兽 · 流程巡航员",
+    "role_name": "巡检工",
     "role_tags": [
       "模板执行",
       "固定复盘"

@@ -45,18 +45,18 @@ NEUTRAL_TASK = _task(
 
 # 12 类角色各一条虚构命中任务（动词＋对象＋信号均落表内，权重 70% 保证主角色）。
 ROLE_TASKS = {
-    "TABLE_GOBLIN": _task("task-role", "多源数据周报搬运", "从五个互不相通的系统导出运营数据，清洗合并后录入固定周报模板。", "HIGH", 70, _signals(1, 1, 0, 1, 2, 2)),
-    "INSPECTOR_BOT": _task("task-role", "后台流程巡检", "按发布清单在后台配置活动，逐项检查链接与库存字段。", "HIGH", 70, _signals(0, 0, 0, 1, 2, 2)),
-    "PROOFREADER_OWL": _task("task-role", "对外口径校准", "审核对外文案，统一品牌口径并对事实表述把关。", "MEDIUM", 70, _signals(2, 0, 0, 2, 1, 2)),
-    "ASSEMBLY_CRANE": _task("task-role", "多版本内容组装", "把四方收集的素材整理排版，组装成多版本内容专题。", "HIGH", 70, _signals(1, 0, 0, 1, 2, 2)),
-    "ROOTCAUSE_HOUND": _task("task-role", "数据异常追因", "排查数据异常，沿链路定位波动原因并验证候选根因。", "MEDIUM", 70, _signals(2, 2, 0, 1, 0, 2)),
-    "GATEKEEPER_BEAR": _task("task-role", "上线质量守门", "审查上线权限与系统边界，测试通过后才批准发布。", "MEDIUM", 70, _signals(2, 1, 0, 2, 1, 2)),
-    "TRANSLATOR_FOX": _task("task-role", "跨组信息对齐", "协调两个团队的需求，反复对齐信息以消除团队误解。", "MEDIUM", 70, _signals(1, 2, 0, 1, 1, 2)),
-    "DECONSTRUCTOR_BEAVER": _task("task-role", "模糊需求拆解", "把一句话模糊诉求澄清细化，转化成可执行要求。", "MEDIUM", 70, _signals(2, 0, 0, 1, 1, 2)),
-    "PROGRESS_HERDER": _task("task-role", "项目进度催办", "跟进项目排期，对延期依赖逐项催办并更新里程碑。", "MEDIUM", 70, _signals(1, 2, 0, 1, 2, 1)),
-    "MINESWEEPER_MOLE": _task("task-role", "项目风险兜底", "识别上线风险，评估故障影响并对结果负责兜底。", "LOW", 70, _signals(2, 1, 0, 2, 0, 1)),
-    "SOLVER_OTTER": _task("task-role", "客户例外处理", "理解客户场景，处理例外工单并解答疑难问题。", "MEDIUM", 70, _signals(2, 2, 0, 1, 0, 2)),
-    "ONSCENE_CHAMELEON": _task("task-role", "现场突发响应", "设备突发告警时第一时间到场，现场协调抢修与恢复。", "LOW", 70, _signals(1, 2, 2, 2, 0, 1)),
+    "TABLE_WORKER": _task("task-role", "多源数据周报搬运", "从五个互不相通的系统导出运营数据，清洗合并后录入固定周报模板。", "HIGH", 70, _signals(1, 1, 0, 1, 2, 2)),
+    "INSPECTOR_WORKER": _task("task-role", "后台流程巡检", "按发布清单在后台配置活动，逐项检查链接与库存字段。", "HIGH", 70, _signals(0, 0, 0, 1, 2, 2)),
+    "PROOFREADER_WORKER": _task("task-role", "对外口径校准", "审核对外文案，统一品牌口径并对事实表述把关。", "MEDIUM", 70, _signals(2, 0, 0, 2, 1, 2)),
+    "ASSEMBLY_WORKER": _task("task-role", "多版本内容组装", "把四方收集的素材整理排版，组装成多版本内容专题。", "HIGH", 70, _signals(1, 0, 0, 1, 2, 2)),
+    "ROOTCAUSE_WORKER": _task("task-role", "数据异常追因", "排查数据异常，沿链路定位波动原因并验证候选根因。", "MEDIUM", 70, _signals(2, 2, 0, 1, 0, 2)),
+    "GATEKEEPER_WORKER": _task("task-role", "上线质量守门", "审查上线权限与系统边界，测试通过后才批准发布。", "MEDIUM", 70, _signals(2, 1, 0, 2, 1, 2)),
+    "TRANSLATOR_WORKER": _task("task-role", "跨组信息对齐", "协调两个团队的需求，反复对齐信息以消除团队误解。", "MEDIUM", 70, _signals(1, 2, 0, 1, 1, 2)),
+    "DECONSTRUCTOR_WORKER": _task("task-role", "模糊需求拆解", "把一句话模糊诉求澄清细化，转化成可执行要求。", "MEDIUM", 70, _signals(2, 0, 0, 1, 1, 2)),
+    "PROGRESS_WORKER": _task("task-role", "项目进度催办", "跟进项目排期，对延期依赖逐项催办并更新里程碑。", "MEDIUM", 70, _signals(1, 2, 0, 1, 2, 1)),
+    "MINESWEEPER_WORKER": _task("task-role", "项目风险兜底", "识别上线风险，评估故障影响并对结果负责兜底。", "LOW", 70, _signals(2, 1, 0, 2, 0, 1)),
+    "SOLVER_WORKER": _task("task-role", "客户例外处理", "理解客户场景，处理例外工单并解答疑难问题。", "MEDIUM", 70, _signals(2, 2, 0, 1, 0, 2)),
+    "ONSCENE_WORKER": _task("task-role", "现场突发响应", "设备突发告警时第一时间到场，现场协调抢修与恢复。", "LOW", 70, _signals(1, 2, 2, 2, 0, 1)),
 }
 
 
@@ -161,8 +161,8 @@ class TwelveRoleCasesTest(unittest.TestCase):
                 self.assertTrue(report["report_metadata"]["is_sufficient_info"])
 
     def test_r5_same_role_lands_on_different_index_levels(self):
-        low = finalize_report(_role_draft("TABLE_GOBLIN", second_level="LOW"))
-        high = finalize_report(_role_draft("TABLE_GOBLIN", second_level="HIGH"))
+        low = finalize_report(_role_draft("TABLE_WORKER", second_level="LOW"))
+        high = finalize_report(_role_draft("TABLE_WORKER", second_level="HIGH"))
 
         self.assertEqual(low["profile"]["role"]["code"], high["profile"]["role"]["code"])
         self.assertNotEqual(low["metrics"]["irreplaceability_index"], high["metrics"]["irreplaceability_index"])
@@ -177,88 +177,88 @@ class TwelveRoleCasesTest(unittest.TestCase):
 
 class R1PredicateTest(unittest.TestCase):
     def test_predicate_requires_verb_object_and_signals_together(self):
-        task = dict(ROLE_TASKS["TABLE_GOBLIN"])
+        task = dict(ROLE_TASKS["TABLE_WORKER"])
 
         # 信号不满足 → 不命中。
         bad_signals = dict(task, signals=_signals(2, 2, 0, 1, 2, 2))
-        self.assertNotIn("TABLE_GOBLIN", match_task_roles(bad_signals))
+        self.assertNotIn("TABLE_WORKER", match_task_roles(bad_signals))
 
         # 动词缺失 → 不命中（对象与信号保留）。
         bad_verb = dict(task, task_name="多源数据周报", evidence="五个系统的运营数据与固定周报模板。")
-        self.assertNotIn("TABLE_GOBLIN", match_task_roles(bad_verb))
+        self.assertNotIn("TABLE_WORKER", match_task_roles(bad_verb))
 
         # 对象缺失 → 不命中（动词与信号保留）。
         bad_object = dict(task, task_name="多源信息搬运", evidence="从五个系统导出并清洗合并后录入。")
-        self.assertNotIn("TABLE_GOBLIN", match_task_roles(bad_object))
+        self.assertNotIn("TABLE_WORKER", match_task_roles(bad_object))
 
         # 三者齐 → 命中。
-        self.assertIn("TABLE_GOBLIN", match_task_roles(task))
+        self.assertIn("TABLE_WORKER", match_task_roles(task))
 
     def test_unknown_tasks_never_match(self):
-        unknown = dict(ROLE_TASKS["TABLE_GOBLIN"], exposure_level="UNKNOWN")
+        unknown = dict(ROLE_TASKS["TABLE_WORKER"], exposure_level="UNKNOWN")
         self.assertEqual(match_task_roles(unknown), [])
 
     def test_task_text_uses_name_and_evidence_not_job_title(self):
         # 岗位名称不参与判定：证据里没有动词/对象就不命中。
-        role_task = ROLE_TASKS["TABLE_GOBLIN"]
+        role_task = ROLE_TASKS["TABLE_WORKER"]
         task = dict(role_task, task_name="运营专员", evidence="负责整体协调与规划。")
         self.assertEqual(match_task_roles(task), [])
 
     def test_gatekeeper_accepts_either_judgment2_or_accountability2(self):
-        base = ROLE_TASKS["GATEKEEPER_BEAR"]
+        base = ROLE_TASKS["GATEKEEPER_WORKER"]
         judgment_only = dict(base, signals=_signals(2, 0, 0, 1, 1, 2))
         accountability_only = dict(base, signals=_signals(1, 0, 0, 2, 1, 2))
         neither = dict(base, signals=_signals(1, 0, 0, 1, 1, 2))
-        self.assertIn("GATEKEEPER_BEAR", match_task_roles(judgment_only))
-        self.assertIn("GATEKEEPER_BEAR", match_task_roles(accountability_only))
-        self.assertNotIn("GATEKEEPER_BEAR", match_task_roles(neither))
+        self.assertIn("GATEKEEPER_WORKER", match_task_roles(judgment_only))
+        self.assertIn("GATEKEEPER_WORKER", match_task_roles(accountability_only))
+        self.assertNotIn("GATEKEEPER_WORKER", match_task_roles(neither))
 
 
 class R2R3WeightTest(unittest.TestCase):
     def test_user_share_decides_main_role(self):
-        heavy = dict(ROLE_TASKS["INSPECTOR_BOT"], time_share_percent=70)
-        light = dict(ROLE_TASKS["TABLE_GOBLIN"], time_share_percent=30)
+        heavy = dict(ROLE_TASKS["INSPECTOR_WORKER"], time_share_percent=70)
+        light = dict(ROLE_TASKS["TABLE_WORKER"], time_share_percent=30)
         result = analyze_roles([heavy, light])
 
-        self.assertEqual(result["main_role"], "INSPECTOR_BOT")
-        self.assertEqual(result["coverage"], {"INSPECTOR_BOT": 70, "TABLE_GOBLIN": 30})
+        self.assertEqual(result["main_role"], "INSPECTOR_WORKER")
+        self.assertEqual(result["coverage"], {"INSPECTOR_WORKER": 70, "TABLE_WORKER": 30})
 
     def test_equal_fallback_counts_hits_when_no_shares(self):
-        two = [dict(ROLE_TASKS["TRANSLATOR_FOX"], time_share_percent=None),
-               _task("task-t2", "对齐第二组", "再次对齐两个团队的需求信息。", "MEDIUM", None, ROLE_TASKS["TRANSLATOR_FOX"]["signals"])]
-        one = [dict(ROLE_TASKS["PROGRESS_HERDER"], time_share_percent=None)]
-        self.assertEqual(analyze_roles(two + one)["main_role"], "TRANSLATOR_FOX")
+        two = [dict(ROLE_TASKS["TRANSLATOR_WORKER"], time_share_percent=None),
+               _task("task-t2", "对齐第二组", "再次对齐两个团队的需求信息。", "MEDIUM", None, ROLE_TASKS["TRANSLATOR_WORKER"]["signals"])]
+        one = [dict(ROLE_TASKS["PROGRESS_WORKER"], time_share_percent=None)]
+        self.assertEqual(analyze_roles(two + one)["main_role"], "TRANSLATOR_WORKER")
 
     def test_mixed_input_uses_single_formula_with_equal_weight_one(self):
         # 混合输入同一公式：搬表兽 25（用户占比）；催办兽 24（用户占比）+ 两条缺失占比（各按 1）= 26。
-        shared = dict(ROLE_TASKS["TABLE_GOBLIN"], time_share_percent=25)
-        user_share = dict(ROLE_TASKS["PROGRESS_HERDER"], time_share_percent=24)
-        missing_a = dict(ROLE_TASKS["PROGRESS_HERDER"], time_share_percent=None)
-        missing_b = dict(ROLE_TASKS["PROGRESS_HERDER"], time_share_percent=None, task_id="task-herder-2", evidence="跟进排期，催办延期依赖并更新里程碑。")
+        shared = dict(ROLE_TASKS["TABLE_WORKER"], time_share_percent=25)
+        user_share = dict(ROLE_TASKS["PROGRESS_WORKER"], time_share_percent=24)
+        missing_a = dict(ROLE_TASKS["PROGRESS_WORKER"], time_share_percent=None)
+        missing_b = dict(ROLE_TASKS["PROGRESS_WORKER"], time_share_percent=None, task_id="task-herder-2", evidence="跟进排期，催办延期依赖并更新里程碑。")
         result = analyze_roles([shared, user_share, missing_a, missing_b])
 
-        self.assertEqual(result["main_role"], "PROGRESS_HERDER")
-        self.assertEqual(result["coverage"]["PROGRESS_HERDER"], 26)
-        self.assertEqual(result["coverage"]["TABLE_GOBLIN"], 25)
+        self.assertEqual(result["main_role"], "PROGRESS_WORKER")
+        self.assertEqual(result["coverage"]["PROGRESS_WORKER"], 26)
+        self.assertEqual(result["coverage"]["TABLE_WORKER"], 25)
 
     def test_r3_tie_breaks_by_table_order(self):
         # 等权重并列：翻译兽(7) 先于 催办兽(9)；搬表兽(1) 先于 巡检兽(2)。
         late_order = analyze_roles([
-            dict(ROLE_TASKS["PROGRESS_HERDER"], time_share_percent=50),
-            dict(ROLE_TASKS["TRANSLATOR_FOX"], time_share_percent=50),
+            dict(ROLE_TASKS["PROGRESS_WORKER"], time_share_percent=50),
+            dict(ROLE_TASKS["TRANSLATOR_WORKER"], time_share_percent=50),
         ])
         early_order = analyze_roles([
-            dict(ROLE_TASKS["INSPECTOR_BOT"], time_share_percent=50),
-            dict(ROLE_TASKS["TABLE_GOBLIN"], time_share_percent=50),
+            dict(ROLE_TASKS["INSPECTOR_WORKER"], time_share_percent=50),
+            dict(ROLE_TASKS["TABLE_WORKER"], time_share_percent=50),
         ])
-        self.assertEqual(late_order["main_role"], "TRANSLATOR_FOX")
-        self.assertEqual(early_order["main_role"], "TABLE_GOBLIN")
+        self.assertEqual(late_order["main_role"], "TRANSLATOR_WORKER")
+        self.assertEqual(early_order["main_role"], "TABLE_WORKER")
 
 
 class R4DualThresholdTest(unittest.TestCase):
     def test_index_threshold_fails_role_and_index_hidden(self):
         result = analyze_roles([
-            ROLE_TASKS["TABLE_GOBLIN"],
+            ROLE_TASKS["TABLE_WORKER"],
             dict(NEUTRAL_TASK, exposure_level="UNKNOWN"),
             _task("task-vague-2", "综合协调", "负责综合协调事务。", "UNKNOWN", None, _signals(), "LOW"),
         ])
@@ -268,7 +268,7 @@ class R4DualThresholdTest(unittest.TestCase):
     def test_role_threshold_can_fail_while_index_threshold_passes(self):
         # 3/3 暴露可判（指数门槛过），但只有 1 条命中角色（角色门槛未过）。
         tasks = [
-            ROLE_TASKS["TABLE_GOBLIN"],
+            ROLE_TASKS["TABLE_WORKER"],
             dict(NEUTRAL_TASK, exposure_level="MEDIUM"),
             _task("task-neutral-2", "跨团队例会", "主持跨团队例会并口头汇报进展。", "LOW", None, _signals(1, 1, 0, 1, 1, 1)),
         ]
@@ -278,13 +278,13 @@ class R4DualThresholdTest(unittest.TestCase):
         self.assertIsNone(result["main_role"])
 
     def test_exactly_half_role_evaluable_is_sufficient(self):
-        result = analyze_roles([ROLE_TASKS["TABLE_GOBLIN"], NEUTRAL_TASK])
+        result = analyze_roles([ROLE_TASKS["TABLE_WORKER"], NEUTRAL_TASK])
         self.assertTrue(result["is_role_sufficient"])
 
 
 class CoexistenceStateTest(unittest.TestCase):
     def _coexistence_draft(self):
-        draft = _role_draft("TABLE_GOBLIN")
+        draft = _role_draft("TABLE_WORKER")
         # 把第二条任务换成零命中的可判断任务 → 指数显示、角色门槛未过。
         draft["tasks"][1] = dict(NEUTRAL_TASK, exposure_level="MEDIUM")
         draft["tasks"].append(
@@ -300,14 +300,14 @@ class CoexistenceStateTest(unittest.TestCase):
 
         assert_valid_report(report)
         self.assertIsNotNone(report["metrics"]["irreplaceability_index"])
-        self.assertEqual(report["profile"]["role"]["code"], "SHADOW_BEAST")
-        self.assertEqual(report["profile"]["role"]["name"], "影子兽 · 待解锁工种")
+        self.assertEqual(report["profile"]["role"]["code"], "SHADOW_WORKER")
+        self.assertEqual(report["profile"]["role"]["name"], "神秘工 · 待解锁")
         self.assertEqual(report["profile"]["role"]["source_task_ids"], [])
         self.assertFalse(report["report_metadata"]["is_role_sufficient_info"])
         self.assertTrue(report["report_metadata"]["is_sufficient_info"])
-        # 并存态分享卡：真指数 + 影子兽名。
+        # 并存态分享卡：真指数 + 神秘工名。
         self.assertEqual(report["share_card"]["irreplaceability_index"], report["metrics"]["irreplaceability_index"])
-        self.assertEqual(report["share_card"]["role_name"], "影子兽 · 待解锁工种")
+        self.assertEqual(report["share_card"]["role_name"], "神秘工 · 待解锁")
 
     def test_parallel_state_keeps_case_snarky_quote_without_role_identity(self):
         draft = self._coexistence_draft()
@@ -315,11 +315,11 @@ class CoexistenceStateTest(unittest.TestCase):
 
         report = finalize_report(draft)
 
-        self.assertEqual(report["profile"]["role"]["code"], "SHADOW_BEAST")
+        self.assertEqual(report["profile"]["role"]["code"], "SHADOW_WORKER")
         self.assertEqual(report["profile"]["role"]["snarky_quote"], "三摊子事各说各话，全靠你本人兼容。")
 
     def test_full_insufficient_state_hides_index_and_uses_shadow(self):
-        draft = _role_draft("TABLE_GOBLIN")
+        draft = _role_draft("TABLE_WORKER")
         for task in draft["tasks"]:
             task["exposure_level"] = "UNKNOWN"
             task["time_share_percent"] = None
@@ -332,13 +332,13 @@ class CoexistenceStateTest(unittest.TestCase):
         report = finalize_report(draft)
 
         self.assertIsNone(report["metrics"]["irreplaceability_index"])
-        self.assertEqual(report["profile"]["role"]["code"], "SHADOW_BEAST")
+        self.assertEqual(report["profile"]["role"]["code"], "SHADOW_WORKER")
         self.assertFalse(report["report_metadata"]["is_sufficient_info"])
 
 
 class DeterminismTest(unittest.TestCase):
     def test_same_tasks_always_yield_same_role(self):
-        tasks = [ROLE_TASKS["GATEKEEPER_BEAR"], NEUTRAL_TASK]
+        tasks = [ROLE_TASKS["GATEKEEPER_WORKER"], NEUTRAL_TASK]
         first = analyze_roles(tasks)
         second = analyze_roles([dict(task) for task in tasks])
         self.assertEqual(first, second)

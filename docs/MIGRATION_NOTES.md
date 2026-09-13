@@ -1,4 +1,4 @@
-# 迁移说明（1.0.0 → 2.0.0 → 3.0.0）
+# 迁移说明（1.0.0 → 2.0.0 → 3.0.0 → 4.0.0）
 
 契约版本：`1.0.0` → `2.0.0`（`schema_version` 与 `rule_version` 同步升级）。
 触发变更：角色体系由旧六角色升级为 12 类＋影子兽（内容基线冻结版，见 `docs/SCORING_RULES.md` §6）。
@@ -67,7 +67,31 @@
 - 防双翻：`migrate_report.py` 拒绝迁移 3.0.0 报告（幂等由测试锁定）；1.0.0/2.0.0 草稿读时迁移。
 - 颜色绑定随风险镜像：新 LOW/MEDIUM（高替代风险）＝警示橙，新 HIGH（安全）＝品牌黄/黑。
 
+## 3.0.0 → 4.0.0：角色更名与品牌化（2026-09-14）
+
+**机械更名、零语义**：12+1 角色昵称由「xx兽」改为「xx工」，code 全量迁移为 `*_WORKER`，素材文件同步改名（`assets/characters/*_worker.webp`），新增工牌短码 `TW-01…TW-12 / TW-00`；品牌层引入 `mbai`（Me, Beyond AI）——`mbai` 是测评品牌名，「工作任务 AI 不可替代指数」仍是正式指标名，分数/等级/算法/判定零改动。**指数算法、R1–R5 命中谓词、信号约束、表序全部未动**；角色像素素材沿用现有图像，后续视觉批次按同名文件直接替换。
+
+| 3.x 昵称（code） | 4.0.0 昵称（code） | 工牌 |
+| --- | --- | --- |
+| 搬表兽 · 表格搬运官（TABLE_GOBLIN） | 搬表工（TABLE_WORKER） | TW-01 |
+| 巡检兽 · 流程巡航员（INSPECTOR_BOT） | 巡检工（INSPECTOR_WORKER） | TW-02 |
+| 校稿兽 · 口径校准员（PROOFREADER_OWL） | 校稿工（PROOFREADER_WORKER） | TW-03 |
+| 拼装兽 · 素材组装手（ASSEMBLY_CRANE） | 拼装工（ASSEMBLY_WORKER） | TW-04 |
+| 追因兽 · 归因探查员（ROOTCAUSE_HOUND） | 追因工（ROOTCAUSE_WORKER） | TW-05 |
+| 守门兽 · 上线守门员（GATEKEEPER_BEAR） | 守门工（GATEKEEPER_WORKER） | TW-06 |
+| 翻译兽 · 信息对齐官（TRANSLATOR_FOX） | 翻译工（TRANSLATOR_WORKER） | TW-07 |
+| 拆解兽 · 清单拆解手（DECONSTRUCTOR_BEAVER） | 拆解工（DECONSTRUCTOR_WORKER） | TW-08 |
+| 催办兽 · 进度推土机（PROGRESS_HERDER） | 催办工（PROGRESS_WORKER） | TW-09 |
+| 排雷兽 · 风险预警员（MINESWEEPER_MOLE） | 排雷工（MINESWEEPER_WORKER） | TW-10 |
+| 解题兽 · 现场解题手（SOLVER_OTTER） | 解题工（SOLVER_WORKER） | TW-11 |
+| 应变兽 · 实时响应员（ONSCENE_CHAMELEON） | 应变工（ONSCENE_WORKER） | TW-12 |
+| 影子兽 · 待解锁工种（SHADOW_BEAST） | 神秘工 · 待解锁（SHADOW_WORKER） | TW-00 |
+
+- 三层迁移链：1.0.0 / 2.0.0 / 3.0.0 草稿与 final 均可读时或显式迁移至 4.0.0（角色由引擎按任务证据重判，code 落在新枚举）；4.0.0 报告拒绝再迁移（幂等测试锁定）。
+- 品牌露出：分享卡顶栏左侧 mbai 徽章、HTML ticker 徽章、HTML 页脚锁定语 `mbai — Me, Beyond AI · 我，在 AI 之上`（品牌资产在 `assets/brand/`，SVG 全为闭合路径矢量）。
+- 指数展示口径不变：仍是 3.0.0 的「先取整、后取补」不可替代指数。
+
 ## 同步状态
 
-`references/report-contract.schema.json`、`scripts/validate_report.py` 已随本说明同步至 3.0.0；
+`references/report-contract.schema.json`、`scripts/validate_report.py` 已随本说明同步至 4.0.0；
 `docs/SCORING_RULES.md` §6 为角色体系的规则权威，§1/§3 的 3.0.0 增补块为展示口径权威。

@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://local.example/ai-task-exposure/report-contract-3.0.0.schema.json",
+  "$id": "https://local.example/ai-task-exposure/report-contract-4.0.0.schema.json",
   "title": "Work Task AI Exposure Final Report",
   "type": "object",
   "additionalProperties": false,
@@ -20,10 +20,10 @@
   ],
   "properties": {
     "schema_version": {
-      "const": "3.0.0"
+      "const": "4.0.0"
     },
     "rule_version": {
-      "const": "3.0.0"
+      "const": "4.0.0"
     },
     "report_metadata": {
       "type": "object",
@@ -141,20 +141,21 @@
           "properties": {
             "code": {
               "enum": [
-                "TABLE_GOBLIN",
-                "INSPECTOR_BOT",
-                "PROOFREADER_OWL",
-                "ASSEMBLY_CRANE",
-                "ROOTCAUSE_HOUND",
-                "GATEKEEPER_BEAR",
-                "TRANSLATOR_FOX",
-                "DECONSTRUCTOR_BEAVER",
-                "PROGRESS_HERDER",
-                "MINESWEEPER_MOLE",
-                "SOLVER_OTTER",
-                "ONSCENE_CHAMELEON",
-                "SHADOW_BEAST"
-              ]
+                "TABLE_WORKER",
+                "INSPECTOR_WORKER",
+                "PROOFREADER_WORKER",
+                "ASSEMBLY_WORKER",
+                "ROOTCAUSE_WORKER",
+                "GATEKEEPER_WORKER",
+                "TRANSLATOR_WORKER",
+                "DECONSTRUCTOR_WORKER",
+                "PROGRESS_WORKER",
+                "MINESWEEPER_WORKER",
+                "SOLVER_WORKER",
+                "ONSCENE_WORKER",
+                "SHADOW_WORKER"
+              ],
+              "description": "4.0.0 起为 *_WORKER 家族（工牌短码 TW-01…TW-12、TW-00）；3.x 旧 code 经迁移映射机械改名（见 docs/MIGRATION_NOTES.md），判定语义零变化。"
             },
             "name": {
               "type": "string",
@@ -593,18 +594,18 @@
           "uniqueItems": true,
           "items": {
             "enum": [
-              "TABLE_GOBLIN",
-              "INSPECTOR_BOT",
-              "PROOFREADER_OWL",
-              "ASSEMBLY_CRANE",
-              "ROOTCAUSE_HOUND",
-              "GATEKEEPER_BEAR",
-              "TRANSLATOR_FOX",
-              "DECONSTRUCTOR_BEAVER",
-              "PROGRESS_HERDER",
-              "MINESWEEPER_MOLE",
-              "SOLVER_OTTER",
-              "ONSCENE_CHAMELEON"
+              "TABLE_WORKER",
+              "INSPECTOR_WORKER",
+              "PROOFREADER_WORKER",
+              "ASSEMBLY_WORKER",
+              "ROOTCAUSE_WORKER",
+              "GATEKEEPER_WORKER",
+              "TRANSLATOR_WORKER",
+              "DECONSTRUCTOR_WORKER",
+              "PROGRESS_WORKER",
+              "MINESWEEPER_WORKER",
+              "SOLVER_WORKER",
+              "ONSCENE_WORKER"
             ]
           }
         }

@@ -2,7 +2,7 @@
 
 B 方向（新瑞士式黑黄撞色态度海报）呈现，规范：docs/DESIGN_SYSTEM_B_POSTER.md。
 渲染器只消费最终 JSON；角色素材按 ROLE_TABLE 解析为 data URI 内嵌，
-每份报告只内嵌主角色（或影子兽）＋影子兽兜底两张，断网可看、可导出。
+每份报告只内嵌主角色（或神秘工）＋神秘工兜底两张，断网可看、可导出。
 """
 
 from __future__ import annotations
@@ -18,9 +18,11 @@ from typing import Any
 if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from scripts.role_match import ROLE_BY_CODE, SHADOW_BEAST
+from scripts.role_match import ROLE_BY_CODE, SHADOW_WORKER
 
 ASSET_DIR = Path(__file__).resolve().parents[1] / "assets" / "characters"
+BRAND_BADGE_PNG = Path(__file__).resolve().parents[1] / "assets" / "brand" / "png" / "mbai_badge_64px.png"
+BRAND_LOCKUP = "mbai — Me, Beyond AI · 我，在 AI 之上"
 
 # 3.0.0 词表拆分：汇总位说「不可替代」，任务行说「AI 可接管」——同一页面不允许同词反义。
 SUMMARY_LEVEL_LABELS = {"LOW": "低不可替代", "MEDIUM": "中不可替代", "HIGH": "高不可替代", "UNKNOWN": "未知"}
@@ -57,18 +59,26 @@ def _asset_data_uri(filename: str) -> str:
     return f"data:image/webp;base64,{encoded}"
 
 
+def _brand_badge_data_uri() -> str:
+    if not BRAND_BADGE_PNG.is_file():
+        raise RuntimeError(f"品牌徽章缺失，拒绝渲染缺标的报告：{BRAND_BADGE_PNG}")
+    encoded = base64.b64encode(BRAND_BADGE_PNG.read_bytes()).decode("ascii")
+    return f"data:image/png;base64,{encoded}"
+
+
 def _role_assets(report: dict[str, Any]) -> dict[str, str]:
-    """只内嵌主角色（或影子兽）＋影子兽兜底。"""
+    """只内嵌主角色（或神秘工）＋神秘工兜底。"""
     code = report["profile"]["role"]["code"]
-    main = ROLE_BY_CODE.get(code, SHADOW_BEAST)
+    main = ROLE_BY_CODE.get(code, SHADOW_WORKER)
     assets = {"main": _asset_data_uri(main["asset"])}
-    if main["code"] != SHADOW_BEAST["code"]:
-        assets["shadow"] = _asset_data_uri(SHADOW_BEAST["asset"])
+    if main["code"] != SHADOW_WORKER["code"]:
+        assets["shadow"] = _asset_data_uri(SHADOW_WORKER["asset"])
     else:
         assets["shadow"] = assets["main"]
-    assets["specimen"] = main["specimen"]
+    assets["badge"] = main["badge"]
     assets["code"] = main["code"]
     assets["definition"] = main["definition"]
+    assets["brand_badge"] = _brand_badge_data_uri()
     return assets
 
 
@@ -108,6 +118,9 @@ a { color: var(--c-black); text-decoration: underline; }
   font: 700 13px/1.35 var(--font-mono); letter-spacing: .06em;
 }
 .poster-ticker .ticker-secondary { color: var(--c-gray-light); }
+.ticker-brand { display: inline-flex; align-items: center; gap: 8px; font: 900 15px/1 var(--font-heavy); letter-spacing: .04em; color: var(--c-yellow); }
+.ticker-badge { width: 26px; height: 26px; display: block; border: 2px solid var(--c-yellow); }
+.brand-lockup { margin: 18px 0 0; padding-top: 14px; border-top: 3px solid var(--c-black); font: 700 14px/1.5 var(--font-mono); letter-spacing: .02em; }
 .hero-grid { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 28px; align-items: stretch; }
 .attitude-block {
   position: relative; display: flex; flex-direction: column; justify-content: flex-end;
@@ -283,9 +296,10 @@ CARD_SCRIPT = r"""
   const reportId = __REPORT_ID__;
   const roleCode = __ROLE_CODE__;
   const roleDefinition = __ROLE_DEFINITION__;
-  const specimen = __SPECIMEN__;
+  const badge = __BADGE__;
   const assetMain = __ASSET_MAIN__;
   const assetShadow = __ASSET_SHADOW__;
+  const assetBadge = __ASSET_BADGE__;
   const params = new URLSearchParams(window.location.search);
   if (params.get("share") === "1") document.documentElement.classList.add("share-only");
 
@@ -332,15 +346,16 @@ CARD_SCRIPT = r"""
     return y + lines.length * lineHeight;
   }
 
-  function drawCard(image) {
+  function drawCard(image, badgeImage) {
     ctx.clearRect(0, 0, 1080, 1440);
     ctx.fillStyle = YELLOW; ctx.fillRect(0, 0, 1080, 1440);
     ctx.strokeStyle = BLACK; ctx.lineWidth = 14; ctx.strokeRect(20, 20, 1040, 1400);
 
-    // 顶部公告条
+    // 顶部公告条：左侧 mbai 品牌徽章（冻结露出位），右侧指标标题
     ctx.fillStyle = BLACK; ctx.fillRect(20, 20, 1040, 72);
+    if (badgeImage) ctx.drawImage(badgeImage, 34, 28, 56, 56);
     ctx.fillStyle = YELLOW; ctx.font = `700 26px ${mono}`;
-    ctx.fillText("AI IRREPLACEABILITY INDEX · 职业体检报告", 56, 68);
+    ctx.fillText("AI IRREPLACEABILITY INDEX · 职业体检报告", 106, 68);
     ctx.textAlign = "right"; ctx.fillText("ROUND_HALF_UP_TO_5", 1024, 68); ctx.textAlign = "left";
 
     // 指数与角色立像（上 60%）
@@ -382,7 +397,7 @@ CARD_SCRIPT = r"""
       ctx.fillRect(545, 101, 464, 36);
       ctx.fillStyle = BLACK;
       ctx.font = `700 15px ${mono}`;
-      ctx.fillText(`SPECIMEN POD // ${specimen} · ${roleCode}`, 562, 125);
+      ctx.fillText(`SPECIMEN POD // ${badge} · ${roleCode}`, 562, 125);
 
       // 实体手办展台底座（在脚底先行绘制，避免遮挡手办脚部）
       ctx.fillStyle = BLACK;
@@ -394,7 +409,7 @@ CARD_SCRIPT = r"""
       ctx.drawImage(image, 557, 128, 440, 440);
     }
 
-    // 角色名条（含定义句；影子兽时定义句即“证据不够，不下结论”）
+    // 角色名条（含定义句；神秘工时定义句即“证据不够，不下结论”）
     ctx.fillStyle = BLACK; ctx.fillRect(56, 640, 968, 128);
     ctx.fillStyle = WHITE; ctx.font = `900 52px ${sans}`;
     drawWrapped(cardData.role_name, 88, 700, 900, 60, 1);
@@ -434,7 +449,7 @@ CARD_SCRIPT = r"""
     ctx.fillStyle = BLACK; ctx.font = `700 24px ${sans}`;
     ctx.fillText("搜 欧八同学 生成自己的职业AI体检报告", 56, 1398);
     ctx.textAlign = "right"; ctx.font = `700 19px ${mono}`;
-    ctx.fillText(`SPECIMEN CARD // ${roleCode} // ${specimen}`, 1024, 1398);
+    ctx.fillText(`SPECIMEN CARD // ${badge} // ${roleCode}`, 1024, 1398);
     ctx.textAlign = "left";
   }
 
@@ -468,8 +483,8 @@ CARD_SCRIPT = r"""
   async function boot() {
     try {
       if (document.fonts && document.fonts.ready) await document.fonts.ready;
-      const image = await loadImage(assetMain);
-      drawCard(image);
+      const [image, badgeImage] = await Promise.all([loadImage(assetMain), loadImage(assetBadge)]);
+      drawCard(image, badgeImage);
       window.__CARD_READY__ = true;
       window.__CARD_ERROR__ = null;
     } catch (error) {
@@ -597,7 +612,8 @@ def render_report(report: dict[str, Any]) -> str:
         .replace("__REPORT_ID__", _json_for_script(metadata["report_id"]))
         .replace("__ROLE_CODE__", _json_for_script(assets["code"]))
         .replace("__ROLE_DEFINITION__", _json_for_script(assets["definition"]))
-        .replace("__SPECIMEN__", _json_for_script(assets["specimen"]))
+        .replace("__BADGE__", _json_for_script(assets["badge"]))
+        .replace("__ASSET_BADGE__", _json_for_script(assets["brand_badge"]))
         .replace("__ASSET_MAIN__", _json_for_script(assets["main"]))
         .replace("__ASSET_SHADOW__", _json_for_script(assets["shadow"]))
     )
@@ -614,8 +630,9 @@ def render_report(report: dict[str, Any]) -> str:
 <body>
   <main class="report-shell">
     <div class="poster-ticker">
+      <span class="ticker-brand"><img class="ticker-badge" src="{assets['brand_badge']}" alt="mbai 徽章">mbai</span>
       <span>WORK TASK // AI IRREPLACEABILITY INDEX</span>
-      <span class="ticker-secondary">RULE v{_e(report['rule_version'])} · {_e(assets['specimen'])}</span>
+      <span class="ticker-secondary">RULE v{_e(report['rule_version'])} · {_e(assets['badge'])}</span>
       <span class="ticker-secondary">不可替代指数量的也是任务，不是人</span>
     </div>
     <section id="hero">
@@ -634,7 +651,7 @@ def render_report(report: dict[str, Any]) -> str:
         </div>
         <div class="stage-block">
           <div class="specimen-capsule">
-            <span>{_e(assets['specimen'])}</span>
+            <span>{_e(assets['badge'])}</span>
             <span>{_e(assets['code'])}</span>
           </div>
           <div class="character-stage">
@@ -694,6 +711,7 @@ def render_report(report: dict[str, Any]) -> str:
       <span class="section-no">07 // METHOD &amp; BOUNDARY</span><h2>方法与边界</h2>
       <p><strong>{_e(report['methodology']['custom_rules_disclaimer'])}</strong></p>
       <ul>{sources}</ul>
+      <p class="brand-lockup">{BRAND_LOCKUP}</p>
     </div>
   </footer>
   <script>{card_script}</script>

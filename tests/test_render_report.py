@@ -114,7 +114,7 @@ class CharacterAssetTest(unittest.TestCase):
         self.assertIn("if (window.__CARD_ERROR__) return", html)
 
     def test_only_main_and_shadow_assets_are_embedded(self):
-        # 每份报告只内嵌主角色＋影子兽兜底：data URI 至多 2 段（命中角色 + 影子兽），影子兽报告只 1 段。
+        # 每份报告只内嵌主角色＋神秘工兜底：data URI 至多 2 段（命中角色 + 神秘工），神秘工报告只 1 段。
         uris = set(re.findall(r'data:image/webp;base64,[A-Za-z0-9+/=]+', self.html))
         self.assertTrue(1 <= len(uris) <= 2)
 
@@ -171,13 +171,13 @@ class ShareCardContentTest(unittest.TestCase):
     def test_coexistence_card_shows_real_index_with_shadow_beast(self):
         cases = {case["slug"]: case for case in case_definitions()}
         report = finalize_report(draft_for_case(cases["ops-deep"]))
-        self.assertEqual(report["profile"]["role"]["code"], "SHADOW_BEAST")
+        self.assertEqual(report["profile"]["role"]["code"], "SHADOW_WORKER")
         self.assertIsNotNone(report["metrics"]["irreplaceability_index"])
         self.assertEqual(report["metrics"]["irreplaceability_index"], 45)
 
         html = render_report(report)
 
-        self.assertIn("影子兽 · 待解锁工种", html)
+        self.assertIn("神秘工 · 待解锁", html)
         self.assertIn("证据不够，不下结论", html)
         self.assertIn("45", html)
         self.assertIn("中不可替代", html)
@@ -199,7 +199,7 @@ class ShareCardContentTest(unittest.TestCase):
         html = render_report(report)
 
         self.assertIn("六个平台互不相通，全靠你本人兼容。", html)
-        self.assertIn("搬表兽 · 表格搬运官", html)
+        self.assertIn("搬表工", html)
         self.assertIn("每到交周报的日子", html)
         self.assertIn("不可替代指数量的也是任务，不是人——分数低", html)
         self.assertIn("AI 可接管·大部分", html)

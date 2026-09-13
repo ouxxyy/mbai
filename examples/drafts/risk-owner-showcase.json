@@ -30,8 +30,8 @@
     "situation_paragraph": "故障报警响起的时候，第一通电话打给你：哪台设备能动、哪条线不能碰、客户那边谁说了算——这些答案都不在手册里，在你跑过的每一次现场里。",
     "index_note": "不可替代指数量的也是任务，不是人——分数高，说明责任和现场信息在你手里。",
     "role": {
-      "code": "MINESWEEPER_MOLE",
-      "name": "排雷兽 · 风险预警员",
+      "code": "MINESWEEPER_WORKER",
+      "name": "排雷工",
       "tags": [
         "项目排雷",
         "风险兜底"
@@ -188,7 +188,7 @@
   },
   "share_card": {
     "category": "装备制造 / 交付保障",
-    "role_name": "排雷兽 · 风险预警员",
+    "role_name": "排雷工",
     "role_tags": [
       "项目排雷",
       "风险兜底"

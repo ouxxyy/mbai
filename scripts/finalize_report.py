@@ -13,7 +13,7 @@ if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from scripts.display_metrics import to_display_metrics
-from scripts.role_match import ROLE_BY_CODE, SHADOW_BEAST, analyze_roles
+from scripts.role_match import ROLE_BY_CODE, SHADOW_WORKER, analyze_roles
 from scripts.score_report import aggregate_tasks
 from scripts.validate_report import ReportValidationError, assert_valid_report
 from scripts.version import RULE_VERSION, SCHEMA_VERSION, SUPPORTED_SCHEMA_VERSIONS
@@ -45,7 +45,7 @@ DEFAULT_METHODOLOGY = {
 
 
 def _migrate_draft(draft: dict[str, Any]) -> dict[str, Any]:
-    """读时迁移：1.0.0 草稿 → 2.0.0（角色由引擎按任务证据重判，旧六角色码弃用）。
+    """读时迁移：1.0.0/2.0.0/3.0.0 草稿 → 4.0.0（角色由引擎按任务证据重判，旧 code 弃用）。
 
     指数字段（tasks 的 level/score/权重、metrics 聚合）原样保留，聚合语义未动。
     """
@@ -74,7 +74,7 @@ def finalize_report(draft: dict[str, Any]) -> dict[str, Any]:
 
     metrics, tasks = aggregate_tasks(report.get("tasks", []))
     is_sufficient = metrics.pop("is_sufficient_info")
-    # 3.0.0 展示层翻转：替代聚合 → 不可替代指数（唯一翻转点在 display_metrics）。
+    # 展示层翻转（3.0.0 起）：替代聚合 → 不可替代指数（唯一翻转点在 display_metrics）。
     metrics = to_display_metrics(metrics)
 
     # 角色匹配引擎（R1–R4）：任务级命中 + 双门槛。
@@ -97,11 +97,11 @@ def finalize_report(draft: dict[str, Any]) -> dict[str, Any]:
             task["task_id"] for task, hits in zip(tasks, role_analysis["task_roles"]) if main_role_code in hits
         ]
     else:
-        # 主角色门槛未过 → 影子兽（R4 角色侧）。指数门槛独立判断，两者可并存。
+        # 主角色门槛未过 → 神秘工（R4 角色侧）。指数门槛独立判断，两者可并存。
         original_quote = role.get("snarky_quote", "证据不够，不下结论。")
-        role["code"] = SHADOW_BEAST["code"]
-        role["name"] = SHADOW_BEAST["name"]
-        role["tags"] = list(SHADOW_BEAST["tags"])
+        role["code"] = SHADOW_WORKER["code"]
+        role["name"] = SHADOW_WORKER["name"]
+        role["tags"] = list(SHADOW_WORKER["tags"])
         role["source_task_ids"] = []
         role.setdefault("snarky_quote", original_quote)
 

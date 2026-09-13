@@ -1,6 +1,6 @@
 {
   "generated_at": "2026-09-11T20:00:00+08:00",
-  "rule_version": "3.0.0",
+  "rule_version": "4.0.0",
   "fictional_data_only": true,
   "cases": [
     {
@@ -20,7 +20,7 @@
       "scenario": "内容编辑",
       "input_type": "DOCX",
       "resume_path": "resumes/content-calibrator.docx",
-      "resume_sha256": "bd4381759e5ba18f242ede1793080e42ae90ce07e8662147812234c83a423790",
+      "resume_sha256": "80deccd198fa3b99b72b033afa3495fed6a2218e47503843a58624198676b530",
       "source_text_path": "source-texts/content-calibrator.txt",
       "draft_path": "drafts/content-calibrator.json",
       "expected_index": 40,

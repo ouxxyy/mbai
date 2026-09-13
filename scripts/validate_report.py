@@ -151,15 +151,15 @@ def assert_valid_report(report: dict[str, Any]) -> None:
     if role_sufficient:
         if role_code != expected_main:
             errors.append(f"主角色门槛已过，主角色必须为引擎判定结果 {expected_main}")
-    elif role_code != "SHADOW_BEAST":
-        errors.append("主角色门槛未过时角色必须为 SHADOW_BEAST（影子兽）")
-    if role_code == "SHADOW_BEAST":
+    elif role_code != "SHADOW_WORKER":
+        errors.append("主角色门槛未过时角色必须为 SHADOW_WORKER（神秘工 · 待解锁）")
+    if role_code == "SHADOW_WORKER":
         if _refs(role):
-            errors.append("影子兽不得引用任务作为角色来源")
+            errors.append("神秘工不得引用任务作为角色来源")
         if role.get("tags") != ["证据待补充"]:
-            errors.append("影子兽标签必须为 [证据待补充]")
+            errors.append("神秘工标签必须为 [证据待补充]")
     # R4 不变量：命中任务 ⊆ 暴露可判任务，因此“无指数却有主角色”不允许出现。
-    if role_code != "SHADOW_BEAST" and not sufficient:
+    if role_code != "SHADOW_WORKER" and not sufficient:
         errors.append("指数门槛未过时不允许出现主角色（无指数却有主角色）")
 
     task_id_set = set(task_ids)
@@ -172,7 +172,7 @@ def assert_valid_report(report: dict[str, Any]) -> None:
             if task_id not in task_id_set:
                 errors.append(f"{prefix} 引用了不存在的任务 {task_id}")
 
-    if role_sufficient and role_code != "SHADOW_BEAST":
+    if role_sufficient and role_code != "SHADOW_WORKER":
         expected_sources = [
             task["task_id"] for task in tasks if role_code in match_task_roles(task)
         ]

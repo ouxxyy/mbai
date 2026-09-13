@@ -1,10 +1,9 @@
-"""Migrate legacy final reports to the current irreplaceability contract
+"""Migrate legacy final reports (1.0.0/2.0.0/3.0.0) to the current 4.0.0 worker contract
 (version source: scripts/version.py).
 
 迁移语义（docs/MIGRATION_NOTES.md）：
-- 1.0.0 → 3.0.0：旧六角色重判（12 类＋影子兽）、schema 新字段、展示层翻转；
-- 2.0.0 → 3.0.0：字段重命名 exposure_* → irreplaceability_*，指数按「先取整、后取补」
-  翻转（90/HIGH → 10/LOW），raw_score 与任务级替代语义逐字段保留；
+- 1.0.0/2.0.0/3.0.0 → 4.0.0：旧六角色或 3.x 旧系 code 重判为 12+1 工系（机械映射见 MIGRATION_NOTES）、展示层翻转维持 3.0.0 口径；
+- 字段重命名 exposure_* → irreplaceability_*（3.0.0），指数按「先取整、后取补」翻转（90/HIGH → 10/LOW），raw_score 与任务级替代语义逐字段保留；
 - 3.0.0 报告拒绝再次迁移（防双翻，schema_version 门控；幂等性由测试锁定）；
 - 指数聚合算法与任务等级判定完全未动，翻转是产品决策而非回归（见 MIGRATION_NOTES）。
 """
