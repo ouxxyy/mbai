@@ -148,9 +148,22 @@ a { color: var(--c-black); text-decoration: underline; }
   padding: 8px 14px; background: var(--c-black); color: var(--c-yellow);
   font: 700 13px/1.4 var(--font-mono);
 }
-.character-stage { position: relative; width: 100%; display: flex; flex-direction: column; align-items: center; }
-.character-figure { width: min(460px, 100%); height: auto; display: block; }
-.character-plinth { width: 62%; height: 26px; margin-top: -18px; background: var(--c-black); border-radius: 50%; }
+.character-stage {
+  position: relative; width: 100%; margin: 14px 0; padding: 22px 16px 18px;
+  background: var(--c-white); border: 3.5px solid var(--c-black);
+  border-radius: 16px; box-shadow: 6px 6px 0 var(--c-black);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  overflow: hidden;
+}
+.character-figure {
+  position: relative; z-index: 2; width: min(380px, 100%); height: auto; display: block;
+  filter: drop-shadow(0 10px 18px rgba(0,0,0,.15));
+}
+.character-plinth {
+  position: relative; z-index: 1; width: 68%; height: 22px; margin-top: -16px;
+  background: radial-gradient(ellipse at center, #2b2b2b 0%, var(--c-black) 100%);
+  border-radius: 50%; box-shadow: 0 4px 8px rgba(0,0,0,.35);
+}
 .stage-nameplate {
   align-self: stretch; margin-top: 18px; padding: 14px 18px; background: var(--c-white);
   border: 3px solid var(--c-black); font-size: 14px;
@@ -244,7 +257,9 @@ html.share-only .download-button { display: none; }
   .level-chip { font-size: 28px; }
   .character-title { font-size: 26px; }
   .snarky-banner { font-size: 19px; }
-  .character-figure { width: min(240px, 100%); }
+  .character-stage { padding: 14px 10px 12px; margin: 8px 0; border-radius: 12px; box-shadow: 4px 4px 0 var(--c-black); }
+  .character-figure { width: min(220px, 100%); }
+  .character-plinth { width: 64%; height: 16px; margin-top: -12px; }
   h2 { font-size: 22px; }
   details.task summary { align-items: flex-start; flex-direction: column; }
   .task-columns { grid-template-columns: 1fr; }
@@ -352,9 +367,25 @@ CARD_SCRIPT = r"""
     ctx.fillStyle = BLACK; ctx.fillText(levelText, 80, 533);
 
     if (image) {
-      ctx.drawImage(image, 560, 120, 440, 440);
+      // 角色展示区物理隔离：纯白实体潮玩展示舱（Solid Specimen Capsule）
+      roundedRect(546, 102, 474, 504, 18, BLACK, BLACK, 0);
+      roundedRect(540, 96, 474, 504, 18, WHITE, BLACK, 5);
+
+      // 舱内顶部工程标本条
+      ctx.fillStyle = "#F4F4F0";
+      ctx.fillRect(545, 101, 464, 36);
       ctx.fillStyle = BLACK;
-      ctx.beginPath(); ctx.ellipse(780, 578, 208, 30, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.font = `700 15px ${mono}`;
+      ctx.fillText(`SPECIMEN POD // ${specimen} · ${roleCode}`, 562, 125);
+
+      // 实体手办展台底座（在脚底先行绘制，避免遮挡手办脚部）
+      ctx.fillStyle = BLACK;
+      ctx.beginPath(); ctx.ellipse(777, 546, 175, 24, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = "#2B2B2B";
+      ctx.beginPath(); ctx.ellipse(777, 540, 145, 16, 0, 0, Math.PI * 2); ctx.fill();
+
+      // 居中绘制实心潮玩立像
+      ctx.drawImage(image, 557, 128, 440, 440);
     }
 
     // 角色名条（含定义句；影子兽时定义句即“证据不够，不下结论”）

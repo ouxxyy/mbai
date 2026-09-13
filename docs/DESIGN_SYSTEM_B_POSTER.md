@@ -136,17 +136,121 @@
 
 ---
 
-## 七、素材技术参数与存储约定
+## 七、素材技术参数与实心抠图规范
 
-- **格式标准**：WebP 格式（带 Alpha 透明通道），质量参数 q80，无损色彩剪切；
+- **格式标准**：WebP 格式（带 Alpha 透明通道），质量参数 q80，无损高保真；
 - **画幅规格**：统一正方形 800 × 800 像素，主体比例占画布约 80%~85%，四周预留 8% 安全留白；
-- **体积指标**：单张文件大小在 **51KB ~ 118KB** 之间，严格优于 ≤150KB 的工程硬约束；
+- **实心防穿孔准则 (Anti-Punchthrough Algorithm)**：
+  - 严禁单纯使用色彩欧氏距离抠图（会导致白色肚皮、高光反光、全息数据框、长清单纸条等内部白色元素被抠穿）；
+  - 采用**“低饱和度无色判别（`np.ptp(RGB) < 14`）+ 外部 4 边界连通域单向 BFS 泛洪”**算法，确保手办身体内部 100% 实心（Alpha = 255），外部摄影棚背景 100% 纯透明（Alpha = 0）；
+- **体积指标**：13 张重新生成的实心 WebP 单张大小在 **45KB ~ 62KB** 之间（平均仅约 52KB），远低于 ≤150KB 的工程硬约束；
 - **存放路径**：
   - 设计小样目录：`visual_samples/characters/`
-  - Skill 正式静态素材目录：`ai-task-exposure-skill/assets/characters/`（Phase 2 工程落地时拷贝）
-- **合版总览图**：
-  - `visual_samples/characters_overview_grid.png`（2400×2400 高清大图）
-  - `visual_samples/characters_overview_grid.webp`（349KB 轻量级网络预览图）
+  - Skill 正式静态素材目录：`ai-task-exposure-skill/assets/characters/`
+
+---
+
+## 八、角色展示区底色物理隔离与展台规范 (Specimen Capsule System)
+
+为彻底解决欧八提出的“透明素材导致海报背景颜色透出”问题，同时坚决避免将透明素材粗暴压死为单一固定底色而丧失复用能力，确立**“实体展示舱（Solid Specimen Capsule）+ 双层手办展台（Pedestal Base）”**的物理隔离方案：
+
+### 8.1 视觉层级结构 (Layer Order)
+1. **底层海报背景**：桌面端/移动端 `.stage-block`（亮黄色 `--c-yellow: #EBFB3B`）或微信分享卡全局黄色底板；
+2. **实体展示仓背板 (Showcase Capsule)**：
+   - 纯白色实心底（`#FFFFFF`），彻底在物理上阻绝外部海报黄底；
+   - 粗黑边框：HTML 端 `3.5px solid #0D0D0D`，Canvas 端 5px 黑色边框；
+   - 瑞士粗野主义硬圆角：HTML 端 `border-radius: 16px`，Canvas 端 `radius: 18px`；
+   - 工业硬投影：HTML 端 `box-shadow: 6px 6px 0 var(--c-black)`，Canvas 端右下偏移硬黑投影；
+3. **顶部标本标签条 (Specimen Ticker)**：
+   - 仓内顶部嵌入浅灰（`#F4F4F0`）工程标签，单行显示 `SPECIMEN POD // SPECIMEN NO.XX · ROLE_CODE`，强化潮玩体检标本隐喻；
+4. **实体手办台阶底座 (Pedestal Base)**：
+   - 必须在手办脚底位置先行绘制（位于手办底层，严禁反客为主覆盖手办脚面）；
+   - 下层宽黑椭圆托盘（厚度 24px~26px），上层深灰微反光台阶（`#2B2B2B`，厚度 16px~18px）；
+5. **角色立像 (Solid Toy Specimen)**：
+   - 居中稳稳立于展台之上，带有细腻的景深投影（`filter: drop-shadow(0 10px 18px rgba(0,0,0,.15))`），手办实体感十足。
+
+### 8.2 Developer 落地代码规则参考
+
+#### A. HTML / CSS 规则 (桌面端与移动端)
+```css
+/* 实体展示仓（纯白实心隔绝黄底） */
+.character-stage {
+  position: relative;
+  width: 100%;
+  margin: 14px 0;
+  padding: 22px 16px 18px;
+  background: var(--c-white);
+  border: 3.5px solid var(--c-black);
+  border-radius: 16px;
+  box-shadow: 6px 6px 0 var(--c-black);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* 潮玩手办立像（层级 z-index: 2） */
+.character-figure {
+  position: relative;
+  z-index: 2;
+  width: min(380px, 100%);
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.15));
+}
+
+/* 实体展台底座（层级 z-index: 1，位于手办背后） */
+.character-plinth {
+  position: relative;
+  z-index: 1;
+  width: 68%;
+  height: 22px;
+  margin-top: -16px;
+  background: radial-gradient(ellipse at center, #2b2b2b 0%, var(--c-black) 100%);
+  border-radius: 50%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.35);
+}
+
+/* 移动端 390 自适应紧凑适配 */
+@media (max-width: 680px) {
+  .character-stage {
+    padding: 14px 10px 12px;
+    margin: 8px 0;
+    border-radius: 12px;
+    box-shadow: 4px 4px 0 var(--c-black);
+  }
+  .character-figure { width: min(220px, 100%); }
+  .character-plinth { width: 64%; height: 16px; margin-top: -12px; }
+}
+```
+
+#### B. Canvas 微信分享卡 (1080×1440) 绘制规则
+```javascript
+if (image) {
+  // 1. 实体展示仓右下硬投影 (x: 546, y: 102, w: 474, h: 504)
+  roundedRect(546, 102, 474, 504, 18, BLACK, BLACK, 0);
+
+  // 2. 纯白实心主体舱 (x: 540, y: 96, w: 474, h: 504, border: 5px)
+  roundedRect(540, 96, 474, 504, 18, WHITE, BLACK, 5);
+
+  // 3. 仓内顶部工程微标签条
+  ctx.fillStyle = "#F4F4F0";
+  ctx.fillRect(545, 101, 464, 36);
+  ctx.fillStyle = BLACK;
+  ctx.font = `700 15px ${mono}`;
+  ctx.fillText(`SPECIMEN POD // ${specimen} · ${roleCode}`, 562, 125);
+
+  // 4. 实体展台底座（脚底先行绘制：底层宽黑椭圆 + 上层灰台阶）
+  ctx.fillStyle = BLACK;
+  ctx.beginPath(); ctx.ellipse(777, 546, 175, 24, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = "#2B2B2B";
+  ctx.beginPath(); ctx.ellipse(777, 540, 145, 16, 0, 0, Math.PI * 2); ctx.fill();
+
+  // 5. 居中绘制实心潮玩立像 (x: 557, y: 128, w: 440, h: 440)
+  ctx.drawImage(image, 557, 128, 440, 440);
+}
+```
 
 ---
 *本规范由视觉负责人（designer）制定，锁定 B 方向作为全量制作唯一视觉依据。*
