@@ -34,6 +34,7 @@ class IrreplaceabilityNamingContractTest(unittest.TestCase):
             "SCORING_RULES": (ROOT / "docs" / "SCORING_RULES.md").read_text(encoding="utf-8"),
             "content-baseline": (ROOT / "references" / "content-baseline.md").read_text(encoding="utf-8"),
             "README": (ROOT / "README.md").read_text(encoding="utf-8"),
+            "AGENTS.md": (ROOT / "AGENTS.md").read_text(encoding="utf-8"),
         }
         for name, text in sources.items():
             self.assertIn("不可替代指数", text, name)
@@ -43,9 +44,12 @@ class IrreplaceabilityNamingContractTest(unittest.TestCase):
         # 生成入口与基线不得再以「AI 替代指数」作为产品名或角落声明（防 A7 回退）。
         skill = (ROOT / "SKILL.md").read_text(encoding="utf-8")
         baseline = (ROOT / "references" / "content-baseline.md").read_text(encoding="utf-8")
+        agents_md = (ROOT / "AGENTS.md").read_text(encoding="utf-8")
         for name, text in (("SKILL.md", skill), ("content-baseline", baseline)):
             self.assertNotIn("替代指数量的是任务", text, name)
             self.assertNotIn("工作任务 AI 替代指数", text, name)
+        # AGENTS.md 由宿主每个会话自动加载，是产品名契约面的一部分：旧称必须被拦截。
+        self.assertNotIn("工作任务 AI 替代指数", agents_md, "AGENTS.md")
         # 展示锚点必须已是翻转后数值。
         for name, text in (("SKILL.md", skill), ("content-baseline", baseline)):
             self.assertNotIn("87.5→90、85→85、92.5→95", text, name)

@@ -20,6 +20,7 @@ from scripts.build_report import build_report
 from scripts.export_png import _stop_owned_browser, find_chrome
 from scripts.finalize_report import finalize_report
 from scripts.sample_cases import case_definitions, draft_for_case
+from scripts.version import RULE_VERSION
 
 
 def _sha256(path: Path) -> str:
@@ -193,7 +194,7 @@ def generate_examples(root: str | Path, *, build_outputs: bool = False, run_ocr:
 
     manifest = {
         "generated_at": "2026-09-11T20:00:00+08:00",
-        "rule_version": "2.0.0",
+        "rule_version": RULE_VERSION,
         "fictional_data_only": True,
         "cases": manifest_cases,
     }

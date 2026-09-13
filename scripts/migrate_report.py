@@ -1,4 +1,5 @@
-"""Migrate legacy final reports to the current 3.0.0 irreplaceability contract.
+"""Migrate legacy final reports to the current irreplaceability contract
+(version source: scripts/version.py).
 
 迁移语义（docs/MIGRATION_NOTES.md）：
 - 1.0.0 → 3.0.0：旧六角色重判（12 类＋影子兽）、schema 新字段、展示层翻转；
@@ -21,8 +22,9 @@ if __package__ in {None, ""}:
 
 from scripts.finalize_report import finalize_report
 from scripts.role_match import LEGACY_ROLE_NAMES
+from scripts.version import MIGRATABLE_SCHEMA_VERSIONS
 
-MIGRATABLE_VERSIONS = ("1.0.0", "2.0.0")
+MIGRATABLE_VERSIONS = MIGRATABLE_SCHEMA_VERSIONS
 
 COMPUTED_TASK_FIELDS = ("score", "effective_weight", "weight_source", "role_codes")
 COMPUTED_METADATA_FIELDS = ("is_sufficient_info", "is_role_sufficient_info")

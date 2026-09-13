@@ -1,5 +1,6 @@
 [project]
 name = "ai-task-exposure-skill"
+# Python 工程版本，与技能契约版本（scripts/version.py 单一来源，同步 schema/SKILL.md）语义不同，无须同步。
 version = "0.1.0"
 description = "Claude Code skill for a task-level AI exposure self-assessment"
 requires-python = ">=3.11"

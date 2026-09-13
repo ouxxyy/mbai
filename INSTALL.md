@@ -18,7 +18,7 @@ Claude Code 会从个人目录 `~/.claude/skills/<skill-name>/SKILL.md` 或项�
 /ai-task-exposure /absolute/path/to/resume.pdf
 ```
 
-也可以直接说“用这份简历做工作任务 AI 替代指数诊断”。
+也可以直接说“用这份简历做工作任务 AI 不可替代指数诊断”。
 
 ## 项目内安装
 
@@ -32,7 +32,13 @@ Claude Code 会从个人目录 `~/.claude/skills/<skill-name>/SKILL.md` 或项�
 
 ## 环境检查
 
+在本仓库内也可以一条命令完成以下检查并给出降级提示：
+
 ```bash
+python3 scripts/check_env.py
+```
+
+逐项手工命令：
 python3 --version
 swift --version
 "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --version

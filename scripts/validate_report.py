@@ -1,4 +1,4 @@
-"""Semantic validation for the frozen report contract (schema 2.0.0)."""
+"""Semantic validation for the frozen report contract (version source: scripts/version.py)."""
 
 from __future__ import annotations
 
@@ -16,6 +16,7 @@ from scripts.display_metrics import to_display_metrics
 from scripts.privacy import PrivacyLeakError, assert_share_card_private
 from scripts.role_match import ROLE_NAMES, analyze_roles, match_task_roles
 from scripts.score_report import aggregate_tasks
+from scripts.version import RULE_VERSION, SCHEMA_VERSION
 
 ROOT_KEYS = {
     "schema_version",
@@ -61,8 +62,8 @@ def assert_valid_report(report: dict[str, Any]) -> None:
     if errors:
         raise ReportValidationError(errors)
 
-    if report.get("schema_version") != "3.0.0" or report.get("rule_version") != "3.0.0":
-        errors.append("schema_version 与 rule_version 必须为 3.0.0")
+    if report.get("schema_version") != SCHEMA_VERSION or report.get("rule_version") != RULE_VERSION:
+        errors.append(f"schema_version 与 rule_version 必须为 {SCHEMA_VERSION}")
 
     metadata = report["report_metadata"]
     questions = metadata.get("questions_asked", [])

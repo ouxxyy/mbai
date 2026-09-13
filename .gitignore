@@ -17,3 +17,6 @@ dist/
 *.key
 examples/output/
 docs/acceptance/artifacts/
+final_acceptance_turn*/
+.claude/
+.zcode/

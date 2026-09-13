@@ -16,8 +16,8 @@ from scripts.display_metrics import to_display_metrics
 from scripts.role_match import ROLE_BY_CODE, SHADOW_BEAST, analyze_roles
 from scripts.score_report import aggregate_tasks
 from scripts.validate_report import ReportValidationError, assert_valid_report
+from scripts.version import RULE_VERSION, SCHEMA_VERSION, SUPPORTED_SCHEMA_VERSIONS
 
-SUPPORTED_SCHEMA_VERSIONS = ("1.0.0", "2.0.0", "3.0.0")
 DEFAULT_INDEX_NOTE = "不可替代指数量的也是任务，不是人。"
 DEFAULT_SITUATION = "先把每项任务说清楚：输入是什么、输出到哪、由谁确认——证据齐了，结论才站得住。"
 
@@ -50,8 +50,8 @@ def _migrate_draft(draft: dict[str, Any]) -> dict[str, Any]:
     指数字段（tasks 的 level/score/权重、metrics 聚合）原样保留，聚合语义未动。
     """
     report = deepcopy(draft)
-    report["schema_version"] = "3.0.0"
-    report["rule_version"] = "3.0.0"
+    report["schema_version"] = SCHEMA_VERSION
+    report["rule_version"] = RULE_VERSION
     profile = report.setdefault("profile", {})
     profile.setdefault("situation_paragraph", DEFAULT_SITUATION)
     profile.setdefault("index_note", DEFAULT_INDEX_NOTE)

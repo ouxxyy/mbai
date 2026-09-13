@@ -1,4 +1,4 @@
-"""展示层语义翻转的唯一落点（schema 3.0.0）。
+"""展示层语义翻转的唯一落点（契约版本单一来源见 scripts/version.py）。
 
 内部评分链（score_report.py）保持纯替代语义、零改动：任务级 0/50/100、
 时间占比加权、EQUAL_FALLBACK、ROUND_HALF_UP_TO_5 全部不变。
@@ -40,7 +40,7 @@ def to_irreplaceability(raw_score: float) -> int:
 
 
 def to_display_metrics(metrics: dict[str, Any]) -> dict[str, Any]:
-    """把 score_report 的替代语义聚合结果翻译为 3.0.0 展示字段。
+    """把 score_report 的替代语义聚合结果翻译为展示层翻转字段。
 
     输入是 aggregate_tasks 的输出（exposure_index 已按 ROUND_HALF_UP_TO_5 取整、
     exposure_level 为替代等级）；输出重命名为 irreplaceability_*，其余字段原样保留。
