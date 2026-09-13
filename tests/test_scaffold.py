@@ -56,6 +56,16 @@ class IrreplaceabilityNamingContractTest(unittest.TestCase):
             self.assertIn("87.5→10", text, name)
 
 
+class DesignSystemCtaDivisionTest(unittest.TestCase):
+    """B1 收口（欧八 2026-09-13 授权）：分享卡角落 CTA 与 HTML 指标解释分层承担。"""
+
+    def test_design_system_no_longer_demands_same_copy_across_page_and_card(self):
+        design = (ROOT / "docs" / "DESIGN_SYSTEM_B_POSTER.md").read_text(encoding="utf-8")
+        self.assertNotIn("在首屏、折叠区与分享卡显要位置常态化出现固定声明", design)
+        self.assertIn("搜 欧八同学 生成自己的职业AI体检报告", design)
+        self.assertIn("不可替代指数量的也是任务，不是人", design)
+
+
 class ActionDeadlineWordingTest(unittest.TestCase):
     """冻结规则 9 的行动口径在全部生成契约文档中保持一致，防止回退成"7 天内完成"。"""
 

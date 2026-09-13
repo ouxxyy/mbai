@@ -146,12 +146,20 @@ class CharacterAssetTest(unittest.TestCase):
 
 
 class ShareCardContentTest(unittest.TestCase):
-    def test_card_carries_disclaimer_corner_and_grade_code(self):
+    def test_card_carries_cta_corner_and_grade_code(self):
         html = render_report(finalize_report(valid_draft()))
 
-        self.assertIn("不可替代指数量的也是任务，不是人。", html)
+        self.assertIn("搜 欧八同学 生成自己的职业AI体检报告", html)
         self.assertIn("SPECIMEN CARD //", html)
         self.assertIn("AI IRREPLACEABILITY INDEX", html)
+
+    def test_indicator_explanation_stays_on_html_while_card_corner_carries_cta(self):
+        html = render_report(finalize_report(valid_draft()))
+
+        # 分层承担（MYW-70 2026-09-13 冻结）：HTML 报告页保留指标解释，
+        # 分享卡角落承担 CTA——两层各司其职，不要求同文案。
+        self.assertIn("不可替代指数量的也是任务，不是人", html)
+        self.assertIn("搜 欧八同学 生成自己的职业AI体检报告", html)
 
     def test_card_script_contains_only_share_projection_not_private_entities(self):
         html = render_report(finalize_report(valid_draft()))

@@ -430,9 +430,9 @@ CARD_SCRIPT = r"""
     ctx.font = `800 30px ${sans}`;
     drawWrapped(cardData.proof_7d, 96, 1326, 900, 36, 2);
 
-    // 角落声明与评级代码（必须完整落在画框内：底边框内缘约 y=1413，基线留足降部空间）
+    // 角落引导语与评级代码（必须完整落在画框内：底边框内缘约 y=1413，基线留足降部空间）
     ctx.fillStyle = BLACK; ctx.font = `700 24px ${sans}`;
-    ctx.fillText("不可替代指数量的也是任务，不是人。", 56, 1398);
+    ctx.fillText("搜 欧八同学 生成自己的职业AI体检报告", 56, 1398);
     ctx.textAlign = "right"; ctx.font = `700 19px ${mono}`;
     ctx.fillText(`SPECIMEN CARD // ${roleCode} // ${specimen}`, 1024, 1398);
     ctx.textAlign = "left";
