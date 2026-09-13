@@ -81,9 +81,11 @@ python3 "${CLAUDE_SKILL_DIR}/scripts/extract_resume.py" --text "<粘贴内容>" 
 - `${CLAUDE_SKILL_DIR}/docs/INTERFACE_CONTRACT.md`
 - `${CLAUDE_SKILL_DIR}/references/report-contract.schema.json`
 - `${CLAUDE_SKILL_DIR}/references/content-baseline.md`（表达规范正反例与冻结版案例文案）
-- `${CLAUDE_SKILL_DIR}/examples/drafts/operations-repetitive.json`（字段范例）
+- `${CLAUDE_SKILL_DIR}/examples/drafts/operations-repetitive.json`（字段范例；示例仅供字段结构，draft 的 `schema_version`/`rule_version` 必须写本文件 metadata 的当前版本）
 
 为每项任务保留原文证据、AI 可完成部分、人仍需负责部分、等级、理由、置信度、时间占比和六类信号。等级只写 `LOW`、`MEDIUM`、`HIGH`、`UNKNOWN`；不要自填 `score`、`effective_weight` 或 `metrics`，确定性脚本会计算。
+
+任务名与证据必须落成**「具体动作动词＋对象」**的结构（从简历原文化出，忠实于原文；不得为了命中某个角色而改写或虚构证据）。补问优先争取各任务的时间占比——它直接决定主角色权重与指数加权。
 
 角色判定按 `docs/SCORING_RULES.md` 第 6 节的 R1–R5 执行：命中谓词（信号＋动词＋对象三者同时成立）、覆盖权重取最大、表序消解并列、双门槛与“有指数＋待解锁角色”并存态。角色与分数解耦，不用分数羞辱或吹捧用户。吐槽只针对重复劳动、流程矛盾或工作场景。
 

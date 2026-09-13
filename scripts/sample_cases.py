@@ -6,6 +6,7 @@ from copy import deepcopy
 from typing import Any
 
 from scripts.role_match import ROLE_NAMES
+from scripts.version import RULE_VERSION, SCHEMA_VERSION
 
 
 CONFIDENCE_LABELS = {"HIGH": "高", "MEDIUM": "中", "LOW": "低"}
@@ -449,8 +450,8 @@ def draft_for_case(case: dict[str, Any]) -> dict[str, Any]:
     extension = {"TEXT": "txt", "DOCX": "docx", "PDF": "pdf"}[case["input_type"]]
     role_code = case["role_code"]
     draft = {
-        "schema_version": "2.0.0",
-        "rule_version": "2.0.0",
+        "schema_version": SCHEMA_VERSION,
+        "rule_version": RULE_VERSION,
         "report_metadata": {
             "report_id": case["slug"],
             "generated_at": "2026-09-11T20:00:00+08:00",

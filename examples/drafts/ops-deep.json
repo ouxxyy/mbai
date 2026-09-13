@@ -1,6 +1,6 @@
 {
-  "schema_version": "2.0.0",
-  "rule_version": "2.0.0",
+  "schema_version": "4.0.0",
+  "rule_version": "4.0.0",
   "report_metadata": {
     "report_id": "ops-deep",
     "generated_at": "2026-09-11T20:00:00+08:00",

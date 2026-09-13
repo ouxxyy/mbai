@@ -77,3 +77,10 @@
 - 冻结版文案的“处境白描”与首屏“指数说明小字”目前没有 draft 字段承载；schema 升版时需补（例如 `profile.situation_paragraph` 与首屏说明字段），渲染器才能消费。
 - examples 的文案源头在 `scripts/sample_cases.py`（`case_definitions` / `draft_for_case`）；`examples/drafts/operations-repetitive.json` 已手工同步为冻结文案，但脚本内同源文案需工程轮同步，否则再生成会回退。
 - 角色正式名与资产代号以 `assets/characters/` 文件名与 `docs/DESIGN_SYSTEM_B_POSTER.md` 为准；schema 枚举与 ROLE_NAMES 同步时直接采用该表。
+
+## 四、4.0.0 增补：证据结构引导（防反向诱导）
+
+任务名与证据写法：从简历原文化出「具体动作动词＋对象」（如"供应商管理"写成"管理供应商交付与例外"）；补问优先争取时间占比。
+
+- ✅ 管理供应商交付节奏，例外时协商补救（动宾结构，忠实原文）
+- ❌ 为了命中角色把"负责后勤支持"改写成"巡检后台字段"（歪曲原文证据，禁止）

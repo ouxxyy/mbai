@@ -40,3 +40,55 @@ class VersionSingleSourceTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TrackedVersionStampGateTest(unittest.TestCase):
+    """P0-3 防回归门禁（analyst 2026-09-14 方案）：版本戳从源头单源锁死。"""
+
+    def test_tracked_examples_carry_current_version_stamp(self):
+        # ① tracked 版本戳清野：drafts＋manifest 不得停在历史版本。
+        drafts = sorted((ROOT / "examples" / "drafts").glob("*.json"))
+        self.assertGreaterEqual(len(drafts), 13)
+        for draft in drafts:
+            payload = json.loads(draft.read_text(encoding="utf-8"))
+            self.assertEqual(payload.get("schema_version"), SCHEMA_VERSION, draft.name)
+            self.assertEqual(payload.get("rule_version"), RULE_VERSION, draft.name)
+        manifest = json.loads((ROOT / "examples" / "manifest.json").read_text(encoding="utf-8"))
+        self.assertEqual(manifest["rule_version"], RULE_VERSION)
+
+    def test_generate_examples_produces_current_version_stamps(self):
+        # ② 生成式测试：从源头锁死，跨机器稳定（新 checkout 无 output 目录也成立）。
+        try:
+            from scripts.export_png import find_chrome
+        except ImportError:  # pragma: no cover
+            self.skipTest("导出依赖不可用")
+        if find_chrome() is None:
+            self.skipTest("Chrome/Chromium not available for PDF fixture")
+
+        import tempfile
+
+        from scripts.generate_examples import generate_examples
+
+        with tempfile.TemporaryDirectory() as directory:
+            manifest_path = generate_examples(Path(directory), build_outputs=False)
+            manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+            self.assertEqual(manifest["rule_version"], RULE_VERSION)
+            for entry in manifest["cases"]:
+                draft = json.loads((Path(directory) / entry["draft_path"]).read_text(encoding="utf-8"))
+                self.assertEqual(draft["schema_version"], SCHEMA_VERSION, entry["slug"])
+                self.assertEqual(draft["rule_version"], RULE_VERSION, entry["slug"])
+
+    def test_no_stale_version_literals_in_scripts(self):
+        # ③ 单源防回退：scripts/ 内禁止历史版本字面量（白名单＝version.py 的 SUPPORTED 历史表
+        #    与 migrate_report.py 的迁移语义；测试夹具的历史版本属 fixtures，在 tests/ 域不扫）。
+        import re
+
+        pattern = re.compile(r'"[123]\.0\.0"')
+        whitelist = {"version.py", "migrate_report.py"}
+        offenders = []
+        for path in sorted((ROOT / "scripts").glob("*.py")):
+            if path.name in whitelist:
+                continue
+            hits = [line_no for line_no, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1) if pattern.search(line)]
+            offenders.extend(f"{path.name}:{line_no}" for line_no in hits)
+        self.assertEqual(offenders, [], f"scripts/ 内发现历史版本字面量：{offenders}")
