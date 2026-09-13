@@ -70,7 +70,7 @@ def case_definitions() -> list[dict[str, Any]]:
         "role_sources": ["task-channel-report", "task-campaign-publish"],
         "snark": "六个平台互不相通，全靠你本人兼容。",
         "situation_paragraph": "每到交周报的日子，你的日程不是一场会，是六个后台：导六份数据，清洗、合并，填进同一张模板。数据在六个地方各说各话，最后由你翻译成同一种话。表格是你的，字段是你的，对不上的数字也是你的。",
-        "index_note": "替代指数量的是任务，不是人——你每周的活里，这些动作 AI 现在就能接走。",
+        "index_note": "不可替代指数量的也是任务，不是人——分数低，说明这些机械动作 AI 现在就能接走。",
         "confidence": "HIGH",
         "confidence_reason": "三项任务均有时间占比、输入输出和责任边界。",
         "questions": ["三项任务大致各占多少时间？", "数据异常后由谁决定处理方式？"],
@@ -266,6 +266,44 @@ def case_definitions() -> list[dict[str, Any]]:
         ),
     }
 
+
+    showcase = {
+        "slug": "risk-owner-showcase",
+        "job_title": "交付保障负责人",
+        "input_type": "TEXT",
+        "resume_text": """陆沉｜交付保障负责人｜磐石重工设备有限公司｜南山理工学院
+上线前识别项目风险，评估故障影响并对交付结果负责兜底，约占 40%。
+供应商设备突发故障时到现场协调处置，约占 35%。
+每周汇总项目里程碑进度并更新依赖台账，约占 25%。
+客户：北岭矿业；项目：盾构三期。""",
+        "privacy_entities": ["陆沉", "磐石重工设备有限公司", "磐石重工", "南山理工学院", "北岭矿业", "盾构三期"],
+        "category": "装备制造 / 交付保障",
+        "role_code": "MINESWEEPER_MOLE",
+        "role_tags": ["项目排雷", "风险兜底"],
+        "role_sources": ["task-risk-gate", "task-onsite-response"],
+        "snark": "凌晨两点的故障电话只打给你，因为只有你知道哪根线不能拔。",
+        "situation_paragraph": "故障报警响起的时候，第一通电话打给你：哪台设备能动、哪条线不能碰、客户那边谁说了算——这些答案都不在手册里，在你跑过的每一次现场里。",
+        "index_note": "不可替代指数量的也是任务，不是人——分数高，说明责任和现场信息在你手里。",
+        "confidence": "HIGH",
+        "confidence_reason": "风险兜底、现场处置与台账更新均有占比和责任边界。",
+        "questions": ["三类工作各占多少时间？", "交付出问题由谁兜底？"],
+        "tasks": [
+            _task("task-risk-gate", "上线风险识别与结果兜底", 40, "LOW", "整理风险清单、量化故障影响并准备预案材料。", "识别上线风险，评估故障影响并对交付结果负责兜底。", "上线前识别项目风险，评估故障影响并对交付结果负责兜底。", "风险取舍与结果责任在人，AI 只做盘点。", _signals(2, 1, 0, 2, 0, 1)),
+            _task("task-onsite-response", "现场协调设备突发故障", 35, "LOW", "整理故障时间线和备选方案。", "到现场确认影响，协调处置并对外沟通。", "供应商设备突发故障时到现场协调处置。", "现场信息与即时协调无法远程替代。", _signals(1, 2, 2, 2, 0, 1)),
+            _task("task-milestone-ledger", "汇总里程碑进度台账", 25, "MEDIUM", "自动汇总里程碑进度并生成台账初稿。", "核对依赖变化并更新对外口径。", "每周汇总项目里程碑进度并更新依赖台账。", "结构固定、数字化，主体可自动完成。", _signals(1, 1, 0, 1, 2, 2)),
+        ],
+        "human_edge": "能把故障影响、合同责任和客户关系放进同一个兜底决定里。",
+        "share_highlights": [
+            {"task_name": "风险兜底", "ai_part": "风险清单与影响量化", "human_part": "你对交付结果负责"},
+            {"task_name": "现场故障", "ai_part": "时间线与备选方案", "human_part": "你在现场协调拍板"},
+        ],
+        "actions": _actions(
+            ("把风险台账初稿交给 AI", "用脱敏台账让 AI 自动汇总里程碑并标出依赖变化。", "台账初稿 + 变化摘要", "连续两周依赖变化全部被标出，你只补判断。", "对外发布前核对责任边界措辞。", "已有每周固定台账任务。", ["task-milestone-ledger"]),
+            ("强化兜底决策记录", "每次风险拍板记四样：信号、备选、决定、事后验证。", "5 张兜底决策卡", "每张能从信号追到结果与责任方。", "不把运气好写成决策对。", "已有上线风险兜底经验。", ["task-risk-gate"]),
+            ("做一份故障应急演练方案", "用虚构设备故障场景写一份可执行的应急流程。", "预案文档 + 角色分工表", "7 天内含三级故障、两套升级路径和一个演练脚本。", "设备与客户名全部虚构。", "源于现场协调处置经验。", ["task-onsite-response"]),
+        ),
+    }
+
     shallow = {
         "slug": "ops-shallow",
         "job_title": "用户运营",
@@ -384,7 +422,7 @@ def case_definitions() -> list[dict[str, Any]]:
         resume_text=operations["resume_text"] + "\n个人信息：女，29 岁，已婚，计划育儿。",
     )
 
-    return [operations, content, technical, client, project, sparse, shallow, deep, detailed, concise, injection, demographics]
+    return [operations, content, technical, client, project, sparse, showcase, shallow, deep, detailed, concise, injection, demographics]
 
 
 def _skill_panel(tasks: list[dict[str, Any]]) -> dict[str, Any]:
@@ -433,7 +471,7 @@ def draft_for_case(case: dict[str, Any]) -> dict[str, Any]:
                 "situation_paragraph",
                 "先把每项任务说清楚：输入是什么、输出到哪、由谁确认——证据齐了，结论才站得住。",
             ),
-            "index_note": case.get("index_note", "替代指数量的是任务，不是人。"),
+            "index_note": case.get("index_note", "不可替代指数量的也是任务，不是人。"),
             "role": {
                 "code": role_code,
                 "name": ROLE_NAMES[role_code],
@@ -451,12 +489,12 @@ def draft_for_case(case: dict[str, Any]) -> dict[str, Any]:
             "role_name": ROLE_NAMES[role_code],
             "role_tags": case["role_tags"],
             "confidence_label": f"证据置信度：{CONFIDENCE_LABELS[case['confidence']]}",
-            "exposure_index": None,
-            "exposure_level": "UNKNOWN",
+            "irreplaceability_index": None,
+            "irreplaceability_level": "UNKNOWN",
             "snarky_quote": case["snark"],
             "task_highlights": deepcopy(case["share_highlights"]),
             "proof_7d": case["actions"]["proof_7d"]["deliverable"] + "；" + case["actions"]["proof_7d"]["acceptance_criteria"],
-            "disclaimer": "本卡反映工作任务与 AI 能力的重合度，不是个人失业概率。",
+            "disclaimer": "本卡的不可替代指数反映工作任务与 AI 能力的重合度，不是个人失业概率。",
         },
     }
     return draft

@@ -28,7 +28,7 @@
   "profile": {
     "sanitized_category": "工业软件 / 项目管理",
     "situation_paragraph": "先把每项任务说清楚：输入是什么、输出到哪、由谁确认——证据齐了，结论才站得住。",
-    "index_note": "替代指数量的是任务，不是人。",
+    "index_note": "不可替代指数量的也是任务，不是人。",
     "role": {
       "code": "ONSCENE_CHAMELEON",
       "name": "应变兽 · 实时响应员",
@@ -220,8 +220,8 @@
       "结果兜底"
     ],
     "confidence_label": "证据置信度：高",
-    "exposure_index": null,
-    "exposure_level": "UNKNOWN",
+    "irreplaceability_index": null,
+    "irreplaceability_level": "UNKNOWN",
     "snarky_quote": "甘特图能自动更新，供应商晚三周时谁去把不可能改成可交付，图表不负责。",
     "task_highlights": [
       {
@@ -236,6 +236,6 @@
       }
     ],
     "proof_7d": "风险登记表 + 两页决策备忘录；7 天内包含影响、两套方案、升级路径和客户沟通稿。",
-    "disclaimer": "本卡反映工作任务与 AI 能力的重合度，不是个人失业概率。"
+    "disclaimer": "本卡的不可替代指数反映工作任务与 AI 能力的重合度，不是个人失业概率。"
   }
 }

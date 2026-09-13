@@ -12,16 +12,17 @@ from typing import Any
 if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
+from scripts.display_metrics import to_display_metrics
 from scripts.role_match import ROLE_BY_CODE, SHADOW_BEAST, analyze_roles
 from scripts.score_report import aggregate_tasks
 from scripts.validate_report import ReportValidationError, assert_valid_report
 
-SUPPORTED_SCHEMA_VERSIONS = ("1.0.0", "2.0.0")
-DEFAULT_INDEX_NOTE = "替代指数量的是任务，不是人。"
+SUPPORTED_SCHEMA_VERSIONS = ("1.0.0", "2.0.0", "3.0.0")
+DEFAULT_INDEX_NOTE = "不可替代指数量的也是任务，不是人。"
 DEFAULT_SITUATION = "先把每项任务说清楚：输入是什么、输出到哪、由谁确认——证据齐了，结论才站得住。"
 
 DEFAULT_METHODOLOGY = {
-    "custom_rules_disclaimer": "“工作任务 AI 替代指数”是本工具自建的解释性评分：不是失业概率或裁员预测，也不是研究机构对个人的预测或认证。",
+    "custom_rules_disclaimer": "“工作任务 AI 不可替代指数”是本工具自建的解释性评分：不可替代指数 = 100 − 取整后的任务替代分，分数越高表示工作任务越依赖你本人。它不是失业概率或裁员预测，也不是研究机构对个人的预测或认证。",
     "sources": [
         {
             "organization": "ILO",
@@ -49,8 +50,8 @@ def _migrate_draft(draft: dict[str, Any]) -> dict[str, Any]:
     指数字段（tasks 的 level/score/权重、metrics 聚合）原样保留，聚合语义未动。
     """
     report = deepcopy(draft)
-    report["schema_version"] = "2.0.0"
-    report["rule_version"] = "2.0.0"
+    report["schema_version"] = "3.0.0"
+    report["rule_version"] = "3.0.0"
     profile = report.setdefault("profile", {})
     profile.setdefault("situation_paragraph", DEFAULT_SITUATION)
     profile.setdefault("index_note", DEFAULT_INDEX_NOTE)
@@ -73,6 +74,8 @@ def finalize_report(draft: dict[str, Any]) -> dict[str, Any]:
 
     metrics, tasks = aggregate_tasks(report.get("tasks", []))
     is_sufficient = metrics.pop("is_sufficient_info")
+    # 3.0.0 展示层翻转：替代聚合 → 不可替代指数（唯一翻转点在 display_metrics）。
+    metrics = to_display_metrics(metrics)
 
     # 角色匹配引擎（R1–R4）：任务级命中 + 双门槛。
     role_analysis = analyze_roles(tasks)
@@ -110,8 +113,8 @@ def finalize_report(draft: dict[str, Any]) -> dict[str, Any]:
     report["share_card"]["role_name"] = role["name"]
     report["share_card"]["role_tags"] = role["tags"]
     report["share_card"]["snarky_quote"] = role["snarky_quote"]
-    report["share_card"]["exposure_index"] = metrics["exposure_index"]
-    report["share_card"]["exposure_level"] = metrics["exposure_level"]
+    report["share_card"]["irreplaceability_index"] = metrics["irreplaceability_index"]
+    report["share_card"]["irreplaceability_level"] = metrics["irreplaceability_level"]
     report["methodology"] = deepcopy(DEFAULT_METHODOLOGY)
 
     assert_valid_report(report)

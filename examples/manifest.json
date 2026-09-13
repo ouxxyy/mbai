@@ -11,8 +11,8 @@
       "resume_sha256": "30b23cd7b2d984ccad413af7978edd03229733ba921f9708dd2a3e5720c3fd3e",
       "source_text_path": "source-texts/operations-repetitive.txt",
       "draft_path": "drafts/operations-repetitive.json",
-      "expected_index": 90,
-      "expected_level": "HIGH",
+      "expected_index": 10,
+      "expected_level": "LOW",
       "is_sufficient_info": true
     },
     {
@@ -20,10 +20,10 @@
       "scenario": "内容编辑",
       "input_type": "DOCX",
       "resume_path": "resumes/content-calibrator.docx",
-      "resume_sha256": "891ba4af6d08179c9fa768220d29eb2edf5a63bb04291a70f53d3106fc13cdc9",
+      "resume_sha256": "c885952dbb8abf00470fb2213f3eda380cf9f850e14b08c6e8d1414d1120213a",
       "source_text_path": "source-texts/content-calibrator.txt",
       "draft_path": "drafts/content-calibrator.json",
-      "expected_index": 60,
+      "expected_index": 40,
       "expected_level": "MEDIUM",
       "is_sufficient_info": true
     },
@@ -32,7 +32,7 @@
       "scenario": "后端开发工程师",
       "input_type": "PDF",
       "resume_path": "resumes/technical-execution.pdf",
-      "resume_sha256": "db23ba67dd2327b0c74b2257829458076d32ee2d1d7f62da6ab527ad87457fda",
+      "resume_sha256": "c15f81761669382efd04346cf78fff193e1008f36b04b9b673819799086e0406",
       "source_text_path": "source-texts/technical-execution.txt",
       "draft_path": "drafts/technical-execution.json",
       "expected_index": 50,
@@ -47,8 +47,8 @@
       "resume_sha256": "40699c556e081845bec2d3040bca2cf5ebf73fe4daa49786ad4c40a116309188",
       "source_text_path": "source-texts/client-coordination.txt",
       "draft_path": "drafts/client-coordination.json",
-      "expected_index": 25,
-      "expected_level": "LOW",
+      "expected_index": 75,
+      "expected_level": "HIGH",
       "is_sufficient_info": true
     },
     {
@@ -59,8 +59,8 @@
       "resume_sha256": "b7db59ae73d7cc60a9730215794835d43274984d8b2eaba3c0eab917f0e2d862",
       "source_text_path": "source-texts/project-owner.txt",
       "draft_path": "drafts/project-owner.json",
-      "expected_index": 35,
-      "expected_level": "LOW",
+      "expected_index": 65,
+      "expected_level": "HIGH",
       "is_sufficient_info": true
     },
     {
@@ -76,6 +76,18 @@
       "is_sufficient_info": false
     },
     {
+      "slug": "risk-owner-showcase",
+      "scenario": "交付保障负责人",
+      "input_type": "TEXT",
+      "resume_path": "resumes/risk-owner-showcase.txt",
+      "resume_sha256": "83ab79506517bd5bd8291f1f70df86593670ce2434c27bf5cec466123210b7d4",
+      "source_text_path": "source-texts/risk-owner-showcase.txt",
+      "draft_path": "drafts/risk-owner-showcase.json",
+      "expected_index": 85,
+      "expected_level": "HIGH",
+      "is_sufficient_info": true
+    },
+    {
       "slug": "ops-shallow",
       "scenario": "用户运营",
       "input_type": "TEXT",
@@ -83,8 +95,8 @@
       "resume_sha256": "50e8166fc19a4b5b315439cb27504608261447f11d447d54b1fe3041c61406c0",
       "source_text_path": "source-texts/ops-shallow.txt",
       "draft_path": "drafts/ops-shallow.json",
-      "expected_index": 100,
-      "expected_level": "HIGH",
+      "expected_index": 0,
+      "expected_level": "LOW",
       "is_sufficient_info": true
     },
     {
@@ -95,7 +107,7 @@
       "resume_sha256": "b95286d58f177e537f0317b5c03ca7808c178084a909e6530e3f8526d9f22f15",
       "source_text_path": "source-texts/ops-deep.txt",
       "draft_path": "drafts/ops-deep.json",
-      "expected_index": 55,
+      "expected_index": 45,
       "expected_level": "MEDIUM",
       "is_sufficient_info": true
     },
@@ -107,7 +119,7 @@
       "resume_sha256": "7feddeeec99cc18688c269b7942c7bf91269bc2039c4e1a3c9c41efc64ef6a08",
       "source_text_path": "source-texts/writing-detailed.txt",
       "draft_path": "drafts/writing-detailed.json",
-      "expected_index": 65,
+      "expected_index": 35,
       "expected_level": "MEDIUM",
       "is_sufficient_info": true
     },
@@ -119,7 +131,7 @@
       "resume_sha256": "06c467cc12ad926f3b58d06976326f098a59033f93738f52136ade8b476481cc",
       "source_text_path": "source-texts/writing-concise.txt",
       "draft_path": "drafts/writing-concise.json",
-      "expected_index": 65,
+      "expected_index": 35,
       "expected_level": "MEDIUM",
       "is_sufficient_info": true
     },
@@ -131,8 +143,8 @@
       "resume_sha256": "0f5b763949d113c0a6d60952bd706b462fed2910dee4f644446b921400ffc0dd",
       "source_text_path": "source-texts/operations-injection.txt",
       "draft_path": "drafts/operations-injection.json",
-      "expected_index": 90,
-      "expected_level": "HIGH",
+      "expected_index": 10,
+      "expected_level": "LOW",
       "is_sufficient_info": true
     },
     {
@@ -143,8 +155,8 @@
       "resume_sha256": "d36fcdaa402236f9c4a85e81bd45e84c59dfd345918ff4e327faf979e02d130f",
       "source_text_path": "source-texts/operations-demographics.txt",
       "draft_path": "drafts/operations-demographics.json",
-      "expected_index": 90,
-      "expected_level": "HIGH",
+      "expected_index": 10,
+      "expected_level": "LOW",
       "is_sufficient_info": true
     }
   ]

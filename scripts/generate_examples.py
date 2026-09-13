@@ -182,8 +182,8 @@ def generate_examples(root: str | Path, *, build_outputs: bool = False, run_ocr:
             "resume_sha256": _sha256(resume),
             "source_text_path": str(source_text.relative_to(target)),
             "draft_path": str(draft_path.relative_to(target)),
-            "expected_index": final["metrics"]["exposure_index"],
-            "expected_level": final["metrics"]["exposure_level"],
+            "expected_index": final["metrics"]["irreplaceability_index"],
+            "expected_level": final["metrics"]["irreplaceability_level"],
             "is_sufficient_info": final["report_metadata"]["is_sufficient_info"],
         }
         if build_outputs:

@@ -1,6 +1,6 @@
 # 中间接口契约（冻结版）
 
-契约版本：`2.0.0`。权威机器格式见 `references/report-contract.schema.json`；1.0.0 → 2.0.0 迁移见 `docs/MIGRATION_NOTES.md`。
+契约版本：`3.0.0`。权威机器格式见 `references/report-contract.schema.json`；历史版本迁移见 `docs/MIGRATION_NOTES.md`。
 
 ## 数据流
 
@@ -19,7 +19,8 @@
 
 - 每项 `tasks[]` 有唯一 ID、证据、AI 部分、人类责任、等级、理由、置信度、权重来源和角色命中（`role_codes`，由确定性引擎写入）。
 - `UNKNOWN` 的 `score` 与 `effective_weight` 必须为 `null`；可判断任务则由确定性脚本写入。
-- `metrics` 由脚本计算，不能由 Claude 自报；`profile.role` 同样由角色匹配引擎（R1–R5）按任务证据确定性写入，上游自报角色会被覆盖。
+- `metrics` 由脚本计算，不能由 Claude 自报；对外字段为 `irreplaceability_index/level`（展示 = 100 − 取整后替代分，唯一翻转点在 `scripts/display_metrics.py`，渲染层禁止二次换算）；`raw_score` 保留替代语义作追溯锚；
+`profile.role` 同样由角色匹配引擎（R1–R5）按任务证据确定性写入，上游自报角色会被覆盖。
 - 主角色门槛与指数门槛独立（R4 双门槛）：主角色门槛未过时角色为影子兽（SHADOW_BEAST），指数照常按指数门槛独立判断，“有指数＋影子兽”并存合法。
 - `skill_panel` 缺证据时 `is_known=false` 且 `score=null`。
 - `role.source_task_ids`、`human_edge[].source_task_ids`、三个行动的 `source_task_ids` 必须指向真实任务。

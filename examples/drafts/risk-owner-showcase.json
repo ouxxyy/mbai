@@ -1,0 +1,215 @@
+{
+  "schema_version": "2.0.0",
+  "rule_version": "2.0.0",
+  "report_metadata": {
+    "report_id": "risk-owner-showcase",
+    "generated_at": "2026-09-11T20:00:00+08:00",
+    "confidence_level": "HIGH",
+    "confidence_reason": "风险兜底、现场处置与台账更新均有占比和责任边界。",
+    "questions_asked": [
+      "三类工作各占多少时间？",
+      "交付出问题由谁兜底？"
+    ],
+    "questions_skipped": false
+  },
+  "source": {
+    "input_type": "TEXT",
+    "input_name": "risk-owner-showcase.txt",
+    "privacy_entities": [
+      "陆沉",
+      "磐石重工设备有限公司",
+      "磐石重工",
+      "南山理工学院",
+      "北岭矿业",
+      "盾构三期"
+    ],
+    "extraction_status": "OK"
+  },
+  "profile": {
+    "sanitized_category": "装备制造 / 交付保障",
+    "situation_paragraph": "故障报警响起的时候，第一通电话打给你：哪台设备能动、哪条线不能碰、客户那边谁说了算——这些答案都不在手册里，在你跑过的每一次现场里。",
+    "index_note": "不可替代指数量的也是任务，不是人——分数高，说明责任和现场信息在你手里。",
+    "role": {
+      "code": "MINESWEEPER_MOLE",
+      "name": "排雷兽 · 风险预警员",
+      "tags": [
+        "项目排雷",
+        "风险兜底"
+      ],
+      "source_task_ids": [
+        "task-risk-gate",
+        "task-onsite-response"
+      ],
+      "snarky_quote": "凌晨两点的故障电话只打给你，因为只有你知道哪根线不能拔。"
+    }
+  },
+  "skill_panel": {
+    "execution": {
+      "score": 100,
+      "evidence": "任务流程与数字化交付证据：汇总里程碑进度台账",
+      "is_known": true,
+      "source_task_ids": [
+        "task-milestone-ledger"
+      ]
+    },
+    "discretion": {
+      "score": 67,
+      "evidence": "模糊情境中的判断证据：上线风险识别与结果兜底、现场协调设备突发故障",
+      "is_known": true,
+      "source_task_ids": [
+        "task-risk-gate",
+        "task-onsite-response",
+        "task-milestone-ledger"
+      ]
+    },
+    "coordination": {
+      "score": 67,
+      "evidence": "跨角色协调证据：上线风险识别与结果兜底、现场协调设备突发故障",
+      "is_known": true,
+      "source_task_ids": [
+        "task-risk-gate",
+        "task-onsite-response",
+        "task-milestone-ledger"
+      ]
+    },
+    "accountability": {
+      "score": 83,
+      "evidence": "结果责任证据：上线风险识别与结果兜底、现场协调设备突发故障",
+      "is_known": true,
+      "source_task_ids": [
+        "task-risk-gate",
+        "task-onsite-response",
+        "task-milestone-ledger"
+      ]
+    }
+  },
+  "tasks": [
+    {
+      "task_id": "task-risk-gate",
+      "task_name": "上线风险识别与结果兜底",
+      "time_share_percent": 40,
+      "exposure_level": "LOW",
+      "ai_can_do": "整理风险清单、量化故障影响并准备预案材料。",
+      "human_must_do": "识别上线风险，评估故障影响并对交付结果负责兜底。",
+      "evidence": "上线前识别项目风险，评估故障影响并对交付结果负责兜底。",
+      "reason": "风险取舍与结果责任在人，AI 只做盘点。",
+      "confidence": "HIGH",
+      "signals": {
+        "judgment": 2,
+        "coordination": 1,
+        "physical_presence": 0,
+        "accountability": 2,
+        "repeatability": 0,
+        "digital_input_output": 1
+      }
+    },
+    {
+      "task_id": "task-onsite-response",
+      "task_name": "现场协调设备突发故障",
+      "time_share_percent": 35,
+      "exposure_level": "LOW",
+      "ai_can_do": "整理故障时间线和备选方案。",
+      "human_must_do": "到现场确认影响，协调处置并对外沟通。",
+      "evidence": "供应商设备突发故障时到现场协调处置。",
+      "reason": "现场信息与即时协调无法远程替代。",
+      "confidence": "HIGH",
+      "signals": {
+        "judgment": 1,
+        "coordination": 2,
+        "physical_presence": 2,
+        "accountability": 2,
+        "repeatability": 0,
+        "digital_input_output": 1
+      }
+    },
+    {
+      "task_id": "task-milestone-ledger",
+      "task_name": "汇总里程碑进度台账",
+      "time_share_percent": 25,
+      "exposure_level": "MEDIUM",
+      "ai_can_do": "自动汇总里程碑进度并生成台账初稿。",
+      "human_must_do": "核对依赖变化并更新对外口径。",
+      "evidence": "每周汇总项目里程碑进度并更新依赖台账。",
+      "reason": "结构固定、数字化，主体可自动完成。",
+      "confidence": "HIGH",
+      "signals": {
+        "judgment": 1,
+        "coordination": 1,
+        "physical_presence": 0,
+        "accountability": 1,
+        "repeatability": 2,
+        "digital_input_output": 2
+      }
+    }
+  ],
+  "human_edge": [
+    {
+      "summary": "能把故障影响、合同责任和客户关系放进同一个兜底决定里。",
+      "source_task_ids": [
+        "task-risk-gate",
+        "task-onsite-response"
+      ]
+    }
+  ],
+  "action_plan": {
+    "hand_to_ai": {
+      "title": "把风险台账初稿交给 AI",
+      "action": "用脱敏台账让 AI 自动汇总里程碑并标出依赖变化。",
+      "deliverable": "台账初稿 + 变化摘要",
+      "acceptance_criteria": "连续两周依赖变化全部被标出，你只补判断。",
+      "human_checkpoint": "对外发布前核对责任边界措辞。",
+      "grounded_evidence": "已有每周固定台账任务。",
+      "source_task_ids": [
+        "task-milestone-ledger"
+      ]
+    },
+    "level_up": {
+      "title": "强化兜底决策记录",
+      "action": "每次风险拍板记四样：信号、备选、决定、事后验证。",
+      "deliverable": "5 张兜底决策卡",
+      "acceptance_criteria": "每张能从信号追到结果与责任方。",
+      "human_checkpoint": "不把运气好写成决策对。",
+      "grounded_evidence": "已有上线风险兜底经验。",
+      "source_task_ids": [
+        "task-risk-gate"
+      ]
+    },
+    "proof_7d": {
+      "title": "做一份故障应急演练方案",
+      "action": "用虚构设备故障场景写一份可执行的应急流程。",
+      "deliverable": "预案文档 + 角色分工表",
+      "acceptance_criteria": "7 天内含三级故障、两套升级路径和一个演练脚本。",
+      "human_checkpoint": "设备与客户名全部虚构。",
+      "grounded_evidence": "源于现场协调处置经验。",
+      "source_task_ids": [
+        "task-onsite-response"
+      ]
+    }
+  },
+  "share_card": {
+    "category": "装备制造 / 交付保障",
+    "role_name": "排雷兽 · 风险预警员",
+    "role_tags": [
+      "项目排雷",
+      "风险兜底"
+    ],
+    "confidence_label": "证据置信度：高",
+    "irreplaceability_index": null,
+    "irreplaceability_level": "UNKNOWN",
+    "snarky_quote": "凌晨两点的故障电话只打给你，因为只有你知道哪根线不能拔。",
+    "task_highlights": [
+      {
+        "task_name": "风险兜底",
+        "ai_part": "风险清单与影响量化",
+        "human_part": "你对交付结果负责"
+      },
+      {
+        "task_name": "现场故障",
+        "ai_part": "时间线与备选方案",
+        "human_part": "你在现场协调拍板"
+      }
+    ],
+    "proof_7d": "预案文档 + 角色分工表；7 天内含三级故障、两套升级路径和一个演练脚本。",
+    "disclaimer": "本卡的不可替代指数反映工作任务与 AI 能力的重合度，不是个人失业概率。"
+  }
+}

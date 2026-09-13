@@ -19,7 +19,7 @@ class BuildReportTest(unittest.TestCase):
 
             self.assertEqual(set(artifacts), {"report_json", "report_html"})
             report = json.loads(artifacts["report_json"].read_text(encoding="utf-8"))
-            self.assertEqual(report["metrics"]["exposure_index"], 60)
+            self.assertEqual(report["metrics"]["irreplaceability_index"], 40)
             self.assertIn("<!doctype html>", artifacts["report_html"].read_text(encoding="utf-8"))
 
     def test_repeated_build_is_byte_identical(self):

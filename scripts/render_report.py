@@ -22,7 +22,9 @@ from scripts.role_match import ROLE_BY_CODE, SHADOW_BEAST
 
 ASSET_DIR = Path(__file__).resolve().parents[1] / "assets" / "characters"
 
-LEVEL_LABELS = {"LOW": "低替代", "MEDIUM": "中替代", "HIGH": "高替代", "UNKNOWN": "未知"}
+# 3.0.0 词表拆分：汇总位说「不可替代」，任务行说「AI 可接管」——同一页面不允许同词反义。
+SUMMARY_LEVEL_LABELS = {"LOW": "低不可替代", "MEDIUM": "中不可替代", "HIGH": "高不可替代", "UNKNOWN": "未知"}
+TASK_LEVEL_LABELS = {"LOW": "AI 可接管·少量", "MEDIUM": "AI 可接管·部分", "HIGH": "AI 可接管·大部分", "UNKNOWN": "未知"}
 SKILL_LABELS = {
     "execution": "任务执行",
     "discretion": "判断决策",
@@ -125,6 +127,7 @@ a { color: var(--c-black); text-decoration: underline; }
   border: 3px solid var(--c-black); box-shadow: 6px 6px 0 rgba(235,251,59,.35);
   font: 900 40px/1 var(--font-heavy); letter-spacing: .02em;
 }
+.level-chip.level-HIGH { background: var(--c-yellow); box-shadow: 6px 6px 0 rgba(13,13,13,.35); }
 .level-chip.level-unknown { background: var(--c-gray-light); }
 .index-caption { margin: 14px 0 0; color: var(--c-gray-light); font-size: 14px; }
 .character-title {
@@ -288,7 +291,7 @@ CARD_SCRIPT = r"""
 
   const canvas = document.getElementById("share-card-canvas");
   const ctx = canvas.getContext("2d");
-  const colors = { LOW: "#0D0D0D", MEDIUM: "#FF4A00", HIGH: "#FF4A00", UNKNOWN: "#555555" };
+  const colors = { LOW: "#FF4A00", MEDIUM: "#FF4A00", HIGH: "#0D0D0D", UNKNOWN: "#555555" };
   const heavy = '"Arial Black", "Impact", "PingFang SC", sans-serif';
   const sans = '-apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif';
   const mono = '"SF Mono", "Consolas", "Monaco", monospace';
@@ -337,18 +340,18 @@ CARD_SCRIPT = r"""
     // 顶部公告条
     ctx.fillStyle = BLACK; ctx.fillRect(20, 20, 1040, 72);
     ctx.fillStyle = YELLOW; ctx.font = `700 26px ${mono}`;
-    ctx.fillText("AI TASK REPLACEMENT INDEX · 职业体检报告", 56, 68);
+    ctx.fillText("AI IRREPLACEABILITY INDEX · 职业体检报告", 56, 68);
     ctx.textAlign = "right"; ctx.fillText("ROUND_HALF_UP_TO_5", 1024, 68); ctx.textAlign = "left";
 
     // 指数与角色立像（上 60%）
     ctx.fillStyle = BLACK; ctx.font = `700 24px ${mono}`;
     ctx.fillText(cardData.category, 56, 136);
     ctx.font = `800 28px ${sans}`;
-    ctx.fillText("工作任务 AI 替代指数", 56, 186);
-    const known = cardData.exposure_index !== null && cardData.exposure_index !== undefined;
+    ctx.fillText("工作任务 AI 不可替代指数", 56, 186);
+    const known = cardData.irreplaceability_index !== null && cardData.irreplaceability_index !== undefined;
     if (known) {
       ctx.font = `900 250px ${heavy}`;
-      const numberText = String(cardData.exposure_index);
+      const numberText = String(cardData.irreplaceability_index);
       ctx.fillText(numberText, 52, 445);
       const numberWidth = ctx.measureText(numberText).width;
       ctx.font = `900 42px ${heavy}`;
@@ -360,11 +363,14 @@ CARD_SCRIPT = r"""
       ctx.fillStyle = "#444444";
       ctx.fillText("证据不够，不下结论", 60, 455);
     }
-    const levelText = { LOW: "LOW · 低替代", MEDIUM: "MEDIUM · 中替代", HIGH: "HIGH · 高替代", UNKNOWN: "UNKNOWN" }[cardData.exposure_level] || "UNKNOWN";
+    const lv = cardData.irreplaceability_level;
+    const levelText = { LOW: "LOW · 低不可替代", MEDIUM: "MEDIUM · 中不可替代", HIGH: "HIGH · 高不可替代", UNKNOWN: "UNKNOWN" }[lv] || "UNKNOWN";
     ctx.font = `900 34px ${heavy}`;
     const chipWidth = ctx.measureText(levelText).width + 48;
-    roundedRect(56, 490, chipWidth, 62, 0, cardData.exposure_level === "HIGH" || cardData.exposure_level === "MEDIUM" ? ORANGE : BLACK, BLACK, 4);
-    ctx.fillStyle = BLACK; ctx.fillText(levelText, 80, 533);
+    // 颜色绑定随风险镜像：新 LOW/MEDIUM（可接管度高＝风险）＝警示橙，新 HIGH（安全）＝黑底黄字。
+    const safe = lv === "HIGH";
+    roundedRect(56, 490, chipWidth, 62, 0, lv === "UNKNOWN" ? GRAY : (safe ? BLACK : ORANGE), BLACK, 4);
+    ctx.fillStyle = safe ? YELLOW : BLACK; ctx.fillText(levelText, 80, 533);
 
     if (image) {
       // 角色展示区物理隔离：纯白实体潮玩展示舱（Solid Specimen Capsule）
@@ -426,7 +432,7 @@ CARD_SCRIPT = r"""
 
     // 角落声明与评级代码（必须完整落在画框内：底边框内缘约 y=1413，基线留足降部空间）
     ctx.fillStyle = BLACK; ctx.font = `700 24px ${sans}`;
-    ctx.fillText("替代指数量的是任务，不是人。", 56, 1398);
+    ctx.fillText("不可替代指数量的也是任务，不是人。", 56, 1398);
     ctx.textAlign = "right"; ctx.font = `700 19px ${mono}`;
     ctx.fillText(`SPECIMEN CARD // ${roleCode} // ${specimen}`, 1024, 1398);
     ctx.textAlign = "left";
@@ -519,7 +525,7 @@ def _task_card(task: dict[str, Any]) -> str:
         <summary>
           <span class="task-title">{_e(task['task_name'])}</span>
           <span class="task-meta">
-            <span class="badge level-{level.lower()}">{_e(LEVEL_LABELS[level])}</span>
+            <span class="badge level-{level.lower()}">{_e(TASK_LEVEL_LABELS[level])}</span>
             <span class="badge">{time_label}</span>
             <span class="badge">证据 {_e(task['confidence'])}</span>
           </span>
@@ -557,8 +563,8 @@ def render_report(report: dict[str, Any]) -> str:
     profile = report["profile"]
     role = profile["role"]
     metrics = report["metrics"]
-    index = metrics["exposure_index"]
-    level = metrics["exposure_level"]
+    index = metrics["irreplaceability_index"]
+    level = metrics["irreplaceability_level"]
     assets = _role_assets(report)
 
     index_attr = "unknown" if index is None else str(index)
@@ -573,7 +579,7 @@ def render_report(report: dict[str, Any]) -> str:
         key=lambda task: (task.get("score", -1), task.get("time_share_percent") or 0),
         reverse=True,
     )[:2]
-    affected_text = "；".join(f"{item['task_name']}（{LEVEL_LABELS[item['exposure_level']]}）" for item in affected) or "现有证据不足，暂不判断受影响任务。"
+    affected_text = "；".join(f"{item['task_name']}（{TASK_LEVEL_LABELS[item['exposure_level']]}）" for item in affected) or "现有证据不足，暂不判断受影响任务。"
     edge_text = report["human_edge"][0]["summary"]
 
     tags = "".join(f'<span class="badge">{_e(tag)}</span>' for tag in role["tags"])
@@ -602,23 +608,23 @@ def render_report(report: dict[str, Any]) -> str:
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="color-scheme" content="light">
-  <title>{_e(role['name'])}｜工作任务 AI 替代指数</title>
+  <title>{_e(role['name'])}｜工作任务 AI 不可替代指数</title>
   <style>{STYLE}</style>
 </head>
 <body>
   <main class="report-shell">
     <div class="poster-ticker">
-      <span>WORK TASK // AI REPLACEMENT INDEX</span>
+      <span>WORK TASK // AI IRREPLACEABILITY INDEX</span>
       <span class="ticker-secondary">RULE v{_e(report['rule_version'])} · {_e(assets['specimen'])}</span>
-      <span class="ticker-secondary">替代指数量的是任务，不是人</span>
+      <span class="ticker-secondary">不可替代指数量的也是任务，不是人</span>
     </div>
     <section id="hero">
       <div class="hero-grid">
         <div class="attitude-block">
-          <div class="attitude-index-row" data-exposure-index="{_e(index_attr)}">
-            <div class="giant-index {giant_class}" aria-label="工作任务 AI 替代指数 {_e(index_attr)}">{giant}</div>
+          <div class="attitude-index-row" data-irreplaceability-index="{_e(index_attr)}">
+            <div class="giant-index {giant_class}" aria-label="工作任务 AI 不可替代指数 {_e(index_attr)}">{giant}</div>
             <div>
-              <span class="level-chip level-{level.lower()}">{_e(level)}</span>
+              <span class="level-chip level-{level.lower()}">{_e(level)} · {_e(SUMMARY_LEVEL_LABELS[level])}</span>
               <p class="index-caption">{_e(index_note)}</p>
             </div>
           </div>

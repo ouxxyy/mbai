@@ -29,7 +29,7 @@ class OcrPrivacyTest(unittest.TestCase):
             assert_ocr_meaningful("unrelated blank image", card)
 
     def test_accepts_ocr_that_contains_the_card_role(self):
-        assert_ocr_meaningful("工作任务 AI 替代指数\n项目风险领航员", {"role_name": "项目风险领航员"})
+        assert_ocr_meaningful("工作任务 AI 不可替代指数\n项目风险领航员", {"role_name": "项目风险领航员"})
 
     def test_builds_native_macos_vision_ocr_helper(self):
         with tempfile.TemporaryDirectory() as directory:

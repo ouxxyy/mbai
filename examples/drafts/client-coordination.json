@@ -28,7 +28,7 @@
   "profile": {
     "sanitized_category": "企业服务 / 客户成功",
     "situation_paragraph": "先把每项任务说清楚：输入是什么、输出到哪、由谁确认——证据齐了，结论才站得住。",
-    "index_note": "替代指数量的是任务，不是人。",
+    "index_note": "不可替代指数量的也是任务，不是人。",
     "role": {
       "code": "TRANSLATOR_FOX",
       "name": "翻译兽 · 信息对齐官",
@@ -194,8 +194,8 @@
       "冲突协商"
     ],
     "confidence_label": "证据置信度：高",
-    "exposure_index": null,
-    "exposure_level": "UNKNOWN",
+    "irreplaceability_index": null,
+    "irreplaceability_level": "UNKNOWN",
     "snarky_quote": "会议纪要能自动生成，但‘大家都同意’和‘大家只是没反对’还得你来分。",
     "task_highlights": [
       {
@@ -210,6 +210,6 @@
       }
     ],
     "proof_7d": "6 页案例演示稿；7 天内包含冲突、两个方案、交换条件和最终承诺表。",
-    "disclaimer": "本卡反映工作任务与 AI 能力的重合度，不是个人失业概率。"
+    "disclaimer": "本卡的不可替代指数反映工作任务与 AI 能力的重合度，不是个人失业概率。"
   }
 }

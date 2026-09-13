@@ -26,7 +26,7 @@
   "profile": {
     "sanitized_category": "互联网 / 产品运营",
     "situation_paragraph": "先把每项任务说清楚：输入是什么、输出到哪、由谁确认——证据齐了，结论才站得住。",
-    "index_note": "替代指数量的是任务，不是人。",
+    "index_note": "不可替代指数量的也是任务，不是人。",
     "role": {
       "code": "SHADOW_BEAST",
       "name": "影子兽 · 待解锁工种",
@@ -172,8 +172,8 @@
       "证据待补充"
     ],
     "confidence_label": "证据置信度：低",
-    "exposure_index": null,
-    "exposure_level": "UNKNOWN",
+    "irreplaceability_index": null,
+    "irreplaceability_level": "UNKNOWN",
     "snarky_quote": "这份简历把三年的工作压成了十二个字，连 AI 都不知道该先替哪一段。",
     "task_highlights": [
       {
@@ -183,6 +183,6 @@
       }
     ],
     "proof_7d": "一页脱敏案例表；7 天内五栏齐全，并由一个不了解背景的人读懂。",
-    "disclaimer": "本卡反映工作任务与 AI 能力的重合度，不是个人失业概率。"
+    "disclaimer": "本卡的不可替代指数反映工作任务与 AI 能力的重合度，不是个人失业概率。"
   }
 }

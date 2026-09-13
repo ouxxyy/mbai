@@ -12,6 +12,7 @@ from typing import Any, Iterable
 if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
+from scripts.display_metrics import to_display_metrics
 from scripts.privacy import PrivacyLeakError, assert_share_card_private
 from scripts.role_match import ROLE_NAMES, analyze_roles, match_task_roles
 from scripts.score_report import aggregate_tasks
@@ -60,8 +61,8 @@ def assert_valid_report(report: dict[str, Any]) -> None:
     if errors:
         raise ReportValidationError(errors)
 
-    if report.get("schema_version") != "2.0.0" or report.get("rule_version") != "2.0.0":
-        errors.append("schema_version 与 rule_version 必须为 2.0.0")
+    if report.get("schema_version") != "3.0.0" or report.get("rule_version") != "3.0.0":
+        errors.append("schema_version 与 rule_version 必须为 3.0.0")
 
     metadata = report["report_metadata"]
     questions = metadata.get("questions_asked", [])
@@ -109,6 +110,7 @@ def assert_valid_report(report: dict[str, Any]) -> None:
         expected_metrics, expected_tasks = aggregate_tasks(tasks)
         expected_sufficient = expected_metrics["is_sufficient_info"]
         expected_metrics.pop("is_sufficient_info")
+        expected_metrics = to_display_metrics(expected_metrics)
         actual_metrics = report["metrics"]
         for key, expected in expected_metrics.items():
             actual = actual_metrics.get(key)
@@ -204,10 +206,10 @@ def assert_valid_report(report: dict[str, Any]) -> None:
 
     metrics = report["metrics"]
     share_card = report["share_card"]
-    if share_card.get("exposure_index") != metrics.get("exposure_index"):
-        errors.append("share_card.exposure_index 与 metrics 不一致")
-    if share_card.get("exposure_level") != metrics.get("exposure_level"):
-        errors.append("share_card.exposure_level 与 metrics 不一致")
+    if share_card.get("irreplaceability_index") != metrics.get("irreplaceability_index"):
+        errors.append("share_card.irreplaceability_index 与 metrics 不一致")
+    if share_card.get("irreplaceability_level") != metrics.get("irreplaceability_level"):
+        errors.append("share_card.irreplaceability_level 与 metrics 不一致")
     if share_card.get("role_name") != role.get("name"):
         errors.append("share_card.role_name 与角色不一致")
     highlights = share_card.get("task_highlights")
@@ -238,7 +240,7 @@ def main() -> int:
     args = parser.parse_args()
     report = json.loads(args.input.read_text(encoding="utf-8"))
     assert_valid_report(report)
-    print(f"REPORT_VALID path={args.input.resolve()} tasks={len(report['tasks'])} index={report['metrics']['exposure_index']}")
+    print(f"REPORT_VALID path={args.input.resolve()} tasks={len(report['tasks'])} index={report['metrics']['irreplaceability_index']}")
     return 0
 
 

@@ -40,7 +40,7 @@ def _ocr_normalize(text: str) -> str:
 def assert_ocr_meaningful(text: str, share_card: dict) -> None:
     normalized = _ocr_normalize(text)
     role = _ocr_normalize(str(share_card.get("role_name", "")))
-    marker = "工作任务ai替代指数"
+    marker = "工作任务ai不可替代指数"
     if len(normalized) < 10 or (role not in normalized and marker not in normalized):
         raise OcrVerificationError("PNG OCR 未识别出角色或指标标题，拒绝将空扫描视为隐私通过")
 

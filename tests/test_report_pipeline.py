@@ -10,14 +10,16 @@ class FinalizeReportTest(unittest.TestCase):
     def test_calculates_metrics_and_syncs_share_card(self):
         report = finalize_report(valid_draft())
 
-        self.assertEqual(report["schema_version"], "2.0.0")
-        self.assertEqual(report["rule_version"], "2.0.0")
-        self.assertEqual(report["metrics"]["exposure_index"], 60)
-        self.assertEqual(report["metrics"]["exposure_level"], "MEDIUM")
+        self.assertEqual(report["schema_version"], "3.0.0")
+        self.assertEqual(report["rule_version"], "3.0.0")
+        # 内部替代 60/MEDIUM → 展示 40/MEDIUM（先取整后取补）。
+        self.assertEqual(report["metrics"]["irreplaceability_index"], 40)
+        self.assertEqual(report["metrics"]["irreplaceability_level"], "MEDIUM")
+        self.assertEqual(report["metrics"]["raw_score"], 60)
         self.assertEqual(report["tasks"][0]["score"], 100)
         self.assertEqual(report["tasks"][1]["score"], 0)
-        self.assertEqual(report["share_card"]["exposure_index"], 60)
-        self.assertEqual(report["share_card"]["exposure_level"], "MEDIUM")
+        self.assertEqual(report["share_card"]["irreplaceability_index"], 40)
+        self.assertEqual(report["share_card"]["irreplaceability_level"], "MEDIUM")
         self.assertTrue(report["report_metadata"]["is_sufficient_info"])
 
     def test_same_draft_finalizes_deterministically(self):
@@ -44,12 +46,12 @@ class FinalizeReportTest(unittest.TestCase):
             task["time_share_percent"] = None
         report = finalize_report(draft)
 
-        self.assertIsNone(report["metrics"]["exposure_index"])
+        self.assertIsNone(report["metrics"]["irreplaceability_index"])
         self.assertEqual(report["profile"]["role"]["code"], "SHADOW_BEAST")
         self.assertEqual(report["profile"]["role"]["name"], "影子兽 · 待解锁工种")
         self.assertFalse(report["report_metadata"]["is_sufficient_info"])
         self.assertFalse(report["report_metadata"]["is_role_sufficient_info"])
-        self.assertEqual(report["share_card"]["exposure_level"], "UNKNOWN")
+        self.assertEqual(report["share_card"]["irreplaceability_level"], "UNKNOWN")
 
     def test_role_is_deterministically_overridden_by_engine(self):
         draft = valid_draft()
@@ -69,7 +71,7 @@ class ValidateReportTest(unittest.TestCase):
 
     def test_rejects_metrics_that_do_not_match_tasks(self):
         report = finalize_report(valid_draft())
-        report["metrics"]["exposure_index"] = 5
+        report["metrics"]["irreplaceability_index"] = 5
 
         with self.assertRaisesRegex(ReportValidationError, "metrics"):
             assert_valid_report(report)
@@ -90,9 +92,9 @@ class ValidateReportTest(unittest.TestCase):
 
     def test_rejects_wrong_version(self):
         report = finalize_report(valid_draft())
-        report["schema_version"] = "1.0.0"
+        report["schema_version"] = "2.0.0"
 
-        with self.assertRaisesRegex(ReportValidationError, "2.0.0"):
+        with self.assertRaisesRegex(ReportValidationError, "3.0.0"):
             assert_valid_report(report)
 
     def test_rejects_main_role_that_disagrees_with_engine(self):

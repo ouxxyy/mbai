@@ -135,8 +135,8 @@ def valid_draft():
             "role_name": "项目风险领航员",
             "role_tags": ["结果兜底", "跨团队协调"],
             "confidence_label": "证据置信度：高",
-            "exposure_index": None,
-            "exposure_level": "UNKNOWN",
+            "irreplaceability_index": None,
+            "irreplaceability_level": "UNKNOWN",
             "snarky_quote": "周报可以自动写，真正不能一键生成的是上线那晚谁来拍板。",
             "task_highlights": [
                 {

@@ -1,4 +1,4 @@
-"""Migration tests: 1.0.0 → 2.0.0 legacy roles, index invariance, dual-threshold rewrite."""
+"""Migration tests: 1.0.0/2.0.0 → 3.0.0 语义翻转、防双翻、读时兼容。"""
 
 import unittest
 
@@ -10,20 +10,39 @@ from scripts.validate_report import ReportValidationError, assert_valid_report
 from tests.sample_factory import valid_draft
 
 
+ROLE_NAMES_OK = {
+    "TABLE_GOBLIN", "INSPECTOR_BOT", "PROOFREADER_OWL", "ASSEMBLY_CRANE", "ROOTCAUSE_HOUND",
+    "GATEKEEPER_BEAR", "TRANSLATOR_FOX", "DECONSTRUCTOR_BEAVER", "PROGRESS_HERDER",
+    "MINESWEEPER_MOLE", "SOLVER_OTTER", "ONSCENE_CHAMELEON", "SHADOW_BEAST",
+}
+
+
 class LegacyDraftMigrationTest(unittest.TestCase):
-    def test_legacy_draft_is_migrated_at_read_time_with_index_untouched(self):
+    def test_legacy_draft_is_migrated_at_read_time_with_flip(self):
         draft = valid_draft()  # 1.0.0 fixture with PROJECT_RISK_NAVIGATOR
-        legacy_index_draft = draft["tasks"]
+        legacy_tasks = draft["tasks"]
 
         report = finalize_report(draft)
 
         assert_valid_report(report)
-        self.assertEqual(report["schema_version"], "2.0.0")
-        self.assertEqual(report["rule_version"], "2.0.0")
+        self.assertEqual(report["schema_version"], "3.0.0")
+        self.assertEqual(report["rule_version"], "3.0.0")
         self.assertIn(report["profile"]["role"]["code"], ROLE_NAMES_OK)
-        # 指数字段语义未动：等级逐一保留。
-        for old, new in zip(legacy_index_draft, report["tasks"]):
+        # 任务级替代语义逐字段保留；raw_score 是翻转前的锚。
+        for old, new in zip(legacy_tasks, report["tasks"]):
             self.assertEqual(old["exposure_level"], new["exposure_level"])
+        self.assertEqual(report["metrics"]["raw_score"], 60)
+        self.assertEqual(report["metrics"]["irreplaceability_index"], 40)
+
+    def test_2_0_0_draft_is_accepted_and_flips_once(self):
+        draft = valid_draft()
+        draft["schema_version"] = "2.0.0"
+        draft["rule_version"] = "2.0.0"
+
+        report = finalize_report(draft)
+
+        self.assertEqual(report["schema_version"], "3.0.0")
+        self.assertEqual(report["metrics"]["irreplaceability_index"], 40)
 
     def test_unknown_schema_version_is_rejected(self):
         draft = valid_draft()
@@ -31,13 +50,6 @@ class LegacyDraftMigrationTest(unittest.TestCase):
 
         with self.assertRaises(ReportValidationError):
             finalize_report(draft)
-
-
-ROLE_NAMES_OK = {
-    "TABLE_GOBLIN", "INSPECTOR_BOT", "PROOFREADER_OWL", "ASSEMBLY_CRANE", "ROOTCAUSE_HOUND",
-    "GATEKEEPER_BEAR", "TRANSLATOR_FOX", "DECONSTRUCTOR_BEAVER", "PROGRESS_HERDER",
-    "MINESWEEPER_MOLE", "SOLVER_OTTER", "ONSCENE_CHAMELEON", "SHADOW_BEAST",
-}
 
 
 class LegacyRoleMappingTest(unittest.TestCase):
@@ -66,39 +78,55 @@ class LegacyRoleMappingTest(unittest.TestCase):
         self.assertNotIn(report["profile"]["role"]["code"], LEGACY_ROLE_MIGRATION)
 
 
+def _final_2_0_0() -> dict:
+    """构造一份 2.0.0 形态的旧 final 报告（替代口径 90/HIGH）。"""
+    cases = {case["slug"]: case for case in case_definitions()}
+    final = finalize_report(draft_for_case(cases["operations-repetitive"]))
+    final["schema_version"] = "2.0.0"
+    final["rule_version"] = "2.0.0"
+    # 还原 2.0.0 字段形态：irreplaceability_* → exposure_*（替代语义值）。
+    metrics = final["metrics"]
+    metrics["exposure_index"] = 90
+    metrics["exposure_level"] = "HIGH"
+    for key in ("irreplaceability_index", "irreplaceability_level"):
+        metrics.pop(key)
+    share = final["share_card"]
+    share["exposure_index"] = 90
+    share["exposure_level"] = "HIGH"
+    for key in ("irreplaceability_index", "irreplaceability_level"):
+        share.pop(key)
+    return final
+
+
 class FinalReportMigrationTest(unittest.TestCase):
-    def test_migrate_final_report_keeps_index_and_level_identical(self):
-        old_final = finalize_report(valid_draft())
-        old_final["schema_version"] = "1.0.0"
-        old_final["rule_version"] = "1.0.0"
-        # 还原 1.0.0 final 形态：没有角色命中与双门槛字段。
-        for task in old_final["tasks"]:
-            task.pop("role_codes", None)
-        old_final["metrics"].pop("task_count_role_evaluable", None)
-        old_final["report_metadata"].pop("is_role_sufficient_info", None)
-        old_final["profile"]["role"] = {
-            "code": "PROJECT_RISK_NAVIGATOR",
-            "name": "项目风险领航员",
-            "tags": ["结果兜底", "跨团队协调"],
-            "source_task_ids": ["task-weekly-report", "task-launch-decision"],
-            "snarky_quote": "周报可以自动写，真正不能一键生成的是上线那晚谁来拍板。",
-        }
+    def test_migrate_2_0_0_final_flips_display_and_keeps_raw(self):
+        old_final = _final_2_0_0()
 
         migrated = migrate_report(old_final)
 
         assert_valid_report(migrated)
-        self.assertEqual(migrated["schema_version"], "2.0.0")
-        self.assertEqual(migrated["metrics"]["exposure_index"], old_final["metrics"]["exposure_index"])
-        self.assertEqual(migrated["metrics"]["exposure_level"], old_final["metrics"]["exposure_level"])
-        self.assertEqual(migrated["metrics"]["raw_score"], old_final["metrics"]["raw_score"])
+        self.assertEqual(migrated["schema_version"], "3.0.0")
+        # 产品决策（非回归）：旧 90/HIGH 展示为 10/LOW；raw_score 与任务等级逐字段保留。
+        self.assertEqual(migrated["metrics"]["irreplaceability_index"], 10)
+        self.assertEqual(migrated["metrics"]["irreplaceability_level"], "LOW")
+        self.assertEqual(migrated["metrics"]["raw_score"], 87.5)
+        self.assertEqual(migrated["share_card"]["irreplaceability_index"], 10)
         for old, new in zip(old_final["tasks"], migrated["tasks"]):
             self.assertEqual(old["exposure_level"], new["exposure_level"])
             self.assertEqual(old["score"], new["score"])
 
-    def test_migrate_rejects_non_1_0_0_input(self):
-        report = finalize_report(valid_draft())
+    def test_migrating_a_3_0_0_report_is_rejected_as_double_flip(self):
+        old_final = _final_2_0_0()
+        migrated = migrate_report(old_final)
 
-        with self.assertRaisesRegex(ValueError, "1.0.0"):
+        with self.assertRaisesRegex(ValueError, "双翻"):
+            migrate_report(migrated)
+
+    def test_migrate_rejects_unsupported_version(self):
+        report = finalize_report(valid_draft())
+        report["schema_version"] = "9.9.9"
+
+        with self.assertRaisesRegex(ValueError, "仅迁移"):
             migrate_report(report)
 
 

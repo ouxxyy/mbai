@@ -135,8 +135,8 @@ def _role_draft(role_code, *, second_level="LOW", second_share=30):
             "role_name": ROLE_BY_CODE[role_code]["name"],
             "role_tags": ROLE_BY_CODE[role_code]["tags"],
             "confidence_label": "证据置信度：高",
-            "exposure_index": None,
-            "exposure_level": "UNKNOWN",
+            "irreplaceability_index": None,
+            "irreplaceability_level": "UNKNOWN",
             "snarky_quote": "虚构嘴替句，仅用于角色验收。",
             "task_highlights": [
                 {"task_name": "目标任务", "ai_part": "机械部分", "human_part": "关键判断"}
@@ -165,7 +165,7 @@ class TwelveRoleCasesTest(unittest.TestCase):
         high = finalize_report(_role_draft("TABLE_GOBLIN", second_level="HIGH"))
 
         self.assertEqual(low["profile"]["role"]["code"], high["profile"]["role"]["code"])
-        self.assertNotEqual(low["metrics"]["exposure_index"], high["metrics"]["exposure_index"])
+        self.assertNotEqual(low["metrics"]["irreplaceability_index"], high["metrics"]["irreplaceability_index"])
 
     def test_every_role_asset_file_exists_for_renderer(self):
         from pathlib import Path
@@ -299,14 +299,14 @@ class CoexistenceStateTest(unittest.TestCase):
         report = finalize_report(self._coexistence_draft())
 
         assert_valid_report(report)
-        self.assertIsNotNone(report["metrics"]["exposure_index"])
+        self.assertIsNotNone(report["metrics"]["irreplaceability_index"])
         self.assertEqual(report["profile"]["role"]["code"], "SHADOW_BEAST")
         self.assertEqual(report["profile"]["role"]["name"], "影子兽 · 待解锁工种")
         self.assertEqual(report["profile"]["role"]["source_task_ids"], [])
         self.assertFalse(report["report_metadata"]["is_role_sufficient_info"])
         self.assertTrue(report["report_metadata"]["is_sufficient_info"])
         # 并存态分享卡：真指数 + 影子兽名。
-        self.assertEqual(report["share_card"]["exposure_index"], report["metrics"]["exposure_index"])
+        self.assertEqual(report["share_card"]["irreplaceability_index"], report["metrics"]["irreplaceability_index"])
         self.assertEqual(report["share_card"]["role_name"], "影子兽 · 待解锁工种")
 
     def test_parallel_state_keeps_case_snarky_quote_without_role_identity(self):
@@ -331,7 +331,7 @@ class CoexistenceStateTest(unittest.TestCase):
 
         report = finalize_report(draft)
 
-        self.assertIsNone(report["metrics"]["exposure_index"])
+        self.assertIsNone(report["metrics"]["irreplaceability_index"])
         self.assertEqual(report["profile"]["role"]["code"], "SHADOW_BEAST")
         self.assertFalse(report["report_metadata"]["is_sufficient_info"])
 

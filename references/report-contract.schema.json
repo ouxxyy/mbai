@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://local.example/ai-task-exposure/report-contract-2.0.0.schema.json",
+  "$id": "https://local.example/ai-task-exposure/report-contract-3.0.0.schema.json",
   "title": "Work Task AI Exposure Final Report",
   "type": "object",
   "additionalProperties": false,
@@ -20,10 +20,10 @@
   ],
   "properties": {
     "schema_version": {
-      "const": "2.0.0"
+      "const": "3.0.0"
     },
     "rule_version": {
-      "const": "2.0.0"
+      "const": "3.0.0"
     },
     "report_metadata": {
       "type": "object",
@@ -196,8 +196,8 @@
       "type": "object",
       "additionalProperties": false,
       "required": [
-        "exposure_index",
-        "exposure_level",
+        "irreplaceability_index",
+        "irreplaceability_level",
         "task_count_total",
         "task_count_evaluable",
         "weight_mode",
@@ -206,22 +206,24 @@
         "task_count_role_evaluable"
       ],
       "properties": {
-        "exposure_index": {
+        "irreplaceability_index": {
           "type": [
             "integer",
             "null"
           ],
           "minimum": 0,
           "maximum": 100,
-          "multipleOf": 5
+          "multipleOf": 5,
+          "description": "对外展示的 AI 不可替代指数 = 100 − 取整后替代分（先取整、后取补，display = 100 − ROUND_HALF_UP_TO_5(raw)）。分数越高表示工作任务越依赖本人。"
         },
-        "exposure_level": {
+        "irreplaceability_level": {
           "enum": [
             "LOW",
             "MEDIUM",
             "HIGH",
             "UNKNOWN"
-          ]
+          ],
+          "description": "不可替代等级：≤20 LOW / 25–60 MEDIUM / ≥65 HIGH；信息不足为 UNKNOWN。"
         },
         "task_count_total": {
           "type": "integer",
@@ -240,7 +242,8 @@
           ]
         },
         "rounding_mode": {
-          "const": "ROUND_HALF_UP_TO_5"
+          "const": "ROUND_HALF_UP_TO_5",
+          "description": "替代分四舍五入到 5 分档、半档向上；展示层随后取补（display = 100 − rounded）。"
         },
         "raw_score": {
           "type": [
@@ -248,7 +251,8 @@
             "null"
           ],
           "minimum": 0,
-          "maximum": 100
+          "maximum": 100,
+          "description": "替代暴露原始分（内部计算锚点，展示层翻转之前）：raw = Σ(任务替代分 × w) / Σ(w)。"
         },
         "task_count_role_evaluable": {
           "type": "integer",
@@ -323,8 +327,8 @@
         "role_name",
         "role_tags",
         "confidence_label",
-        "exposure_index",
-        "exposure_level",
+        "irreplaceability_index",
+        "irreplaceability_level",
         "snarky_quote",
         "task_highlights",
         "proof_7d",
@@ -351,22 +355,24 @@
           "type": "string",
           "minLength": 1
         },
-        "exposure_index": {
+        "irreplaceability_index": {
           "type": [
             "integer",
             "null"
           ],
           "minimum": 0,
           "maximum": 100,
-          "multipleOf": 5
+          "multipleOf": 5,
+          "description": "与 metrics.irreplaceability_index 一致的镜像。"
         },
-        "exposure_level": {
+        "irreplaceability_level": {
           "enum": [
             "LOW",
             "MEDIUM",
             "HIGH",
             "UNKNOWN"
-          ]
+          ],
+          "description": "与 metrics.irreplaceability_level 一致的镜像。"
         },
         "snarky_quote": {
           "type": "string",

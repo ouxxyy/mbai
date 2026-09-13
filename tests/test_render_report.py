@@ -17,20 +17,22 @@ class RenderReportTest(unittest.TestCase):
         positions = [html.index(f'id="{section_id}"') for section_id in ids]
 
         self.assertEqual(positions, sorted(positions))
-        self.assertIn("60", html)
+        self.assertIn("40", html)
         self.assertIn("不是失业概率", html)
-        self.assertIn("替代指数量的是任务，不是人", html)
+        self.assertIn("不可替代指数量的也是任务，不是人", html)
+        self.assertIn("低不可替代", html)
+        self.assertNotIn("替代指数量的是任务", html)
 
     def test_is_byte_deterministic_for_same_final_json(self):
         self.assertEqual(render_report(self.report), render_report(self.report))
 
     def test_renderer_follows_final_json_without_recalculating(self):
-        self.report["metrics"]["exposure_index"] = 15
-        self.report["share_card"]["exposure_index"] = 15
+        self.report["metrics"]["irreplaceability_index"] = 15
+        self.report["share_card"]["irreplaceability_index"] = 15
 
         html = render_report(self.report)
 
-        self.assertIn('data-exposure-index="15"', html)
+        self.assertIn('data-irreplaceability-index="15"', html)
         self.assertIn("15", html)
 
     def test_unknown_index_renders_placeholder_not_fake_number(self):
@@ -42,6 +44,7 @@ class RenderReportTest(unittest.TestCase):
 
         self.assertIn("暂无指数", html)
         self.assertIn("证据不够，不下结论", html)
+        self.assertIn("UNKNOWN · 未知", html)
 
     def test_escapes_resume_evidence_and_script_closing_sequences(self):
         draft = valid_draft()
@@ -146,8 +149,9 @@ class ShareCardContentTest(unittest.TestCase):
     def test_card_carries_disclaimer_corner_and_grade_code(self):
         html = render_report(finalize_report(valid_draft()))
 
-        self.assertIn("替代指数量的是任务，不是人。", html)
+        self.assertIn("不可替代指数量的也是任务，不是人。", html)
         self.assertIn("SPECIMEN CARD //", html)
+        self.assertIn("AI IRREPLACEABILITY INDEX", html)
 
     def test_card_script_contains_only_share_projection_not_private_entities(self):
         html = render_report(finalize_report(valid_draft()))
@@ -160,13 +164,15 @@ class ShareCardContentTest(unittest.TestCase):
         cases = {case["slug"]: case for case in case_definitions()}
         report = finalize_report(draft_for_case(cases["ops-deep"]))
         self.assertEqual(report["profile"]["role"]["code"], "SHADOW_BEAST")
-        self.assertIsNotNone(report["metrics"]["exposure_index"])
+        self.assertIsNotNone(report["metrics"]["irreplaceability_index"])
+        self.assertEqual(report["metrics"]["irreplaceability_index"], 45)
 
         html = render_report(report)
 
         self.assertIn("影子兽 · 待解锁工种", html)
         self.assertIn("证据不够，不下结论", html)
-        self.assertIn(str(report["metrics"]["exposure_index"]), html)
+        self.assertIn("45", html)
+        self.assertIn("中不可替代", html)
 
     def test_long_copy_is_wrapped_not_clipped_on_card(self):
         draft = valid_draft()
@@ -187,7 +193,8 @@ class ShareCardContentTest(unittest.TestCase):
         self.assertIn("六个平台互不相通，全靠你本人兼容。", html)
         self.assertIn("搬表兽 · 表格搬运官", html)
         self.assertIn("每到交周报的日子", html)
-        self.assertIn("替代指数量的是任务，不是人——你每周的活里", html)
+        self.assertIn("不可替代指数量的也是任务，不是人——分数低", html)
+        self.assertIn("AI 可接管·大部分", html)
 
 
 if __name__ == "__main__":

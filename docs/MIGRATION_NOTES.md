@@ -1,4 +1,4 @@
-# 1.0.0 → 2.0.0 迁移说明
+# 迁移说明（1.0.0 → 2.0.0 → 3.0.0）
 
 契约版本：`1.0.0` → `2.0.0`（`schema_version` 与 `rule_version` 同步升级）。
 触发变更：角色体系由旧六角色升级为 12 类＋影子兽（内容基线冻结版，见 `docs/SCORING_RULES.md` §6）。
@@ -48,7 +48,26 @@
 - 已交付的 1.0.0 final 报告：`python3 scripts/migrate_report.py --input old.json --output new.json`，
   迁移后指数与等级逐字段不变，仅角色体系与新增字段变化。
 
+## 2.0.0 → 3.0.0：展示层语义翻转（2026-09-13，产品决策）
+
+对外指标由「AI 替代指数」改为「**AI 不可替代指数**」。**指数聚合算法与任务等级判定完全未动，
+翻转只发生在展示层**（唯一函数 `scripts/display_metrics.py`：显示分 = 100 − 取整后替代分，
+先取整、后取补；等级按翻转表 HIGH↔LOW / MEDIUM↔MEDIUM 镜像）。
+
+| 位置 | 2.0.0 | 3.0.0 |
+| --- | --- | --- |
+| `metrics.exposure_index / exposure_level` | 替代口径 | 重命名为 `irreplaceability_index / irreplaceability_level`（翻转后取值） |
+| `share_card.exposure_index / exposure_level` | 同上 | 同步重命名 |
+| `metrics.raw_score` | 替代原始分 | **字段名与语义原样保留**（可追溯锚） |
+| `tasks[].exposure_level / score` | 任务级替代 | **不改**（描述任务的 AI 可完成度） |
+
+- 展示带域镜像：≤20 低不可替代 / 25–60 中不可替代 / ≥65 高不可替代。
+- 旧案例展示值翻转（产品决策，**有意推翻** Phase 2 的“指数与等级保持一致”验收项的展示面）：
+  operations-repetitive 90/HIGH → **10/LOW**；ops-deep 55/MEDIUM → **45/MEDIUM**；信息不足态不变。
+- 防双翻：`migrate_report.py` 拒绝迁移 3.0.0 报告（幂等由测试锁定）；1.0.0/2.0.0 草稿读时迁移。
+- 颜色绑定随风险镜像：新 LOW/MEDIUM（高替代风险）＝警示橙，新 HIGH（安全）＝品牌黄/黑。
+
 ## 同步状态
 
-`references/report-contract.schema.json`、`scripts/validate_report.py` 已随本说明同步至 2.0.0；
-`docs/SCORING_RULES.md` §6 为角色体系的规则权威。
+`references/report-contract.schema.json`、`scripts/validate_report.py` 已随本说明同步至 3.0.0；
+`docs/SCORING_RULES.md` §6 为角色体系的规则权威，§1/§3 的 3.0.0 增补块为展示口径权威。
