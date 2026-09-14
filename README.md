@@ -1,6 +1,6 @@
 # MBAI · 工作任务 AI 不可替代指数
 
-把一份简历交给 Claude Code，它会读出你具体做了哪些任务，逐条判断哪些可以交给 AI、哪些离不开你本人，最后生成一份离线 HTML 报告和一张 1080 × 1440 的脱敏分享卡。评分、校验、渲染全部由本地脚本完成，不需要任何在线服务。
+把你的简历、年度工作总结，或一段描述自己工作的文字，交给支持技能格式的 AI agent（Claude Code、ZCode 等），它会读出你具体做了哪些任务，逐条判断哪些可以交给 AI、哪些离不开你本人，最后生成一份离线 HTML 报告和一张 1080 × 1440 的脱敏分享卡。评分、校验、渲染全部由本地 Python 脚本完成，不需要任何在线服务。
 
 MBAI（Me, Beyond AI · 我，在 AI 之上）是测评品牌名；正式指标名是「工作任务 AI 不可替代指数」——分数越高，说明你的工作越依赖你本人。
 
@@ -14,8 +14,8 @@ MBAI（Me, Beyond AI · 我，在 AI 之上）是测评品牌名；正式指标�
 
 ## 它怎么工作
 
-1. 安装 Skill 到 Claude Code（见下方快速开始）。
-2. 给它一份文字型 PDF、DOCX，或直接粘贴简历文本。
+1. 安装 Skill 到你的 agent 工具（见下方快速开始）。
+2. 给它一份文字型 PDF、DOCX，或直接粘贴文本——简历、年度工作总结、一段关于自己工作的描述，都可以。
 3. Claude 按冻结规则拆解任务并逐条评估；信息不足时最多补问 3 个问题，跳过就降低置信度继续。
 4. 本地脚本完成契约校验、评分和渲染，产出离线 HTML 报告与 PNG 分享卡。命令行导出 PNG 需要 Chrome；没有 Chrome 时也可以直接在 HTML 页面里点按钮导出。
 
@@ -23,7 +23,7 @@ MBAI（Me, Beyond AI · 我，在 AI 之上）是测评品牌名；正式指标�
 
 ## 快速开始
 
-把仓库复制为 Claude Code 的个人技能目录：
+任何支持 Agent Skills 格式（`SKILL.md`）的 agent 工具都能用。以 Claude Code 为例，把仓库复制为个人技能目录：
 
 ```bash
 git clone https://github.com/ouxxyy/mbai.git
@@ -31,15 +31,15 @@ mkdir -p ~/.claude/skills
 cp -R mbai ~/.claude/skills/ai-task-exposure
 ```
 
-重启一次 Claude Code 后，在会话里输入：
+其他工具放进各自的技能目录（如 ZCode 的 `~/.zcode/skills/`、通用的 `~/.agents/skills/`），保持仓库目录结构原样即可。重启或重新加载技能后，直接对 agent 说：
 
 ```text
-/mbai /absolute/path/to/resume.pdf
+用这份材料做工作任务 AI 不可替代指数诊断：<文件路径>
 ```
 
-或者直接说「用这份简历做工作任务 AI 不可替代指数诊断」。
+Claude Code 里也可以输入 `/mbai /absolute/path/to/resume.pdf`。
 
-环境要求：macOS（Apple Silicon）与 Python 3.11+。文字型 PDF 解析依赖系统 PDFKit/Swift；其他平台请改用 DOCX 或粘贴文本。可以用一条命令检查环境：
+环境要求：任何装有 Python 3.11+ 的电脑，macOS、Windows、Linux 均可。唯一平台差异是文件型 PDF 的解析——macOS 用系统自带的 PDFKit，其他平台改用 DOCX / TXT / MD 或直接粘贴文本，评分与渲染完全一致。可以用一条命令检查环境：
 
 ```bash
 python3 scripts/check_env.py

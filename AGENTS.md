@@ -1,6 +1,6 @@
 # Project overview
 
-本项目交付一个中文 Claude Code Skill：依据简历中的具体任务生成“工作任务 AI 不可替代指数”离线报告和脱敏分享卡。技术栈为 Python 3.11+ 与无外部运行时依赖的原生 HTML/CSS/JavaScript。
+本项目交付一个中文 Agent Skills 兼容 Skill（Claude Code、ZCode 等支持 `SKILL.md` 格式的 agent 工具均可安装）：依据简历、年度工作总结等工作材料中的具体任务生成“工作任务 AI 不可替代指数”离线报告和脱敏分享卡。技术栈为 Python 3.11+ 与无外部运行时依赖的原生 HTML/CSS/JavaScript。
 
 关键目录：`docs/` 保存冻结规则；`references/` 保存 JSON Schema；`scripts/` 是确定性流水线（呈现层内联在 `scripts/render_report.py` 的 STYLE 与 CARD_SCRIPT 中）；`examples/` 是虚构验收数据；`tests/` 覆盖评分、解析、隐私与渲染。
 
