@@ -1,6 +1,6 @@
 {
-  "schema_version": "4.0.0",
-  "rule_version": "4.1.0",
+  "schema_version": "5.0.0",
+  "rule_version": "5.0.0",
   "report_metadata": {
     "report_id": "ops-shallow",
     "generated_at": "2026-09-11T20:00:00+08:00",
@@ -24,10 +24,10 @@
   "profile": {
     "sanitized_category": "互联网 / 用户运营",
     "situation_paragraph": "先把每项任务说清楚：输入是什么、输出到哪、由谁确认——证据齐了，结论才站得住。",
-    "index_note": "不可替代指数量的也是任务，不是人。",
+    "index_note": "分数越高，当前工作越依赖人的判断、协作或现场处理。",
     "role": {
       "code": "INSPECTOR_WORKER",
-      "name": "巡检工",
+      "name": "流程打卡王",
       "tags": [
         "模板执行",
         "固定复盘"
@@ -36,7 +36,9 @@
         "task-template-campaign",
         "task-fixed-review"
       ],
-      "snarky_quote": "岗位名里有‘运营’，实际每天做的是给模板按时续命。"
+      "snarky_quote": "岗位名里有‘运营’，实际每天做的是给模板按时续命。",
+      "reason": "能稳定完成高频流程，但当前简历尚未显示策略、协商或结果责任。",
+      "confidence": "HIGH"
     }
   },
   "skill_panel": {
@@ -154,7 +156,7 @@
   },
   "share_card": {
     "category": "互联网 / 用户运营",
-    "role_name": "巡检工",
+    "role_name": "流程打卡王",
     "role_tags": [
       "模板执行",
       "固定复盘"
@@ -163,19 +165,11 @@
     "irreplaceability_index": null,
     "irreplaceability_level": "UNKNOWN",
     "snarky_quote": "岗位名里有‘运营’，实际每天做的是给模板按时续命。",
-    "task_highlights": [
-      {
-        "task_name": "模板活动配置",
-        "ai_part": "生成配置与排期",
-        "human_part": "确认权限并升级异常"
-      },
-      {
-        "task_name": "固定复盘",
-        "ai_part": "汇总数据与套结论",
-        "human_part": "核对数据完整性"
-      }
+    "value_line": "能稳定完成高频流程，但当前简历尚未显示策略、协商或结果责任。",
+    "source_task_ids": [
+      "task-template-campaign",
+      "task-fixed-review"
     ],
-    "proof_7d": "表格 + 自动化脚本 + 使用说明；7 天内一键运行，至少识别两类异常。",
-    "disclaimer": "本卡的不可替代指数反映工作任务与 AI 能力的重合度，不是个人失业概率。"
+    "disclaimer": "依据当前任务描述分析，不代表未来失业概率。"
   }
 }

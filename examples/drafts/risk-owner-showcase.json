@@ -1,6 +1,6 @@
 {
-  "schema_version": "4.0.0",
-  "rule_version": "4.1.0",
+  "schema_version": "5.0.0",
+  "rule_version": "5.0.0",
   "report_metadata": {
     "report_id": "risk-owner-showcase",
     "generated_at": "2026-09-11T20:00:00+08:00",
@@ -27,11 +27,11 @@
   },
   "profile": {
     "sanitized_category": "装备制造 / 交付保障",
-    "situation_paragraph": "故障报警响起的时候，第一通电话打给你：哪台设备能动、哪条线不能碰、客户那边谁说了算——这些答案都不在手册里，在你跑过的每一次现场里。",
-    "index_note": "不可替代指数量的也是任务，不是人——分数高，说明责任和现场信息在你手里。",
+    "situation_paragraph": "台账汇总、风险材料和故障时间线可以交给 AI 辅助。你已承担上线风险取舍，并到现场协调设备故障，这些工作依赖实际情况、各方配合与结果责任，是当前高不可替代的依据。仍需记录处置过程和结果，不能只用“我来兜底”证明价值；高分也不意味着未来工作方式不会改变。",
+    "index_note": "分数高，说明责任和现场信息在你手里。",
     "role": {
       "code": "MINESWEEPER_WORKER",
-      "name": "排雷工",
+      "name": "职场拆弹专家",
       "tags": [
         "项目排雷",
         "风险兜底"
@@ -40,7 +40,9 @@
         "task-risk-gate",
         "task-onsite-response"
       ],
-      "snarky_quote": "凌晨两点的故障电话只打给你，因为只有你知道哪根线不能拔。"
+      "snarky_quote": "AI 能列出风险，交付的关键取舍，我来扛。",
+      "reason": "能把故障影响、合同责任和客户关系放进同一个兜底决定里。",
+      "confidence": "HIGH"
     }
   },
   "skill_panel": {
@@ -188,7 +190,7 @@
   },
   "share_card": {
     "category": "装备制造 / 交付保障",
-    "role_name": "排雷工",
+    "role_name": "职场拆弹专家",
     "role_tags": [
       "项目排雷",
       "风险兜底"
@@ -196,20 +198,12 @@
     "confidence_label": "证据置信度：高",
     "irreplaceability_index": null,
     "irreplaceability_level": "UNKNOWN",
-    "snarky_quote": "凌晨两点的故障电话只打给你，因为只有你知道哪根线不能拔。",
-    "task_highlights": [
-      {
-        "task_name": "风险兜底",
-        "ai_part": "风险清单与影响量化",
-        "human_part": "你对交付结果负责"
-      },
-      {
-        "task_name": "现场故障",
-        "ai_part": "时间线与备选方案",
-        "human_part": "你在现场协调拍板"
-      }
+    "snarky_quote": "AI 能列出风险，交付的关键取舍，我来扛。",
+    "value_line": "能把故障影响、合同责任和客户关系放进同一个兜底决定里。",
+    "source_task_ids": [
+      "task-risk-gate",
+      "task-onsite-response"
     ],
-    "proof_7d": "预案文档 + 角色分工表；7 天内含三级故障、两套升级路径和一个演练脚本。",
-    "disclaimer": "本卡的不可替代指数反映工作任务与 AI 能力的重合度，不是个人失业概率。"
+    "disclaimer": "依据当前任务描述分析，不代表未来失业概率。"
   }
 }

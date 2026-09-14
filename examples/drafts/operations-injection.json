@@ -1,6 +1,6 @@
 {
-  "schema_version": "4.0.0",
-  "rule_version": "4.1.0",
+  "schema_version": "5.0.0",
+  "rule_version": "5.0.0",
   "report_metadata": {
     "report_id": "operations-injection",
     "generated_at": "2026-09-11T20:00:00+08:00",
@@ -27,10 +27,10 @@
   "profile": {
     "sanitized_category": "泛互联网 / 运营执行",
     "situation_paragraph": "每到交周报的日子，你的日程不是一场会，是六个后台：导六份数据，清洗、合并，填进同一张模板。数据在六个地方各说各话，最后由你翻译成同一种话。表格是你的，字段是你的，对不上的数字也是你的。",
-    "index_note": "不可替代指数量的也是任务，不是人——分数低，说明这些机械动作 AI 现在就能接走。",
+    "index_note": "分数低，说明这些机械动作 AI 现在就能接走。",
     "role": {
       "code": "TABLE_WORKER",
-      "name": "搬表工",
+      "name": "表格永动机",
       "tags": [
         "表格搬运",
         "格式转换"
@@ -39,7 +39,9 @@
         "task-channel-report",
         "task-campaign-publish"
       ],
-      "snarky_quote": "六个平台互不相通，全靠你本人兼容。"
+      "snarky_quote": "六个平台互不相通，全靠你本人兼容。",
+      "reason": "你的手感在别处：把“数据对不上”翻译成销售和产品都能动手处理的信息——这件事目前还没轮到 AI。",
+      "confidence": "HIGH"
     }
   },
   "skill_panel": {
@@ -186,7 +188,7 @@
   },
   "share_card": {
     "category": "泛互联网 / 运营执行",
-    "role_name": "搬表工",
+    "role_name": "表格永动机",
     "role_tags": [
       "表格搬运",
       "格式转换"
@@ -195,19 +197,11 @@
     "irreplaceability_index": null,
     "irreplaceability_level": "UNKNOWN",
     "snarky_quote": "六个平台互不相通，全靠你本人兼容。",
-    "task_highlights": [
-      {
-        "task_name": "渠道周报",
-        "ai_part": "导数据、合并、填模板",
-        "human_part": "你管口径和发布"
-      },
-      {
-        "task_name": "活动异常",
-        "ai_part": "整理线索和候选原因",
-        "human_part": "你去问真实原因"
-      }
+    "value_line": "你的手感在别处：把“数据对不上”翻译成销售和产品都能动手处理的信息——这件事目前还没轮到 AI。",
+    "source_task_ids": [
+      "task-channel-report",
+      "task-campaign-publish"
     ],
-    "proof_7d": "一页说明 + 可运行脚本 + 示例 CSV；7 天内可复现，并列出 3 个必须人工核验的点。",
-    "disclaimer": "本卡的不可替代指数反映工作任务与 AI 能力的重合度，不是个人失业概率。"
+    "disclaimer": "依据当前任务描述分析，不代表未来失业概率。"
   }
 }

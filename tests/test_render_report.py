@@ -13,13 +13,13 @@ class RenderReportTest(unittest.TestCase):
 
     def test_renders_sections_in_required_order(self):
         html = render_report(self.report)
-        ids = ["hero", "skill-panel", "task-breakdown", "human-edge", "action-plan", "share-export", "methodology"]
+        ids = ["hero", "task-breakdown", "human-edge", "action-plan", "skill-panel", "share-export", "methodology"]
         positions = [html.index(f'id="{section_id}"') for section_id in ids]
 
         self.assertEqual(positions, sorted(positions))
         self.assertIn("40", html)
         self.assertIn("不是失业概率", html)
-        self.assertIn("不可替代指数量的也是任务，不是人", html)
+        self.assertIn("分数越高，当前工作越依赖人的判断、协作或现场处理", html)
         self.assertIn("低不可替代", html)
         self.assertNotIn("替代指数量的是任务", html)
 
@@ -44,7 +44,7 @@ class RenderReportTest(unittest.TestCase):
 
         self.assertIn("暂无指数", html)
         self.assertIn("证据不够，不下结论", html)
-        self.assertIn("UNKNOWN · 未知", html)
+        self.assertIn("未知", html)
 
     def test_escapes_resume_evidence_and_script_closing_sequences(self):
         draft = valid_draft()
@@ -94,7 +94,7 @@ class CharacterAssetTest(unittest.TestCase):
         self.html = render_report(self.report)
 
     def test_character_image_is_embedded_as_data_uri(self):
-        self.assertRegex(self.html, r'<img class="character-figure" src="data:image/webp;base64,')
+        self.assertRegex(self.html, r'<img class="character-figure" src="data:image/(?:webp|png);base64,')
 
     def test_card_script_awaits_asset_decode_before_ready(self):
         html = self.html
@@ -113,16 +113,16 @@ class CharacterAssetTest(unittest.TestCase):
         self.assertIn("button.disabled = true", html)
         self.assertIn("if (window.__CARD_ERROR__) return", html)
 
-    def test_only_main_and_shadow_assets_are_embedded(self):
-        # 每份报告只内嵌主角色＋神秘工兜底：data URI 至多 2 段（命中角色 + 神秘工），神秘工报告只 1 段。
-        uris = set(re.findall(r'data:image/webp;base64,[A-Za-z0-9+/=]+', self.html))
-        self.assertTrue(1 <= len(uris) <= 2)
+    def test_only_selected_character_asset_is_embedded(self):
+        # 每份报告只内嵌所选角色；宽泛资料仍归类，不嵌入历史兜底图。
+        uris = set(re.findall(r'data:image/(?:webp|png);base64,[A-Za-z0-9+/=]+', self.html))
+        self.assertEqual(len(uris), 1)
 
-        shadow_html = render_report(finalize_report(draft_for_case(
+        sparse_html = render_report(finalize_report(draft_for_case(
             next(case for case in case_definitions() if case["slug"] == "sparse-information")
         )))
-        shadow_uris = set(re.findall(r'data:image/webp;base64,[A-Za-z0-9+/=]+', shadow_html))
-        self.assertEqual(len(shadow_uris), 1)
+        sparse_uris = set(re.findall(r'data:image/(?:webp|png);base64,[A-Za-z0-9+/=]+', sparse_html))
+        self.assertEqual(len(sparse_uris), 1)
 
     def test_missing_asset_file_fails_render_explicitly(self):
         from pathlib import Path
@@ -149,17 +149,19 @@ class ShareCardContentTest(unittest.TestCase):
     def test_card_carries_cta_corner_and_grade_code(self):
         html = render_report(finalize_report(valid_draft()))
 
-        self.assertIn("搜 欧八同学 生成自己的职业AI体检报告", html)
-        self.assertIn("SPECIMEN CARD //", html)
-        self.assertIn("AI IRREPLACEABILITY INDEX", html)
+        self.assertIn('ctx.fillText("欧八同学",', html)
+        self.assertIn("生成自己的职业 AI 体检报告", html)
+        self.assertNotIn("SPECIMEN CARD //", html)
+        self.assertIn("工作任务 AI", html)
 
     def test_indicator_explanation_stays_on_html_while_card_corner_carries_cta(self):
         html = render_report(finalize_report(valid_draft()))
 
         # 分层承担（MYW-70 2026-09-13 冻结）：HTML 报告页保留指标解释，
         # 分享卡角落承担 CTA——两层各司其职，不要求同文案。
-        self.assertIn("不可替代指数量的也是任务，不是人", html)
-        self.assertIn("搜 欧八同学 生成自己的职业AI体检报告", html)
+        self.assertIn("分数越高，当前工作越依赖人的判断、协作或现场处理", html)
+        self.assertIn('ctx.fillText("欧八同学",', html)
+        self.assertIn("生成自己的职业 AI 体检报告", html)
 
     def test_card_script_contains_only_share_projection_not_private_entities(self):
         html = render_report(finalize_report(valid_draft()))
@@ -171,13 +173,13 @@ class ShareCardContentTest(unittest.TestCase):
     def test_coexistence_card_shows_real_index_with_shadow_beast(self):
         cases = {case["slug"]: case for case in case_definitions()}
         report = finalize_report(draft_for_case(cases["ops-deep"]))
-        self.assertEqual(report["profile"]["role"]["code"], "SHADOW_WORKER")
+        self.assertEqual(report["profile"]["role"]["code"], "MINESWEEPER_WORKER")
         self.assertIsNotNone(report["metrics"]["irreplaceability_index"])
         self.assertEqual(report["metrics"]["irreplaceability_index"], 45)
 
         html = render_report(report)
 
-        self.assertIn("神秘工 · 待解锁", html)
+        self.assertNotIn("神秘工 · 待解锁", html)
         self.assertIn("证据不够，不下结论", html)
         self.assertIn("45", html)
         self.assertIn("中不可替代", html)
@@ -199,9 +201,9 @@ class ShareCardContentTest(unittest.TestCase):
         html = render_report(report)
 
         self.assertIn("六个平台互不相通，全靠你本人兼容。", html)
-        self.assertIn("搬表工", html)
+        self.assertIn("表格永动机", html)
         self.assertIn("每到交周报的日子", html)
-        self.assertIn("不可替代指数量的也是任务，不是人——分数低", html)
+        self.assertIn("分数低", html)
         self.assertIn("AI 可接管·大部分", html)
 
 

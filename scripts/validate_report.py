@@ -14,7 +14,7 @@ if __package__ in {None, ""}:
 
 from scripts.display_metrics import to_display_metrics
 from scripts.privacy import PrivacyLeakError, assert_share_card_private
-from scripts.role_match import ROLE_NAMES, analyze_roles, match_task_roles
+from scripts.role_match import ROLE_NAMES, ROLE_BY_CODE
 from scripts.score_report import aggregate_tasks
 from scripts.version import RULE_VERSION, SCHEMA_VERSION
 
@@ -98,8 +98,7 @@ def assert_valid_report(report: dict[str, Any]) -> None:
                 errors.append(f"{prefix} UNKNOWN 任务的 score/effective_weight 必须为 null")
             if item.get("weight_source") != "NOT_APPLICABLE":
                 errors.append(f"{prefix} UNKNOWN 任务权重来源必须为 NOT_APPLICABLE")
-            if item.get("role_codes"):
-                errors.append(f"{prefix} UNKNOWN 任务不得命中角色")
+
         elif level in {"LOW", "MEDIUM", "HIGH"}:
             expected_score = {"LOW": 0, "MEDIUM": 50, "HIGH": 100}[level]
             if item.get("score") != expected_score:
@@ -130,37 +129,22 @@ def assert_valid_report(report: dict[str, Any]) -> None:
 
     sufficient = bool(expected_sufficient)
 
-    # —— 角色侧（R1–R4 双门槛）：重算命中并与报告核对 ——
-    role_analysis = analyze_roles(tasks)
-    role_sufficient = bool(role_analysis["is_role_sufficient"])
-    expected_main = role_analysis["main_role"]
-    for index, expected_roles in enumerate(role_analysis["task_roles"]):
-        if tasks[index].get("role_codes") != expected_roles:
-            errors.append(f"tasks[{index}].role_codes 与命中引擎不一致")
-    if actual_metrics.get("task_count_role_evaluable") != role_analysis["role_evaluable"]:
-        errors.append("metrics.task_count_role_evaluable 与命中引擎不一致")
     if metadata.get("is_sufficient_info") is not sufficient:
         errors.append("report_metadata.is_sufficient_info 与任务可判断比例不一致")
-    if metadata.get("is_role_sufficient_info") is not role_sufficient:
-        errors.append("report_metadata.is_role_sufficient_info 与主角色门槛不一致")
-
     role = profile.get("role", {})
     role_code = role.get("code")
-    if ROLE_NAMES.get(role_code) != role.get("name"):
-        errors.append("角色 code/name 不符合冻结映射")
-    if role_sufficient:
-        if role_code != expected_main:
-            errors.append(f"主角色门槛已过，主角色必须为引擎判定结果 {expected_main}")
-    elif role_code != "SHADOW_WORKER":
-        errors.append("主角色门槛未过时角色必须为 SHADOW_WORKER（神秘工 · 待解锁）")
-    if role_code == "SHADOW_WORKER":
-        if _refs(role):
-            errors.append("神秘工不得引用任务作为角色来源")
-        if role.get("tags") != ["证据待补充"]:
-            errors.append("神秘工标签必须为 [证据待补充]")
-    # R4 不变量：命中任务 ⊆ 暴露可判任务，因此“无指数却有主角色”不允许出现。
-    if role_code != "SHADOW_WORKER" and not sufficient:
-        errors.append("指数门槛未过时不允许出现主角色（无指数却有主角色）")
+    if not isinstance(role_code, str) or role_code not in ROLE_BY_CODE:
+        errors.append("主角色必须从现有 12 类选择，不支持神秘工")
+    elif role.get("name") != ROLE_NAMES[role_code] or role.get("tags") != ROLE_BY_CODE[role_code]["tags"]:
+        errors.append("主角色 code/name/tags 不符合目录映射")
+    _check_required_text(errors, role, ["reason", "snarky_quote"], "profile.role")
+    refs = role.get("source_task_ids")
+    if not isinstance(refs, list) or not refs or any(not isinstance(x, str) for x in refs) or len(refs) != len(set(refs)):
+        errors.append("主角色必须有不重复的来源任务引用")
+    if role.get("confidence") not in {"LOW", "MEDIUM", "HIGH"}:
+        errors.append("主角色 confidence 必须为 LOW/MEDIUM/HIGH")
+    if "is_role_sufficient_info" in metadata or "task_count_role_evaluable" in report["metrics"] or any("role_codes" in t for t in tasks):
+        errors.append("5.0 已移除角色命中计数与门槛字段")
 
     task_id_set = set(task_ids)
     grounded_values: list[tuple[str, dict[str, Any]]] = [("profile.role", role)]
@@ -169,15 +153,8 @@ def assert_valid_report(report: dict[str, Any]) -> None:
     grounded_values.extend((f"action_plan.{key}", value) for key, value in report["action_plan"].items())
     for prefix, value in grounded_values:
         for task_id in _refs(value):
-            if task_id not in task_id_set:
+            if not isinstance(task_id, str) or task_id not in task_id_set:
                 errors.append(f"{prefix} 引用了不存在的任务 {task_id}")
-
-    if role_sufficient and role_code != "SHADOW_WORKER":
-        expected_sources = [
-            task["task_id"] for task in tasks if role_code in match_task_roles(task)
-        ]
-        if _refs(role) != expected_sources:
-            errors.append("主角色 source_task_ids 必须恰好等于该角色命中的任务")
 
     for key in ("execution", "discretion", "coordination", "accountability"):
         item = report["skill_panel"].get(key, {})
@@ -213,9 +190,22 @@ def assert_valid_report(report: dict[str, Any]) -> None:
         errors.append("share_card.irreplaceability_level 与 metrics 不一致")
     if share_card.get("role_name") != role.get("name"):
         errors.append("share_card.role_name 与角色不一致")
-    highlights = share_card.get("task_highlights")
-    if not isinstance(highlights, list) or not 1 <= len(highlights) <= 2:
-        errors.append("分享卡必须有 1–2 个任务切片")
+    share_keys = {"category", "role_name", "role_tags", "confidence_label", "irreplaceability_index", "irreplaceability_level", "snarky_quote", "value_line", "source_task_ids", "disclaimer"}
+    if set(share_card) != share_keys:
+        errors.append("share_card 必须严格使用脱敏 allowlist 字段")
+    _check_required_text(errors, share_card, ["category", "value_line", "disclaimer", "confidence_label"], "share_card")
+    if share_card.get("snarky_quote") != role.get("snarky_quote") or share_card.get("role_tags") != role.get("tags"):
+        errors.append("分享卡外号文案与角色不一致")
+    expected_confidence_label = {"HIGH": "任务依据清楚", "MEDIUM": "按现有任务归类", "LOW": "暂按现有描述归类"}.get(role.get("confidence"))
+    if share_card.get("confidence_label") != expected_confidence_label:
+        errors.append("分享卡必须如实呈现角色置信度")
+    for key, maximum in {"category": 36, "snarky_quote": 80, "value_line": 80, "disclaimer": 100}.items():
+        value = share_card.get(key)
+        if isinstance(value, str) and len(value) > maximum:
+            errors.append(f"share_card.{key} 超过 {maximum} 字，请精简而非截断")
+    share_refs = share_card.get("source_task_ids")
+    if not isinstance(share_refs, list) or not share_refs or any(not isinstance(x, str) or x not in task_id_set for x in share_refs):
+        errors.append("分享卡价值说明必须引用真实任务")
     try:
         assert_share_card_private(share_card, report["source"].get("privacy_entities", []))
     except PrivacyLeakError as exc:

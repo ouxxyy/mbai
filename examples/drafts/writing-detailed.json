@@ -1,6 +1,6 @@
 {
-  "schema_version": "4.0.0",
-  "rule_version": "4.1.0",
+  "schema_version": "5.0.0",
+  "rule_version": "5.0.0",
   "report_metadata": {
     "report_id": "writing-detailed",
     "generated_at": "2026-09-11T20:00:00+08:00",
@@ -22,10 +22,10 @@
   "profile": {
     "sanitized_category": "消费品牌 / 内容运营",
     "situation_paragraph": "先把每项任务说清楚：输入是什么、输出到哪、由谁确认——证据齐了，结论才站得住。",
-    "index_note": "不可替代指数量的也是任务，不是人。",
+    "index_note": "分数越高，当前工作越依赖人的判断、协作或现场处理。",
     "role": {
       "code": "ASSEMBLY_WORKER",
-      "name": "拼装工",
+      "name": "脑洞施工员",
       "tags": [
         "语境校准",
         "事实把关"
@@ -35,7 +35,9 @@
         "task-fact-calibration",
         "task-interview"
       ],
-      "snarky_quote": "初稿像流水线，真正费脑的是哪一句会让法务半夜给你打电话。"
+      "snarky_quote": "初稿像流水线，真正费脑的是哪一句会让法务半夜给你打电话。",
+      "reason": "能为一段可生成的文字补上真实来源、语境边界和发布责任。",
+      "confidence": "HIGH"
     }
   },
   "skill_panel": {
@@ -185,7 +187,7 @@
   },
   "share_card": {
     "category": "消费品牌 / 内容运营",
-    "role_name": "拼装工",
+    "role_name": "脑洞施工员",
     "role_tags": [
       "语境校准",
       "事实把关"
@@ -194,19 +196,12 @@
     "irreplaceability_index": null,
     "irreplaceability_level": "UNKNOWN",
     "snarky_quote": "初稿像流水线，真正费脑的是哪一句会让法务半夜给你打电话。",
-    "task_highlights": [
-      {
-        "task_name": "文章初稿",
-        "ai_part": "结构与文本生成",
-        "human_part": "确认选题意图"
-      },
-      {
-        "task_name": "事实与语气校准",
-        "ai_part": "标记疑点与改写建议",
-        "human_part": "核实来源并承担发布责任"
-      }
+    "value_line": "能为一段可生成的文字补上真实来源、语境边界和发布责任。",
+    "source_task_ids": [
+      "task-article-draft",
+      "task-fact-calibration",
+      "task-interview"
     ],
-    "proof_7d": "短文 + 来源核查表；7 天内完成，所有事实可点击回到公开来源。",
-    "disclaimer": "本卡的不可替代指数反映工作任务与 AI 能力的重合度，不是个人失业概率。"
+    "disclaimer": "依据当前任务描述分析，不代表未来失业概率。"
   }
 }

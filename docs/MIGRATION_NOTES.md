@@ -1,3 +1,9 @@
+# 5.0 迁移补充
+
+5.0 删除关键词分类引擎与神秘类别；旧名称映射仅作历史记录，不再决定分类。旧报告必须由模型根据新 12 类补写 code、reason、confidence、source_task_ids，以及分享 value_line/source_task_ids，删除旧分享 task_highlights/proof_7d。缺分类信息返回 ROLE_REANALYSIS_REQUIRED，禁止静默猜类。指数按原任务重新聚合，不能二次翻转；保留原文件。
+
+以下为历史记录，不是当前生成规则。
+
 # 迁移说明（1.0.0 → 2.0.0 → 3.0.0 → 4.0.0 → 4.1.0）
 
 契约版本：`1.0.0` → `2.0.0`（`schema_version` 与 `rule_version` 同步升级）。

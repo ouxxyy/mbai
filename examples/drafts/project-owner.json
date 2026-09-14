@@ -1,6 +1,6 @@
 {
-  "schema_version": "4.0.0",
-  "rule_version": "4.1.0",
+  "schema_version": "5.0.0",
+  "rule_version": "5.0.0",
   "report_metadata": {
     "report_id": "project-owner",
     "generated_at": "2026-09-11T20:00:00+08:00",
@@ -28,10 +28,10 @@
   "profile": {
     "sanitized_category": "工业软件 / 项目管理",
     "situation_paragraph": "先把每项任务说清楚：输入是什么、输出到哪、由谁确认——证据齐了，结论才站得住。",
-    "index_note": "不可替代指数量的也是任务，不是人。",
+    "index_note": "分数越高，当前工作越依赖人的判断、协作或现场处理。",
     "role": {
       "code": "ONSCENE_WORKER",
-      "name": "应变工",
+      "name": "现场定海针",
       "tags": [
         "风险取舍",
         "结果兜底"
@@ -41,7 +41,9 @@
         "task-owner-decision",
         "task-vendor-incident"
       ],
-      "snarky_quote": "甘特图能自动更新，供应商晚三周时谁去把不可能改成可交付，图表不负责。"
+      "snarky_quote": "甘特图能自动更新，供应商晚三周时谁去把不可能改成可交付，图表不负责。",
+      "reason": "能在预算、质量、时间和客户承诺同时冲突时做可追责的选择。",
+      "confidence": "HIGH"
     }
   },
   "skill_panel": {
@@ -214,7 +216,7 @@
   },
   "share_card": {
     "category": "工业软件 / 项目管理",
-    "role_name": "应变工",
+    "role_name": "现场定海针",
     "role_tags": [
       "风险取舍",
       "结果兜底"
@@ -223,19 +225,12 @@
     "irreplaceability_index": null,
     "irreplaceability_level": "UNKNOWN",
     "snarky_quote": "甘特图能自动更新，供应商晚三周时谁去把不可能改成可交付，图表不负责。",
-    "task_highlights": [
-      {
-        "task_name": "状态汇总",
-        "ai_part": "聚合里程碑与风险",
-        "human_part": "核验异常和口径"
-      },
-      {
-        "task_name": "项目取舍",
-        "ai_part": "量化方案影响",
-        "human_part": "平衡约束并承担最终选择"
-      }
+    "value_line": "能在预算、质量、时间和客户承诺同时冲突时做可追责的选择。",
+    "source_task_ids": [
+      "task-plan-review",
+      "task-owner-decision",
+      "task-vendor-incident"
     ],
-    "proof_7d": "风险登记表 + 两页决策备忘录；7 天内包含影响、两套方案、升级路径和客户沟通稿。",
-    "disclaimer": "本卡的不可替代指数反映工作任务与 AI 能力的重合度，不是个人失业概率。"
+    "disclaimer": "依据当前任务描述分析，不代表未来失业概率。"
   }
 }

@@ -25,8 +25,8 @@ class LegacyDraftMigrationTest(unittest.TestCase):
         report = finalize_report(draft)
 
         assert_valid_report(report)
-        self.assertEqual(report["schema_version"], "4.0.0")
-        self.assertEqual(report["rule_version"], "4.1.0")
+        self.assertEqual(report["schema_version"], "5.0.0")
+        self.assertEqual(report["rule_version"], "5.0.0")
         self.assertIn(report["profile"]["role"]["code"], ROLE_NAMES_OK)
         # 任务级替代语义逐字段保留；raw_score 是翻转前的锚。
         for old, new in zip(legacy_tasks, report["tasks"]):
@@ -41,7 +41,7 @@ class LegacyDraftMigrationTest(unittest.TestCase):
 
         report = finalize_report(draft)
 
-        self.assertEqual(report["schema_version"], "4.0.0")
+        self.assertEqual(report["schema_version"], "5.0.0")
         self.assertEqual(report["metrics"]["irreplaceability_index"], 40)
 
     def test_unknown_schema_version_is_rejected(self):
@@ -53,25 +53,12 @@ class LegacyDraftMigrationTest(unittest.TestCase):
 
 
 class LegacyRoleMappingTest(unittest.TestCase):
-    def test_sample_case_roles_stay_inside_frozen_migration_candidates(self):
-        legacy_code_by_slug = {
-            "operations-repetitive": "FLOW_ORCHESTRATOR",
-            "content-calibrator": "CONTENT_CALIBRATOR",
-            "technical-execution": "SYSTEM_BOUNDARY_GUARD",
-            "client-coordination": "COORDINATION_TRANSLATOR",
-            "project-owner": "PROJECT_RISK_NAVIGATOR",
-            "sparse-information": "LOCKED_ROLE",
-        }
-        cases = {case["slug"]: case for case in case_definitions()}
-        for slug, legacy_code in legacy_code_by_slug.items():
-            with self.subTest(slug=slug):
-                report = finalize_report(draft_for_case(cases[slug]))
-                new_code = report["profile"]["role"]["code"]
-                self.assertIn(
-                    new_code,
-                    LEGACY_ROLE_MIGRATION[legacy_code],
-                    f"{legacy_code} → {new_code} 超出冻结版候选映射",
-                )
+    def test_old_role_without_semantic_evidence_requires_reanalysis(self):
+        draft = valid_draft()
+        draft["schema_version"] = "4.0.0"
+        draft["profile"]["role"].pop("reason")
+        with self.assertRaisesRegex(ReportValidationError, "ROLE_REANALYSIS_REQUIRED"):
+            finalize_report(draft)
 
     def test_legacy_role_codes_are_gone_from_the_contract(self):
         report = finalize_report(valid_draft())
@@ -105,7 +92,7 @@ class FinalReportMigrationTest(unittest.TestCase):
         migrated = migrate_report(old_final)
 
         assert_valid_report(migrated)
-        self.assertEqual(migrated["schema_version"], "4.0.0")
+        self.assertEqual(migrated["schema_version"], "5.0.0")
         # 产品决策（非回归）：旧 90/HIGH 展示为 10/LOW；raw_score 与任务等级逐字段保留。
         self.assertEqual(migrated["metrics"]["irreplaceability_index"], 10)
         self.assertEqual(migrated["metrics"]["irreplaceability_level"], "LOW")

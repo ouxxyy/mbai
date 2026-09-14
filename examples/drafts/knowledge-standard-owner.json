@@ -1,6 +1,6 @@
 {
-  "schema_version": "4.0.0",
-  "rule_version": "4.1.0",
+  "schema_version": "5.0.0",
+  "rule_version": "5.0.0",
   "report_metadata": {
     "report_id": "knowledge-standard-owner",
     "generated_at": "2026-09-11T20:00:00+08:00",
@@ -26,10 +26,10 @@
   "profile": {
     "sanitized_category": "质量技术 / 标准管理",
     "situation_paragraph": "检验报告被退回来不是因为数据错，是因为“合格”两个字在三个部门有三种含义。你的日常，是把争论变成条文。",
-    "index_note": "不可替代指数量的也是任务，不是人——分数低，说明这些机械动作 AI 现在就能接走。",
+    "index_note": "分数低，说明这些机械动作 AI 现在就能接走。",
     "role": {
       "code": "PROOFREADER_WORKER",
-      "name": "校稿工",
+      "name": "差不多克星",
       "tags": [
         "口径校准",
         "标准制定"
@@ -38,7 +38,9 @@
         "task-inspection-standard",
         "task-vendor-assessment"
       ],
-      "snarky_quote": "同一句“合格”，三个部门三种理解——你把那句话写成了大家只能有一种理解的样子。"
+      "snarky_quote": "同一句“合格”，三个部门三种理解——你把那句话写成了大家只能有一种理解的样子。",
+      "reason": "能把部门间的口径之争变成一条可执行的条文。",
+      "confidence": "HIGH"
     }
   },
   "skill_panel": {
@@ -185,7 +187,7 @@
   },
   "share_card": {
     "category": "质量技术 / 标准管理",
-    "role_name": "校稿工",
+    "role_name": "差不多克星",
     "role_tags": [
       "口径校准",
       "标准制定"
@@ -194,19 +196,11 @@
     "irreplaceability_index": null,
     "irreplaceability_level": "UNKNOWN",
     "snarky_quote": "同一句“合格”，三个部门三种理解——你把那句话写成了大家只能有一种理解的样子。",
-    "task_highlights": [
-      {
-        "task_name": "检验标准",
-        "ai_part": "判例比对与起草",
-        "human_part": "你裁定口径"
-      },
-      {
-        "task_name": "考核制度",
-        "ai_part": "评分汇总初稿",
-        "human_part": "你拟定并解释口径"
-      }
+    "value_line": "能把部门间的口径之争变成一条可执行的条文。",
+    "source_task_ids": [
+      "task-inspection-standard",
+      "task-vendor-assessment"
     ],
-    "proof_7d": "一页对照表；7 天内含三个指标的两种口径示例。",
-    "disclaimer": "本卡的不可替代指数反映工作任务与 AI 能力的重合度，不是个人失业概率。"
+    "disclaimer": "依据当前任务描述分析，不代表未来失业概率。"
   }
 }

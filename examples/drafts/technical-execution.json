@@ -1,6 +1,6 @@
 {
-  "schema_version": "4.0.0",
-  "rule_version": "4.1.0",
+  "schema_version": "5.0.0",
+  "rule_version": "5.0.0",
   "report_metadata": {
     "report_id": "technical-execution",
     "generated_at": "2026-09-11T20:00:00+08:00",
@@ -29,10 +29,10 @@
   "profile": {
     "sanitized_category": "企业软件 / 后端研发",
     "situation_paragraph": "先把每项任务说清楚：输入是什么、输出到哪、由谁确认——证据齐了，结论才站得住。",
-    "index_note": "不可替代指数量的也是任务，不是人。",
+    "index_note": "分数越高，当前工作越依赖人的判断、协作或现场处理。",
     "role": {
       "code": "GATEKEEPER_WORKER",
-      "name": "守门工",
+      "name": "上线守门员",
       "tags": [
         "边界把关",
         "故障处置"
@@ -41,7 +41,9 @@
         "task-api",
         "task-incident"
       ],
-      "snarky_quote": "代码初稿越来越便宜，凌晨两点决定回滚的那五分钟反而越来越贵。"
+      "snarky_quote": "代码初稿越来越便宜，凌晨两点决定回滚的那五分钟反而越来越贵。",
+      "reason": "能把日志证据、系统边界和业务损失放进同一个故障决定里。",
+      "confidence": "HIGH"
     }
   },
   "skill_panel": {
@@ -191,7 +193,7 @@
   },
   "share_card": {
     "category": "企业软件 / 后端研发",
-    "role_name": "守门工",
+    "role_name": "上线守门员",
     "role_tags": [
       "边界把关",
       "故障处置"
@@ -200,19 +202,11 @@
     "irreplaceability_index": null,
     "irreplaceability_level": "UNKNOWN",
     "snarky_quote": "代码初稿越来越便宜，凌晨两点决定回滚的那五分钟反而越来越贵。",
-    "task_highlights": [
-      {
-        "task_name": "常规 API",
-        "ai_part": "骨架、校验与初稿",
-        "human_part": "领域边界和合并质量"
-      },
-      {
-        "task_name": "生产故障",
-        "ai_part": "日志聚合与排查假设",
-        "human_part": "决定回滚并承担业务结果"
-      }
+    "value_line": "能把日志证据、系统边界和业务损失放进同一个故障决定里。",
+    "source_task_ids": [
+      "task-api",
+      "task-incident"
     ],
-    "proof_7d": "代码仓库 + README + 测试日志；7 天内可本机运行，含 8 个边界测试和一次差异说明。",
-    "disclaimer": "本卡的不可替代指数反映工作任务与 AI 能力的重合度，不是个人失业概率。"
+    "disclaimer": "依据当前任务描述分析，不代表未来失业概率。"
   }
 }

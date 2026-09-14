@@ -1,6 +1,6 @@
 {
-  "schema_version": "4.0.0",
-  "rule_version": "4.1.0",
+  "schema_version": "5.0.0",
+  "rule_version": "5.0.0",
   "report_metadata": {
     "report_id": "sparse-information",
     "generated_at": "2026-09-11T20:00:00+08:00",
@@ -26,15 +26,20 @@
   "profile": {
     "sanitized_category": "互联网 / 产品运营",
     "situation_paragraph": "先把每项任务说清楚：输入是什么、输出到哪、由谁确认——证据齐了，结论才站得住。",
-    "index_note": "不可替代指数量的也是任务，不是人。",
+    "index_note": "分数越高，当前工作越依赖人的判断、协作或现场处理。",
     "role": {
-      "code": "SHADOW_WORKER",
-      "name": "神秘工 · 待解锁",
+      "code": "TRANSLATOR_WORKER",
+      "name": "人话翻译官",
       "tags": [
-        "证据待补充"
+        "解释沟通",
+        "协调共识"
       ],
-      "source_task_ids": [],
-      "snarky_quote": "这份简历把三年的工作压成了十二个字，连 AI 都不知道该先替哪一段。"
+      "source_task_ids": [
+        "task-cross-team"
+      ],
+      "snarky_quote": "日常运营、沟通、分析：活不少，说明书还没写。",
+      "reason": "现有证据不足以定位个人价值；先补任务和责任，再谈结论。",
+      "confidence": "LOW"
     }
   },
   "skill_panel": {
@@ -126,7 +131,7 @@
     {
       "summary": "现有证据不足以定位个人价值；先补任务和责任，再谈结论。",
       "source_task_ids": [
-        "task-daily-ops"
+        "task-cross-team"
       ]
     }
   ],
@@ -167,22 +172,19 @@
   },
   "share_card": {
     "category": "互联网 / 产品运营",
-    "role_name": "神秘工 · 待解锁",
+    "role_name": "人话翻译官",
     "role_tags": [
-      "证据待补充"
+      "解释沟通",
+      "协调共识"
     ],
     "confidence_label": "证据置信度：低",
     "irreplaceability_index": null,
     "irreplaceability_level": "UNKNOWN",
-    "snarky_quote": "这份简历把三年的工作压成了十二个字，连 AI 都不知道该先替哪一段。",
-    "task_highlights": [
-      {
-        "task_name": "日常运营",
-        "ai_part": "待补充后判断",
-        "human_part": "待补充责任边界"
-      }
+    "snarky_quote": "日常运营、沟通、分析：活不少，说明书还没写。",
+    "value_line": "现有证据不足以定位个人价值；先补任务和责任，再谈结论。",
+    "source_task_ids": [
+      "task-cross-team"
     ],
-    "proof_7d": "一页脱敏案例表；7 天内五栏齐全，并由一个不了解背景的人读懂。",
-    "disclaimer": "本卡的不可替代指数反映工作任务与 AI 能力的重合度，不是个人失业概率。"
+    "disclaimer": "依据当前任务描述分析，不代表未来失业概率。"
   }
 }

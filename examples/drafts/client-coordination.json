@@ -1,6 +1,6 @@
 {
-  "schema_version": "4.0.0",
-  "rule_version": "4.1.0",
+  "schema_version": "5.0.0",
+  "rule_version": "5.0.0",
   "report_metadata": {
     "report_id": "client-coordination",
     "generated_at": "2026-09-11T20:00:00+08:00",
@@ -28,10 +28,10 @@
   "profile": {
     "sanitized_category": "企业服务 / 客户成功",
     "situation_paragraph": "先把每项任务说清楚：输入是什么、输出到哪、由谁确认——证据齐了，结论才站得住。",
-    "index_note": "不可替代指数量的也是任务，不是人。",
+    "index_note": "分数越高，当前工作越依赖人的判断、协作或现场处理。",
     "role": {
       "code": "TRANSLATOR_WORKER",
-      "name": "翻译工",
+      "name": "人话翻译官",
       "tags": [
         "需求翻译",
         "冲突协商"
@@ -40,7 +40,9 @@
         "task-stakeholder-interview",
         "task-scope-negotiate"
       ],
-      "snarky_quote": "会议纪要能自动生成，但‘大家都同意’和‘大家只是没反对’还得你来分。"
+      "snarky_quote": "会议纪要能自动生成，但‘大家都同意’和‘大家只是没反对’还得你来分。",
+      "reason": "能识别不同部门口中的同一个词其实指向不同利益，并把冲突变成可执行承诺。",
+      "confidence": "HIGH"
     }
   },
   "skill_panel": {
@@ -188,7 +190,7 @@
   },
   "share_card": {
     "category": "企业服务 / 客户成功",
-    "role_name": "翻译工",
+    "role_name": "人话翻译官",
     "role_tags": [
       "需求翻译",
       "冲突协商"
@@ -197,19 +199,11 @@
     "irreplaceability_index": null,
     "irreplaceability_level": "UNKNOWN",
     "snarky_quote": "会议纪要能自动生成，但‘大家都同意’和‘大家只是没反对’还得你来分。",
-    "task_highlights": [
-      {
-        "task_name": "复盘材料",
-        "ai_part": "汇总数据与生成初稿",
-        "human_part": "确认异常解释"
-      },
-      {
-        "task_name": "范围协商",
-        "ai_part": "列方案与依赖",
-        "human_part": "处理冲突并确认承诺"
-      }
+    "value_line": "能识别不同部门口中的同一个词其实指向不同利益，并把冲突变成可执行承诺。",
+    "source_task_ids": [
+      "task-stakeholder-interview",
+      "task-scope-negotiate"
     ],
-    "proof_7d": "6 页案例演示稿；7 天内包含冲突、两个方案、交换条件和最终承诺表。",
-    "disclaimer": "本卡的不可替代指数反映工作任务与 AI 能力的重合度，不是个人失业概率。"
+    "disclaimer": "依据当前任务描述分析，不代表未来失业概率。"
   }
 }

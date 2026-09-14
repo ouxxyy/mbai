@@ -1,11 +1,7 @@
-"""Migrate legacy final reports (1.0.0/2.0.0/3.0.0) to the current 4.0.0 worker contract
-(version source: scripts/version.py).
+"""Rebuild a legacy report after model-authored v5 role and share fields are supplied.
 
-迁移语义（docs/MIGRATION_NOTES.md）：
-- 1.0.0/2.0.0/3.0.0 → 4.0.0：旧六角色或 3.x 旧系 code 重判为 12+1 工系（机械映射见 MIGRATION_NOTES）、展示层翻转维持 3.0.0 口径；
-- 字段重命名 exposure_* → irreplaceability_*（3.0.0），指数按「先取整、后取补」翻转（90/HIGH → 10/LOW），raw_score 与任务级替代语义逐字段保留；
-- 3.0.0 报告拒绝再次迁移（防双翻，schema_version 门控；幂等性由测试锁定）；
-- 指数聚合算法与任务等级判定完全未动，翻转是产品决策而非回归（见 MIGRATION_NOTES）。
+Missing semantic classification fails closed; old task scores are recomputed with
+unchanged aggregation, never by complementing an already displayed score.
 """
 
 from __future__ import annotations
@@ -56,15 +52,15 @@ def migrate_report(final: dict[str, Any]) -> dict[str, Any]:
     if version not in MIGRATABLE_VERSIONS:
         raise ValueError(
             f"仅迁移 {'/'.join(MIGRATABLE_VERSIONS)} 报告，当前为 {version}；"
-            "3.0.0 报告已是不可替代口径，再次迁移会造成双翻"
+            "当前版本不需要再迁移，避免双翻；请直接渲染"
         )
     return finalize_report(_to_draft(final))
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--input", required=True, type=Path, help="1.0.0/2.0.0 final report JSON")
-    parser.add_argument("--output", required=True, type=Path, help="Migrated 3.0.0 final report JSON")
+    parser.add_argument("--input", required=True, type=Path, help="Legacy report with model-authored v5 role and share fields")
+    parser.add_argument("--output", required=True, type=Path, help="Current final report JSON")
     args = parser.parse_args()
 
     final = json.loads(args.input.read_text(encoding="utf-8"))

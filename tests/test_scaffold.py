@@ -11,7 +11,7 @@ class ScaffoldTest(unittest.TestCase):
         schema_path = ROOT / "references" / "report-contract.schema.json"
         schema = json.loads(schema_path.read_text(encoding="utf-8"))
 
-        self.assertEqual(schema["properties"]["schema_version"]["const"], "4.0.0")
+        self.assertEqual(schema["properties"]["schema_version"]["const"], "5.0.0")
         from scripts.version import RULE_VERSION as _RULE
         self.assertEqual(schema["properties"]["rule_version"]["const"], _RULE)
         self.assertIn("irreplaceability_index", schema["properties"]["metrics"]["required"])
@@ -19,7 +19,7 @@ class ScaffoldTest(unittest.TestCase):
         self.assertIn("irreplaceability_index", schema["properties"]["share_card"]["required"])
         self.assertNotIn("exposure_index", schema["properties"]["metrics"]["required"])
         self.assertIn("raw_score", schema["properties"]["metrics"]["required"])
-        self.assertEqual(len(schema["properties"]["profile"]["properties"]["role"]["properties"]["code"]["enum"]), 13)
+        self.assertEqual(len(schema["properties"]["profile"]["properties"]["role"]["properties"]["code"]["enum"]), 12)
         self.assertTrue((ROOT / "docs" / "MIGRATION_NOTES.md").is_file())
         self.assertTrue((ROOT / "docs" / "SCORING_RULES.md").is_file())
         self.assertTrue((ROOT / "docs" / "INTERFACE_CONTRACT.md").is_file())
@@ -64,7 +64,7 @@ class DesignSystemCtaDivisionTest(unittest.TestCase):
         design = (ROOT / "docs" / "DESIGN_SYSTEM_B_POSTER.md").read_text(encoding="utf-8")
         self.assertNotIn("在首屏、折叠区与分享卡显要位置常态化出现固定声明", design)
         self.assertIn("搜 欧八同学 生成自己的职业AI体检报告", design)
-        self.assertIn("不可替代指数量的也是任务，不是人", design)
+        self.assertIn("分数越高，当前工作越依赖人的判断、协作或现场处理", design)
 
 
 class ActionDeadlineWordingTest(unittest.TestCase):

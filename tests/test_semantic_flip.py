@@ -180,13 +180,13 @@ class SampleFlipExpectationsTest(unittest.TestCase):
         report = self.reports["ops-deep"]
         self.assertEqual(report["metrics"]["irreplaceability_index"], 45)
         self.assertEqual(report["metrics"]["irreplaceability_level"], "MEDIUM")
-        self.assertEqual(report["profile"]["role"]["code"], "SHADOW_WORKER")
+        self.assertEqual(report["profile"]["role"]["code"], "MINESWEEPER_WORKER")
 
     def test_insufficient_state_unchanged(self):
         report = self.reports["sparse-information"]
         self.assertIsNone(report["metrics"]["irreplaceability_index"])
         self.assertEqual(report["metrics"]["irreplaceability_level"], "UNKNOWN")
-        self.assertEqual(report["profile"]["role"]["code"], "SHADOW_WORKER")
+        self.assertEqual(report["profile"]["role"]["code"], "TRANSLATOR_WORKER")
 
     def test_showcase_case_is_high_irreplaceability(self):
         report = self.reports["risk-owner-showcase"]
@@ -228,12 +228,14 @@ class FreshInputsPipelineTest(unittest.TestCase):
             "profile": {
                 "sanitized_category": "虚构 / 方向验收",
                 "situation_paragraph": "虚构输入：验证语义方向。",
-                "index_note": "不可替代指数量的也是任务，不是人。",
+                "index_note": "分数越高，当前工作越依赖人的判断、协作或现场处理。",
                 "role": {
                     "code": "TABLE_WORKER",
+                    "reason": "方向测试夹具，模型选择独立于指数。",
+                    "confidence": "MEDIUM",
                     "name": "搬表工",
                     "tags": ["表格搬运", "格式转换"],
-                    "source_task_ids": [],
+                    "source_task_ids": [tasks[0]["task_id"]],
                     "snarky_quote": "虚构嘴替句。",
                 },
             },
@@ -256,9 +258,9 @@ class FreshInputsPipelineTest(unittest.TestCase):
                 "irreplaceability_index": None,
                 "irreplaceability_level": "UNKNOWN",
                 "snarky_quote": "虚构嘴替句。",
-                "task_highlights": [{"task_name": "t", "ai_part": "a", "human_part": "h"}],
-                "proof_7d": "c；c",
-                "disclaimer": "本卡的不可替代指数反映工作任务与 AI 能力的重合度，不是个人失业概率。",
+                "value_line": "虚构方向测试。",
+                "source_task_ids": [tasks[0]["task_id"]],
+                "disclaimer": "依据当前任务描述分析，不代表未来失业概率。",
             },
         }
         return draft

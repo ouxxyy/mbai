@@ -8,7 +8,7 @@ from pathlib import Path
 from scripts.finalize_report import finalize_report
 from scripts.migrate_report import migrate_report
 from scripts.render_report import render_report
-from scripts.role_match import BEAST_TO_WORKER, ROLES, ROLE_BY_CODE, SHADOW_WORKER
+from scripts.role_match import BEAST_TO_WORKER, ROLES, ROLE_BY_CODE
 from scripts.sample_cases import case_definitions, draft_for_case
 from scripts.validate_report import assert_valid_report
 from tests.sample_factory import valid_draft
@@ -75,20 +75,17 @@ class NamingSweepTest(unittest.TestCase):
         ]
         self.assertEqual(offenders, [], f"旧 code 残留在非迁移数据文件：{offenders}")
 
-    def test_role_table_names_are_all_workers(self):
-        for role in ROLES:
-            self.assertTrue(role["name"].endswith("工"), role["name"])
-            self.assertTrue(role["code"].endswith("_WORKER"), role["code"])
-            self.assertRegex(role["badge"], r"^TW-\d{2}$")
-        self.assertEqual(SHADOW_WORKER["name"], "神秘工 · 待解锁")
-        self.assertEqual(SHADOW_WORKER["badge"], "TW-00")
+    def test_role_table_contains_twelve_distinct_nicknames(self):
+        self.assertEqual(len({r["name"] for r in ROLES}), 12)
+        self.assertNotIn("SHADOW_WORKER", ROLE_BY_CODE)
+
 
 
 class BeastToWorkerMappingTest(unittest.TestCase):
     """机械映射一一对应且覆盖全部 13 项。"""
 
     def test_mapping_is_complete_bijection(self):
-        worker_codes = {role["code"] for role in ROLES} | {SHADOW_WORKER["code"]}
+        worker_codes = {role["code"] for role in ROLES} | {"SHADOW_WORKER"}
         self.assertEqual(set(BEAST_TO_WORKER.values()), worker_codes)
         self.assertEqual(len(BEAST_TO_WORKER), 13)
 
@@ -101,24 +98,29 @@ class BrandExposureTest(unittest.TestCase):
         html = render_report(finalize_report(draft_for_case(cases["operations-repetitive"])))
 
         self.assertIn("ticker-badge", html)  # ticker mbai 徽章
-        self.assertIn("mbai", html)
-        self.assertIn("mbai — Me, Beyond AI · 我，在 AI 之上", html)  # 页脚锁定语
-        self.assertIn("TW-01", html)  # 工牌码进 ticker 与标本舱
-        self.assertIn("搬表工", html)
+        self.assertIn("MBAI", html)
+        self.assertIn("MBAI — Me, Beyond AI · 我，在 AI 之上", html)  # 页脚锁定语
+        self.assertNotIn("SPECIMEN POD", html)  # 工牌码进 ticker 与标本舱
+        self.assertIn("表格永动机", html)
 
     def test_card_script_carries_badge_and_brand_asset(self):
         cases = {case["slug"]: case for case in case_definitions()}
         html = render_report(finalize_report(draft_for_case(cases["risk-owner-showcase"])))
 
         # Canvas 模板字面量注入点与徽章 data URI 常量（${badge} 为 JS 模板变量）。
-        self.assertIn("SPECIMEN POD // ${badge}", html)
-        self.assertIn("SPECIMEN CARD // ${badge}", html)
+        self.assertNotIn("SPECIMEN POD // ${badge}", html)
+        self.assertNotIn("SPECIMEN CARD // ${badge}", html)
         self.assertIn('const badge = "TW-10"', html)
         self.assertNotIn("__ASSET_BADGE__", html)  # 占位符已替换为徽章 data URI
-        self.assertIn("data:image/png;base64,", html)
+        self.assertIn("data:image/svg+xml;base64,", html)
         # 卡面顶栏标题与 OCR marker 冻结不动。
-        self.assertIn("AI IRREPLACEABILITY INDEX", html)
-        self.assertIn("搜 欧八同学 生成自己的职业AI体检报告", html)
+        self.assertIn("工作任务 AI", html)
+        self.assertIn('ctx.fillText("欧八同学",', html)
+        self.assertIn("生成自己的职业 AI 体检报告", html)
+        self.assertNotIn('ctx.fillText("mbai"', html)
+        self.assertNotIn("工作方式图鉴", html)
+        self.assertNotIn("我的工作方式", html)
+        self.assertNotIn("不可替代指数量的也是任务，不是人", html)
 
     def test_brand_assets_are_closed_path_vectors(self):
         svg_dir = ROOT / "assets" / "brand" / "svg"
@@ -135,55 +137,15 @@ class BrandExposureTest(unittest.TestCase):
             self.assertTrue((ROOT / "assets" / "brand" / "png" / needed).is_file(), needed)
 
 
-class ThreeLayerMigrationTest(unittest.TestCase):
-    """三层迁移链实测：1.0.0 → 4.0.0、3.0.0 final → 4.0.0、幂等防重迁。"""
+class ReanalysisMigrationTest(unittest.TestCase):
+    def test_legacy_beast_cannot_be_silently_mapped(self):
+        draft = valid_draft()
+        draft["schema_version"] = "3.0.0"
+        draft["profile"]["role"]["code"] = "TABLE_GOBLIN"
+        from scripts.validate_report import ReportValidationError
+        with self.assertRaisesRegex(ReportValidationError, "ROLE_REANALYSIS_REQUIRED"):
+            finalize_report(draft)
 
-    def test_1_0_0_draft_migrates_to_worker_role(self):
-        report = finalize_report(valid_draft())  # 1.0.0 六角色草稿
-        self.assertEqual(report["schema_version"], "4.0.0")
-        self.assertIn(report["profile"]["role"]["code"], set(BEAST_TO_WORKER.values()))
-        assert_valid_report(report)
-
-    def test_3_0_0_beast_final_migrates_mechanically_to_worker(self):
-        cases = {case["slug"]: case for case in case_definitions()}
-        final = finalize_report(draft_for_case(cases["operations-repetitive"]))
-        # 还原 3.0.0 形态：版本 3.0.0 + 旧兽 code/名（字段结构同代）。
-        final["schema_version"] = "3.0.0"
-        final["rule_version"] = "3.0.0"
-        final["profile"]["role"] = {
-            "code": "TABLE_GOBLIN",
-            "name": "搬表兽 · 表格搬运官",
-            "tags": ["表格搬运", "格式转换"],
-            "source_task_ids": ["task-channel-report"],
-            "snarky_quote": final["profile"]["role"]["snarky_quote"],
-        }
-        final["share_card"]["role_name"] = "搬表兽 · 表格搬运官"
-
-        migrated = migrate_report(final)
-
-        assert_valid_report(migrated)
-        self.assertEqual(migrated["schema_version"], "4.0.0")
-        self.assertEqual(migrated["profile"]["role"]["code"], "TABLE_WORKER")
-        self.assertEqual(migrated["profile"]["role"]["name"], "搬表工")
-        # 机械迁移零语义：指数、等级、raw、任务等级全部不变。
-        self.assertEqual(migrated["metrics"]["irreplaceability_index"], final["metrics"]["irreplaceability_index"])
-        self.assertEqual(migrated["metrics"]["irreplaceability_level"], final["metrics"]["irreplaceability_level"])
-        self.assertEqual(migrated["metrics"]["raw_score"], final["metrics"]["raw_score"])
-        for old, new in zip(final["tasks"], migrated["tasks"]):
-            self.assertEqual(old["exposure_level"], new["exposure_level"])
-
-    def test_4_0_0_report_rejects_re_migration(self):
-        cases = {case["slug"]: case for case in case_definitions()}
-        report = finalize_report(draft_for_case(cases["operations-repetitive"]))
+    def test_current_version_rejects_remigration(self):
         with self.assertRaisesRegex(ValueError, "双翻"):
-            migrate_report(report)
-
-    def test_shadow_worker_asset_file_exists(self):
-        asset_dir = ROOT / "assets" / "characters"
-        self.assertTrue((asset_dir / SHADOW_WORKER["asset"]).is_file())
-        for role in ROLES:
-            self.assertTrue((asset_dir / role["asset"]).is_file(), role["asset"])
-
-
-if __name__ == "__main__":
-    unittest.main()
+            migrate_report(finalize_report(valid_draft()))

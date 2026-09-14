@@ -3,8 +3,8 @@ from copy import deepcopy
 
 def valid_draft():
     draft = {
-        "schema_version": "1.0.0",
-        "rule_version": "1.0.0",
+        "schema_version": "5.0.0",
+        "rule_version": "5.0.0",
         "report_metadata": {
             "report_id": "fixture-project-owner",
             "generated_at": "2026-09-11T12:00:00+08:00",
@@ -22,7 +22,9 @@ def valid_draft():
         "profile": {
             "sanitized_category": "企业服务 / 项目交付",
             "role": {
-                "code": "PROJECT_RISK_NAVIGATOR",
+                "code": "MINESWEEPER_WORKER",
+                "reason": "承担上线风险取舍与客户解释，最贴近结果责任类。",
+                "confidence": "HIGH",
                 "name": "项目风险领航员",
                 "tags": ["结果兜底", "跨团队协调"],
                 "source_task_ids": ["task-weekly-report", "task-launch-decision"],
@@ -138,19 +140,8 @@ def valid_draft():
             "irreplaceability_index": None,
             "irreplaceability_level": "UNKNOWN",
             "snarky_quote": "周报可以自动写，真正不能一键生成的是上线那晚谁来拍板。",
-            "task_highlights": [
-                {
-                    "task_name": "固定格式周报",
-                    "ai_part": "生成与整理初稿",
-                    "human_part": "确认异常和披露口径",
-                },
-                {
-                    "task_name": "上线风险判断",
-                    "ai_part": "整理风险与模拟方案",
-                    "human_part": "协调并承担最终决定",
-                },
-            ],
-            "proof_7d": "7 天做成一份两页上线风险决策备忘录。",
+            "value_line": "我会协调各方，权衡客户影响，并承担上线取舍。",
+            "source_task_ids": ["task-launch-decision"],
             "disclaimer": "本卡反映工作任务与 AI 能力的重合度，不是个人失业概率。",
         },
     }

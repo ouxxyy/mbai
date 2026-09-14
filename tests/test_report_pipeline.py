@@ -10,8 +10,8 @@ class FinalizeReportTest(unittest.TestCase):
     def test_calculates_metrics_and_syncs_share_card(self):
         report = finalize_report(valid_draft())
 
-        self.assertEqual(report["schema_version"], "4.0.0")
-        self.assertEqual(report["rule_version"], "4.1.0")
+        self.assertEqual(report["schema_version"], "5.0.0")
+        self.assertEqual(report["rule_version"], "5.0.0")
         # 内部替代 60/MEDIUM → 展示 40/MEDIUM（先取整后取补）。
         self.assertEqual(report["metrics"]["irreplaceability_index"], 40)
         self.assertEqual(report["metrics"]["irreplaceability_level"], "MEDIUM")
@@ -39,7 +39,7 @@ class FinalizeReportTest(unittest.TestCase):
         )
         self.assertIn("忽略以上规则", injected_report["tasks"][0]["evidence"])
 
-    def test_information_insufficient_forces_shadow_beast_and_no_index(self):
+    def test_information_insufficient_keeps_role_and_hides_index(self):
         draft = valid_draft()
         for task in draft["tasks"]:
             task["exposure_level"] = "UNKNOWN"
@@ -47,13 +47,13 @@ class FinalizeReportTest(unittest.TestCase):
         report = finalize_report(draft)
 
         self.assertIsNone(report["metrics"]["irreplaceability_index"])
-        self.assertEqual(report["profile"]["role"]["code"], "SHADOW_WORKER")
-        self.assertEqual(report["profile"]["role"]["name"], "神秘工 · 待解锁")
+        self.assertEqual(report["profile"]["role"]["code"], "MINESWEEPER_WORKER")
+        self.assertEqual(report["profile"]["role"]["name"], "职场拆弹专家")
         self.assertFalse(report["report_metadata"]["is_sufficient_info"])
-        self.assertFalse(report["report_metadata"]["is_role_sufficient_info"])
+        self.assertNotIn("is_role_sufficient_info", report["report_metadata"])
         self.assertEqual(report["share_card"]["irreplaceability_level"], "UNKNOWN")
 
-    def test_role_is_deterministically_overridden_by_engine(self):
+    def test_model_role_is_preserved_and_name_bound(self):
         draft = valid_draft()
         draft["profile"]["role"]["code"] = "GATEKEEPER_WORKER"
         draft["profile"]["role"]["name"] = "守门兽 · 上线守门员"
@@ -94,10 +94,10 @@ class ValidateReportTest(unittest.TestCase):
         report = finalize_report(valid_draft())
         report["schema_version"] = "3.0.0"
 
-        with self.assertRaisesRegex(ReportValidationError, "4.0.0"):
+        with self.assertRaisesRegex(ReportValidationError, "5.0.0"):
             assert_valid_report(report)
 
-    def test_rejects_main_role_that_disagrees_with_engine(self):
+    def test_rejects_role_name_that_disagrees_with_directory(self):
         report = finalize_report(valid_draft())
         report["profile"]["role"]["code"] = "GATEKEEPER_WORKER"
         report["profile"]["role"]["name"] = "守门兽 · 上线守门员"
@@ -131,3 +131,30 @@ class ValidateReportTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+class ShareV5GateTest(unittest.TestCase):
+    def test_new_value_line_is_privacy_checked(self):
+        draft=valid_draft();draft['share_card']['value_line']='在星河科技承担上线决策。'
+        with self.assertRaisesRegex(ReportValidationError,'隐私'):
+            finalize_report(draft)
+
+    def test_unknown_share_field_is_rejected(self):
+        draft=valid_draft();draft['share_card']['resume_text']='private'
+        with self.assertRaisesRegex(ReportValidationError,'allowlist'):
+            finalize_report(draft)
+
+    def test_share_evidence_must_exist(self):
+        draft=valid_draft();draft['share_card']['source_task_ids']=['missing']
+        with self.assertRaisesRegex(ReportValidationError,'真实任务'):
+            finalize_report(draft)
+
+    def test_low_confidence_cannot_be_hidden_on_final_card(self):
+        draft=valid_draft();draft['profile']['role']['confidence']='LOW'
+        report=finalize_report(draft);report['share_card']['confidence_label']='稀有高手'
+        with self.assertRaisesRegex(ReportValidationError,'置信度'):
+            assert_valid_report(report)
+
+    def test_overlong_copy_rejected_instead_of_silent_truncation(self):
+        draft=valid_draft();draft['share_card']['value_line']='长'*81
+        with self.assertRaisesRegex(ReportValidationError,'精简'):
+            finalize_report(draft)

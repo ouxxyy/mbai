@@ -1,6 +1,6 @@
 {
-  "schema_version": "4.0.0",
-  "rule_version": "4.1.0",
+  "schema_version": "5.0.0",
+  "rule_version": "5.0.0",
   "report_metadata": {
     "report_id": "knowledge-flow-builder",
     "generated_at": "2026-09-11T20:00:00+08:00",
@@ -25,11 +25,11 @@
   },
   "profile": {
     "sanitized_category": "企业服务 / 流程管理",
-    "situation_paragraph": "合同在谁的邮箱里卡了三天没人知道——你的办法是从零搭一条审批流程，让每一步有名字、有时限、有归属。",
-    "index_note": "不可替代指数量的也是任务，不是人——分数低，说明这些机械动作 AI 现在就能接走。",
+    "situation_paragraph": "写流程草案、整理准入条款，这些工作 AI 已经能分担。你目前更有价值的部分，是组织各环节试用、维护规则，以及遇到供应商交付例外时协商补救。只会写一份看起来完整的制度，优势会越来越小；能指出它在哪种实际情况下走不通，并验证怎么改，才更有说服力。现有材料没有证明你掌握最终审批权，也没有给出效率提升结果，这两点不能替你加戏。",
+    "index_note": "分数越高，当前工作越依赖人的判断、协作或现场处理。",
     "role": {
       "code": "DECONSTRUCTOR_WORKER",
-      "name": "拆解工",
+      "name": "画饼施工队",
       "tags": [
         "流程建设",
         "标准制定"
@@ -37,7 +37,9 @@
       "source_task_ids": [
         "task-contract-flow"
       ],
-      "snarky_quote": "公司里没有流程的时候，你就是流程。"
+      "snarky_quote": "AI 能画流程图。\n走不通的地方，我来改。",
+      "reason": "主要工作是从零设计合同审批流程、制定准入规则；交付的是办事路径，最贴近画饼施工队。",
+      "confidence": "HIGH"
     }
   },
   "skill_panel": {
@@ -83,9 +85,9 @@
       "time_share_percent": 40,
       "exposure_level": "MEDIUM",
       "ai_can_do": "生成流程草案与环节清单。",
-      "human_must_do": "判断环节取舍并组织试用推广。",
+      "human_must_do": "组织各环节试用，确认草案是否符合真实办事要求；最终审批权限尚不明确。",
       "evidence": "从零搭建合同审批流程并组织各环节试用。",
-      "reason": "结构设计依赖业务判断。",
+      "reason": "AI 能起草通用流程，但通用流程是否适用于各环节，需要试用证据。你已组织过试用，因此不是纯文档制作；具体修改效果尚未提供。",
       "confidence": "HIGH",
       "signals": {
         "judgment": 2,
@@ -102,9 +104,9 @@
       "time_share_percent": 35,
       "exposure_level": "MEDIUM",
       "ai_can_do": "整理既有案例供起草参照。",
-      "human_must_do": "定准入口径并对长期生效负责。",
+      "human_must_do": "结合实际准入要求维护规范，确认例外如何处理；不能仅凭起草经历认定你有最终决定权。",
       "evidence": "制定供应商准入规范并维护口径。",
-      "reason": "立长期规矩属口径源头。",
+      "reason": "条款整理可由 AI 辅助，判断条款是否适用要看真实业务条件。现有证据支持制定与维护，不支持独立承担所有准入风险。",
       "confidence": "HIGH",
       "signals": {
         "judgment": 1,
@@ -123,7 +125,7 @@
       "ai_can_do": "整理交付差异与候选补救。",
       "human_must_do": "对接供应商协商例外补救。",
       "evidence": "对接供应商管理交付节奏，例外时协商补救。",
-      "reason": "对外例外处理依赖关系与判断。",
+      "reason": "AI 可以列补救方案，却不能代替双方承诺交期或资源。你实际参与例外协商，这是低替代的依据；不能据此推断谈判效果。",
       "confidence": "HIGH",
       "signals": {
         "judgment": 1,
@@ -137,7 +139,7 @@
   ],
   "human_edge": [
     {
-      "summary": "能把模糊的办事习惯变成有归属、有时限的流程。",
+      "summary": "组织流程试用和处理交付例外，说明你接触过文档之外的实际约束。但这还不能证明你的方案优于 AI 草案：需要留下试用发现了什么问题、为什么修改、修改后是否有效的记录。",
       "source_task_ids": [
         "task-contract-flow"
       ]
@@ -146,7 +148,7 @@
   "action_plan": {
     "hand_to_ai": {
       "title": "把流程草案交给 AI",
-      "action": "让 AI 按访谈记录生成流程草案与环节清单。",
+      "action": "用一份脱敏需求记录让 AI 起草流程，并标出它自行假设的条件。把时间从重复写条款转向核对真实约束。",
       "deliverable": "流程草案 + 环节清单",
       "acceptance_criteria": "连续两版环节无遗漏，你只做取舍。",
       "human_checkpoint": "上线前与法务核对审批权限。",
@@ -157,7 +159,7 @@
     },
     "level_up": {
       "title": "强化口径决策记录",
-      "action": "每次口径变更记背景、备选与生效范围。",
+      "action": "挑一次准入规则分歧，记录两个处理办法、适用条件与代价。练习解释为什么这样定，而不只是把条款写漂亮。",
       "deliverable": "5 张口径决策卡",
       "acceptance_criteria": "每张能从争议追到定论与适用范围。",
       "human_checkpoint": "不把暂时没吵完的写成定论。",
@@ -168,9 +170,9 @@
     },
     "proof_7d": {
       "title": "做一份流程前后对照",
-      "action": "用虚构审批场景演示流程搭建前后差别。",
+      "action": "用明确标注为模拟的审批场景，对照 AI 草案与修订稿，找出三处走不通的情况并逐项重跑。用错误与修订依据证明你的判断，不能把模拟结果包装成真实业绩。",
       "deliverable": "一页说明 + 流程图",
-      "acceptance_criteria": "7 天内含三个环节的前后对比。",
+      "acceptance_criteria": "第 7 天交付三组场景：原草案问题、修改理由、重跑结果各一栏；未解决的问题明确保留。",
       "human_checkpoint": "客户与公司名全部虚构。",
       "grounded_evidence": "源于流程搭建任务。",
       "source_task_ids": [
@@ -180,7 +182,7 @@
   },
   "share_card": {
     "category": "企业服务 / 流程管理",
-    "role_name": "拆解工",
+    "role_name": "画饼施工队",
     "role_tags": [
       "流程建设",
       "标准制定"
@@ -188,20 +190,11 @@
     "confidence_label": "证据置信度：高",
     "irreplaceability_index": null,
     "irreplaceability_level": "UNKNOWN",
-    "snarky_quote": "公司里没有流程的时候，你就是流程。",
-    "task_highlights": [
-      {
-        "task_name": "审批流程",
-        "ai_part": "流程草案与环节清单",
-        "human_part": "你判断取舍并推广"
-      },
-      {
-        "task_name": "准入规范",
-        "ai_part": "案例整理与对照",
-        "human_part": "你定长期口径"
-      }
+    "snarky_quote": "AI 能画流程图。\n走不通的地方，我来改。",
+    "value_line": "组织流程试用、维护准入规则、协商交付补救。文档之外，还有让事情走通的工作。",
+    "source_task_ids": [
+      "task-contract-flow"
     ],
-    "proof_7d": "一页说明 + 流程图；7 天内含三个环节的前后对比。",
-    "disclaimer": "本卡的不可替代指数反映工作任务与 AI 能力的重合度，不是个人失业概率。"
+    "disclaimer": "依据当前任务描述分析，不代表未来失业概率。"
   }
 }

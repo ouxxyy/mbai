@@ -1,6 +1,6 @@
 {
-  "schema_version": "4.0.0",
-  "rule_version": "4.1.0",
+  "schema_version": "5.0.0",
+  "rule_version": "5.0.0",
   "report_metadata": {
     "report_id": "ops-deep",
     "generated_at": "2026-09-11T20:00:00+08:00",
@@ -25,10 +25,10 @@
   "profile": {
     "sanitized_category": "互联网 / 用户运营",
     "situation_paragraph": "先把每项任务说清楚：输入是什么、输出到哪、由谁确认——证据齐了，结论才站得住。",
-    "index_note": "不可替代指数量的也是任务，不是人。",
+    "index_note": "分数越高，当前工作越依赖人的判断、协作或现场处理。",
     "role": {
-      "code": "SHADOW_WORKER",
-      "name": "神秘工 · 待解锁",
+      "code": "MINESWEEPER_WORKER",
+      "name": "职场拆弹专家",
       "tags": [
         "策略判断",
         "目标负责"
@@ -37,7 +37,9 @@
         "task-strategy",
         "task-resource-conflict"
       ],
-      "snarky_quote": "同样叫用户运营，一个在点发布，一个要在留存掉下去前决定今天到底推不推。"
+      "snarky_quote": "同样叫用户运营，一个在点发布，一个要在留存掉下去前决定今天到底推不推。",
+      "reason": "能把用户证据、资源现实和留存责任放进同一个策略决定。",
+      "confidence": "HIGH"
     }
   },
   "skill_panel": {
@@ -186,7 +188,7 @@
   },
   "share_card": {
     "category": "互联网 / 用户运营",
-    "role_name": "神秘工 · 待解锁",
+    "role_name": "职场拆弹专家",
     "role_tags": [
       "策略判断",
       "目标负责"
@@ -195,19 +197,11 @@
     "irreplaceability_index": null,
     "irreplaceability_level": "UNKNOWN",
     "snarky_quote": "同样叫用户运营，一个在点发布，一个要在留存掉下去前决定今天到底推不推。",
-    "task_highlights": [
-      {
-        "task_name": "活动复盘",
-        "ai_part": "汇总指标与初稿",
-        "human_part": "确认异常和口径"
-      },
-      {
-        "task_name": "触达策略",
-        "ai_part": "分析分群与模拟方案",
-        "human_part": "决定节奏并承担留存目标"
-      }
+    "value_line": "能把用户证据、资源现实和留存责任放进同一个策略决定。",
+    "source_task_ids": [
+      "task-strategy",
+      "task-resource-conflict"
     ],
-    "proof_7d": "实验方案 + 分群表 + 决策说明；7 天内含假设、样本、指标、停损线和资源方案。",
-    "disclaimer": "本卡的不可替代指数反映工作任务与 AI 能力的重合度，不是个人失业概率。"
+    "disclaimer": "依据当前任务描述分析，不代表未来失业概率。"
   }
 }

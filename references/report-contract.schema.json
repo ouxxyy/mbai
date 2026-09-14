@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://local.example/ai-task-exposure/report-contract-4.0.0.schema.json",
+  "$id": "https://local.example/ai-task-exposure/report-contract-5.0.0.schema.json",
   "title": "Work Task AI Exposure Final Report",
   "type": "object",
   "additionalProperties": false,
@@ -20,11 +20,10 @@
   ],
   "properties": {
     "schema_version": {
-      "const": "4.0.0"
+      "const": "5.0.0"
     },
     "rule_version": {
-      "const": "4.1.0",
-      "description": "规则版本；4.1.0＝4.0.0＋动宾词表受控扩展（仅 verbs/objects，判定语义与 schema 结构不变）。"
+      "const": "5.0.0"
     },
     "report_metadata": {
       "type": "object",
@@ -36,8 +35,7 @@
         "confidence_level",
         "confidence_reason",
         "questions_asked",
-        "questions_skipped",
-        "is_role_sufficient_info"
+        "questions_skipped"
       ],
       "properties": {
         "report_id": {
@@ -71,9 +69,6 @@
           }
         },
         "questions_skipped": {
-          "type": "boolean"
-        },
-        "is_role_sufficient_info": {
           "type": "boolean"
         }
       }
@@ -137,7 +132,9 @@
             "name",
             "tags",
             "source_task_ids",
-            "snarky_quote"
+            "snarky_quote",
+            "reason",
+            "confidence"
           ],
           "properties": {
             "code": {
@@ -153,10 +150,8 @@
                 "PROGRESS_WORKER",
                 "MINESWEEPER_WORKER",
                 "SOLVER_WORKER",
-                "ONSCENE_WORKER",
-                "SHADOW_WORKER"
-              ],
-              "description": "4.0.0 起为 *_WORKER 家族（工牌短码 TW-01…TW-12、TW-00）；3.x 旧 code 经迁移映射机械改名（见 docs/MIGRATION_NOTES.md），判定语义零变化。"
+                "ONSCENE_WORKER"
+              ]
             },
             "name": {
               "type": "string",
@@ -176,11 +171,23 @@
               "uniqueItems": true,
               "items": {
                 "type": "string"
-              }
+              },
+              "minItems": 1
             },
             "snarky_quote": {
               "type": "string",
               "minLength": 1
+            },
+            "reason": {
+              "type": "string",
+              "minLength": 1
+            },
+            "confidence": {
+              "enum": [
+                "LOW",
+                "MEDIUM",
+                "HIGH"
+              ]
             }
           }
         },
@@ -204,8 +211,7 @@
         "task_count_evaluable",
         "weight_mode",
         "rounding_mode",
-        "raw_score",
-        "task_count_role_evaluable"
+        "raw_score"
       ],
       "properties": {
         "irreplaceability_index": {
@@ -255,10 +261,6 @@
           "minimum": 0,
           "maximum": 100,
           "description": "替代暴露原始分（内部计算锚点，展示层翻转之前）：raw = Σ(任务替代分 × w) / Σ(w)。"
-        },
-        "task_count_role_evaluable": {
-          "type": "integer",
-          "minimum": 0
         }
       }
     },
@@ -332,14 +334,15 @@
         "irreplaceability_index",
         "irreplaceability_level",
         "snarky_quote",
-        "task_highlights",
-        "proof_7d",
-        "disclaimer"
+        "disclaimer",
+        "value_line",
+        "source_task_ids"
       ],
       "properties": {
         "category": {
           "type": "string",
-          "minLength": 1
+          "minLength": 1,
+          "maxLength": 36
         },
         "role_name": {
           "type": "string",
@@ -378,23 +381,26 @@
         },
         "snarky_quote": {
           "type": "string",
-          "minLength": 1
-        },
-        "task_highlights": {
-          "type": "array",
-          "minItems": 1,
-          "maxItems": 2,
-          "items": {
-            "$ref": "#/$defs/shareTask"
-          }
-        },
-        "proof_7d": {
-          "type": "string",
-          "minLength": 1
+          "minLength": 1,
+          "maxLength": 80
         },
         "disclaimer": {
           "type": "string",
-          "minLength": 1
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "value_line": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "source_task_ids": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
         }
       }
     },
@@ -589,26 +595,6 @@
               "maximum": 2
             }
           }
-        },
-        "role_codes": {
-          "type": "array",
-          "uniqueItems": true,
-          "items": {
-            "enum": [
-              "TABLE_WORKER",
-              "INSPECTOR_WORKER",
-              "PROOFREADER_WORKER",
-              "ASSEMBLY_WORKER",
-              "ROOTCAUSE_WORKER",
-              "GATEKEEPER_WORKER",
-              "TRANSLATOR_WORKER",
-              "DECONSTRUCTOR_WORKER",
-              "PROGRESS_WORKER",
-              "MINESWEEPER_WORKER",
-              "SOLVER_WORKER",
-              "ONSCENE_WORKER"
-            ]
-          }
         }
       }
     },
@@ -678,29 +664,6 @@
           "items": {
             "type": "string"
           }
-        }
-      }
-    },
-    "shareTask": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "task_name",
-        "ai_part",
-        "human_part"
-      ],
-      "properties": {
-        "task_name": {
-          "type": "string",
-          "minLength": 1
-        },
-        "ai_part": {
-          "type": "string",
-          "minLength": 1
-        },
-        "human_part": {
-          "type": "string",
-          "minLength": 1
         }
       }
     },

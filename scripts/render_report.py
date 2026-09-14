@@ -2,7 +2,7 @@
 
 B 方向（新瑞士式黑黄撞色态度海报）呈现，规范：docs/DESIGN_SYSTEM_B_POSTER.md。
 渲染器只消费最终 JSON；角色素材按 ROLE_TABLE 解析为 data URI 内嵌，
-每份报告只内嵌主角色（或神秘工）＋神秘工兜底两张，断网可看、可导出。
+每份报告只内嵌已选主角色，断网可看、可导出。
 """
 
 from __future__ import annotations
@@ -18,11 +18,11 @@ from typing import Any
 if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from scripts.role_match import ROLE_BY_CODE, SHADOW_WORKER
+from scripts.role_match import ROLE_BY_CODE
 
 ASSET_DIR = Path(__file__).resolve().parents[1] / "assets" / "characters"
-BRAND_BADGE_PNG = Path(__file__).resolve().parents[1] / "assets" / "brand" / "png" / "mbai_badge_64px.png"
-BRAND_LOCKUP = "mbai — Me, Beyond AI · 我，在 AI 之上"
+BRAND_WORDMARK_SVG = Path(__file__).resolve().parents[1] / "assets" / "brand" / "svg" / "MBAI_wordmark.svg"
+BRAND_LOCKUP = "MBAI — Me, Beyond AI · 我，在 AI 之上"
 
 # 3.0.0 词表拆分：汇总位说「不可替代」，任务行说「AI 可接管」——同一页面不允许同词反义。
 SUMMARY_LEVEL_LABELS = {"LOW": "低不可替代", "MEDIUM": "中不可替代", "HIGH": "高不可替代", "UNKNOWN": "未知"}
@@ -56,25 +56,22 @@ def _asset_data_uri(filename: str) -> str:
     if not path.is_file():
         raise RuntimeError(f"角色素材缺失，拒绝渲染缺角色的报告：{path}")
     encoded = base64.b64encode(path.read_bytes()).decode("ascii")
-    return f"data:image/webp;base64,{encoded}"
+    mime = "image/png" if path.suffix == ".png" else "image/webp"
+    return f"data:{mime};base64,{encoded}"
 
 
 def _brand_badge_data_uri() -> str:
-    if not BRAND_BADGE_PNG.is_file():
-        raise RuntimeError(f"品牌徽章缺失，拒绝渲染缺标的报告：{BRAND_BADGE_PNG}")
-    encoded = base64.b64encode(BRAND_BADGE_PNG.read_bytes()).decode("ascii")
-    return f"data:image/png;base64,{encoded}"
+    if not BRAND_WORDMARK_SVG.is_file():
+        raise RuntimeError(f"品牌徽章缺失，拒绝渲染缺标的报告：{BRAND_WORDMARK_SVG}")
+    encoded = base64.b64encode(BRAND_WORDMARK_SVG.read_bytes()).decode("ascii")
+    return f"data:image/svg+xml;base64,{encoded}"
 
 
 def _role_assets(report: dict[str, Any]) -> dict[str, str]:
-    """只内嵌主角色（或神秘工）＋神秘工兜底。"""
+    """只嵌入所选角色；素材失败明确中止，不使用其他角色兜底。"""
     code = report["profile"]["role"]["code"]
-    main = ROLE_BY_CODE.get(code, SHADOW_WORKER)
+    main = ROLE_BY_CODE[code]
     assets = {"main": _asset_data_uri(main["asset"])}
-    if main["code"] != SHADOW_WORKER["code"]:
-        assets["shadow"] = _asset_data_uri(SHADOW_WORKER["asset"])
-    else:
-        assets["shadow"] = assets["main"]
     assets["badge"] = main["badge"]
     assets["code"] = main["code"]
     assets["definition"] = main["definition"]
@@ -119,11 +116,11 @@ a { color: var(--c-black); text-decoration: underline; }
 }
 .poster-ticker .ticker-secondary { color: var(--c-gray-light); }
 .ticker-brand { display: inline-flex; align-items: center; gap: 8px; font: 900 15px/1 var(--font-heavy); letter-spacing: .04em; color: var(--c-yellow); }
-.ticker-badge { width: 26px; height: 26px; display: block; border: 2px solid var(--c-yellow); }
+.ticker-badge { width: 112px; height: 32px; display: block; }
 .brand-lockup { margin: 18px 0 0; padding-top: 14px; border-top: 3px solid var(--c-black); font: 700 14px/1.5 var(--font-mono); letter-spacing: .02em; }
 .hero-grid { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 28px; align-items: stretch; }
 .attitude-block {
-  position: relative; display: flex; flex-direction: column; justify-content: flex-end;
+  position: relative; display: flex; flex-direction: column; justify-content: center;
   padding: 34px 34px 30px;
   background: var(--c-black); color: var(--c-white);
   border: 3.5px solid var(--c-border); box-shadow: 10px 10px 0 rgba(0,0,0,.15);
@@ -140,7 +137,7 @@ a { color: var(--c-black); text-decoration: underline; }
   border: 3px solid var(--c-black); box-shadow: 6px 6px 0 rgba(235,251,59,.35);
   font: 900 40px/1 var(--font-heavy); letter-spacing: .02em;
 }
-.level-chip.level-HIGH { background: var(--c-yellow); box-shadow: 6px 6px 0 rgba(13,13,13,.35); }
+.level-chip.level-high { background: var(--c-yellow); box-shadow: 6px 6px 0 rgba(13,13,13,.35); }
 .level-chip.level-unknown { background: var(--c-gray-light); }
 .index-caption { margin: 14px 0 0; color: var(--c-gray-light); font-size: 14px; }
 .character-title {
@@ -149,6 +146,7 @@ a { color: var(--c-black); text-decoration: underline; }
 }
 .character-definition { margin: 8px 0 0; color: var(--c-gray-light); font-size: 16px; }
 .snarky-banner {
+  white-space: pre-line;
   margin: 22px 0 0; padding: 16px 20px; transform: rotate(-.5deg);
   background: var(--c-yellow); color: var(--c-black);
   border: 3.5px solid var(--c-black); box-shadow: 8px 8px 0 rgba(0,0,0,.35);
@@ -172,7 +170,7 @@ a { color: var(--c-black); text-decoration: underline; }
   overflow: hidden;
 }
 .character-figure {
-  position: relative; z-index: 2; width: min(380px, 100%); height: auto; display: block;
+  position: relative; z-index: 2; width: min(300px, 100%); height: auto; display: block;
   filter: drop-shadow(0 10px 18px rgba(0,0,0,.15));
 }
 .character-plinth {
@@ -189,7 +187,7 @@ a { color: var(--c-black); text-decoration: underline; }
   margin-top: 28px; padding: 26px 30px; background: var(--c-white);
   border: 3.5px solid var(--c-black); box-shadow: 10px 10px 0 rgba(0,0,0,.15);
 }
-.situation-paper p { margin: 0; font-size: 16px; line-height: 1.65; overflow-wrap: anywhere; }
+.situation-paper p { margin: 16px 0 0; font-size: 16px; line-height: 1.65; overflow-wrap: anywhere; }
 .takeaway-row { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin-top: 28px; }
 .takeaway { padding: 18px 20px; background: var(--c-white); border: 3px solid var(--c-black); box-shadow: 8px 8px 0 rgba(0,0,0,.12); }
 .takeaway strong { display: block; margin-bottom: 8px; font: 700 13px/1.2 var(--font-mono); letter-spacing: .08em; }
@@ -214,10 +212,10 @@ details.task summary::-webkit-details-marker { display: none; }
 .task-title { font-weight: 800; font-size: 17px; overflow-wrap: anywhere; }
 .task-meta { display: flex; flex-wrap: wrap; gap: 8px; }
 .badge { display: inline-flex; align-items: center; min-height: 26px; padding: 4px 10px; border: 2px solid var(--c-black); font: 700 12px/1.2 var(--font-sans); background: var(--c-gray-light); }
-.badge.level-LOW { background: var(--c-yellow); }
-.badge.level-MEDIUM { background: var(--c-white); }
-.badge.level-HIGH { background: var(--c-orange); }
-.badge.level-UNKNOWN { background: var(--c-gray-light); color: #555; }
+.badge.level-low { background: var(--c-yellow); }
+.badge.level-medium { background: var(--c-white); }
+.badge.level-high { background: var(--c-orange); }
+.badge.level-unknown { background: var(--c-gray-light); color: #555; }
 .task-body { border-top: 3px solid var(--c-black); padding: 20px; }
 .task-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 .machine, .human { padding: 16px; border: 3px solid var(--c-black); overflow-wrap: anywhere; }
@@ -228,7 +226,7 @@ details.task summary::-webkit-details-marker { display: none; }
 .raw-evidence { margin-top: 12px; padding: 12px 14px; border-left: 6px solid var(--c-orange); background: var(--c-gray-light); font-size: 13px; overflow-wrap: anywhere; }
 .role-hit-chips { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 8px; }
 .role-hit-chips .badge { background: var(--c-white); font-family: var(--font-mono); }
-.edge-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.edge-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
 .edge { padding: 20px; background: var(--c-black); color: var(--c-yellow); border: 3px solid var(--c-black); box-shadow: 8px 8px 0 rgba(0,0,0,.15); font-size: 16px; font-weight: 650; overflow-wrap: anywhere; }
 .action-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
 .action { padding: 22px; display: flex; flex-direction: column; background: var(--c-white); border: 3px solid var(--c-black); box-shadow: 8px 8px 0 rgba(0,0,0,.12); }
@@ -272,7 +270,8 @@ html.share-only .download-button { display: none; }
   .giant-index.unknown { font-size: 56px; }
   .level-chip { font-size: 28px; }
   .character-title { font-size: 26px; }
-  .snarky-banner { font-size: 19px; }
+  .snarky-banner {
+  white-space: pre-line; font-size: 19px; }
   .character-stage { padding: 14px 10px 12px; margin: 8px 0; border-radius: 12px; box-shadow: 4px 4px 0 var(--c-black); }
   .character-figure { width: min(220px, 100%); }
   .character-plinth { width: 64%; height: 16px; margin-top: -12px; }
@@ -298,7 +297,6 @@ CARD_SCRIPT = r"""
   const roleDefinition = __ROLE_DEFINITION__;
   const badge = __BADGE__;
   const assetMain = __ASSET_MAIN__;
-  const assetShadow = __ASSET_SHADOW__;
   const assetBadge = __ASSET_BADGE__;
   const params = new URLSearchParams(window.location.search);
   if (params.get("share") === "1") document.documentElement.classList.add("share-only");
@@ -324,8 +322,9 @@ CARD_SCRIPT = r"""
     const lines = [];
     let line = "";
     for (const char of chars) {
+      if (char === "\n") { lines.push(line); line = ""; continue; }
       const candidate = line + char;
-      if (line && ctx.measureText(candidate).width > maxWidth) {
+      if (line && ctx.measureText(candidate).width > maxWidth && !"，。；！？、：）】”".includes(char)) {
         lines.push(line);
         line = char;
         if (lines.length === maxLines) break;
@@ -346,120 +345,83 @@ CARD_SCRIPT = r"""
     return y + lines.length * lineHeight;
   }
 
+  function drawFitted(text, x, y, width, height, maxSize, minSize, weight = 700) {
+    // 核心文案必须完整呈现；过长明确中止，不能截断成另一句话。
+    for (let size = maxSize; size >= minSize; size -= 2) {
+      ctx.font = `${weight} ${size}px ${sans}`;
+      const lines = wrapLines(text, width, 999);
+      const step = size * 1.28;
+      if (lines.length * step <= height) {
+        const start = y + (height - lines.length * step) / 2 + size;
+        lines.forEach((line, i) => ctx.fillText(line, x, start + i * step));
+        return;
+      }
+    }
+    throw new Error("分享文案过长，请精简后重新导出");
+  }
+
   function drawCard(image, badgeImage) {
     ctx.clearRect(0, 0, 1080, 1440);
     ctx.fillStyle = YELLOW; ctx.fillRect(0, 0, 1080, 1440);
     ctx.strokeStyle = BLACK; ctx.lineWidth = 14; ctx.strokeRect(20, 20, 1040, 1400);
 
-    // 顶部公告条：左侧 mbai 品牌徽章（冻结露出位），右侧指标标题
-    ctx.fillStyle = BLACK; ctx.fillRect(20, 20, 1040, 72);
-    if (badgeImage) ctx.drawImage(badgeImage, 34, 28, 56, 56);
-    ctx.fillStyle = YELLOW; ctx.font = `700 26px ${mono}`;
-    ctx.fillText("AI IRREPLACEABILITY INDEX · 职业体检报告", 106, 68);
-    ctx.textAlign = "right"; ctx.fillText("ROUND_HALF_UP_TO_5", 1024, 68); ctx.textAlign = "left";
+    // 身份海报：固定目录定义 + 已脱敏的本案分享字段。
+    ctx.fillStyle = BLACK; ctx.fillRect(20, 20, 1040, 88);
+    if (badgeImage) ctx.drawImage(badgeImage, 48, 33, 220, 62);
+    ctx.fillStyle = YELLOW;
+    ctx.textAlign = "right"; ctx.font = `600 24px ${sans}`;
+    ctx.fillText("我，在 AI 之上", 1018, 73); ctx.textAlign = "left";
 
-    // 指数与角色立像（上 60%）
-    ctx.fillStyle = BLACK; ctx.font = `700 24px ${mono}`;
-    ctx.fillText(cardData.category, 56, 136);
-    ctx.font = `800 28px ${sans}`;
-    ctx.fillText("工作任务 AI 不可替代指数", 56, 186);
+    ctx.fillStyle = BLACK; ctx.font = `600 26px ${sans}`;
+    drawFitted(cardData.category, 62, 124, 950, 45, 26, 20);
+    ctx.font = `900 76px ${sans}`;
+    drawWrapped(cardData.role_name, 58, 258, 960, 86, 1);
+    ctx.font = `600 30px ${sans}`;
+    drawWrapped(roleDefinition, 62, 315, 940, 40, 2);
+
+    // 角色和数字各占一侧，避免三位数与形象相撞。
+    roundedRect(60, 395, 490, 475, 20, WHITE, BLACK, 4);
+    if (image) ctx.drawImage(image, 77, 405, 455, 455);
+    ctx.fillStyle = BLACK; ctx.font = `700 28px ${sans}`;
+    ctx.fillText("工作任务 AI", 590, 450);
+    ctx.fillText("不可替代指数", 590, 490);
     const known = cardData.irreplaceability_index !== null && cardData.irreplaceability_index !== undefined;
     if (known) {
-      ctx.font = `900 250px ${heavy}`;
-      const numberText = String(cardData.irreplaceability_index);
-      ctx.fillText(numberText, 52, 445);
-      const numberWidth = ctx.measureText(numberText).width;
-      ctx.font = `900 42px ${heavy}`;
-      ctx.fillText("/ 100", 52 + numberWidth + 24, 445);
+      ctx.font = `900 174px ${heavy}`;
+      ctx.fillText(String(cardData.irreplaceability_index), 575, 680);
+      ctx.font = `700 30px ${sans}`; ctx.fillText("/ 100", 595, 730);
     } else {
-      ctx.font = `900 110px ${heavy}`;
-      ctx.fillText("暂无指数", 56, 400);
-      ctx.font = `700 30px ${sans}`;
-      ctx.fillStyle = "#444444";
-      ctx.fillText("证据不够，不下结论", 60, 455);
+      ctx.font = `900 60px ${sans}`;
+      ctx.fillText("暂无指数", 590, 637);
+      ctx.font = `600 24px ${sans}`; ctx.fillText("证据不够，不下结论", 590, 710);
     }
-    const lv = cardData.irreplaceability_level;
-    const levelText = { LOW: "LOW · 低不可替代", MEDIUM: "MEDIUM · 中不可替代", HIGH: "HIGH · 高不可替代", UNKNOWN: "UNKNOWN" }[lv] || "UNKNOWN";
-    ctx.font = `900 34px ${heavy}`;
-    const chipWidth = ctx.measureText(levelText).width + 48;
-    // 颜色绑定随风险镜像：新 LOW/MEDIUM（可接管度高＝风险）＝警示橙，新 HIGH（安全）＝黑底黄字。
-    const safe = lv === "HIGH";
-    roundedRect(56, 490, chipWidth, 62, 0, lv === "UNKNOWN" ? GRAY : (safe ? BLACK : ORANGE), BLACK, 4);
-    ctx.fillStyle = safe ? YELLOW : BLACK; ctx.fillText(levelText, 80, 533);
+    const levelText = {LOW:"低不可替代", MEDIUM:"中不可替代", HIGH:"高不可替代", UNKNOWN:"信息待补充"}[cardData.irreplaceability_level];
+    roundedRect(590, 774, 380, 62, 0, ORANGE, BLACK, 4);
+    ctx.fillStyle = BLACK; ctx.font = `800 32px ${sans}`; ctx.fillText(levelText, 615, 817);
 
-    if (image) {
-      // 角色展示区物理隔离：纯白实体潮玩展示舱（Solid Specimen Capsule）
-      roundedRect(546, 102, 474, 504, 18, BLACK, BLACK, 0);
-      roundedRect(540, 96, 474, 504, 18, WHITE, BLACK, 5);
-
-      // 舱内顶部工程标本条
-      ctx.fillStyle = "#F4F4F0";
-      ctx.fillRect(545, 101, 464, 36);
-      ctx.fillStyle = BLACK;
-      ctx.font = `700 15px ${mono}`;
-      ctx.fillText(`SPECIMEN POD // ${badge} · ${roleCode}`, 562, 125);
-
-      // 实体手办展台底座（在脚底先行绘制，避免遮挡手办脚部）
-      ctx.fillStyle = BLACK;
-      ctx.beginPath(); ctx.ellipse(777, 546, 175, 24, 0, 0, Math.PI * 2); ctx.fill();
-      ctx.fillStyle = "#2B2B2B";
-      ctx.beginPath(); ctx.ellipse(777, 540, 145, 16, 0, 0, Math.PI * 2); ctx.fill();
-
-      // 居中绘制实心潮玩立像
-      ctx.drawImage(image, 557, 128, 440, 440);
-    }
-
-    // 角色名条（含定义句；神秘工时定义句即“证据不够，不下结论”）
-    ctx.fillStyle = BLACK; ctx.fillRect(56, 640, 968, 128);
-    ctx.fillStyle = WHITE; ctx.font = `900 52px ${sans}`;
-    drawWrapped(cardData.role_name, 88, 700, 900, 60, 1);
-    ctx.fillStyle = YELLOW; ctx.font = `600 26px ${sans}`;
-    drawWrapped(roleDefinition, 88, 744, 830, 32, 1);
-
-    // 嘴替横幅
-    roundedRect(56, 800, 968, 150, 0, WHITE, BLACK, 6);
-    ctx.fillStyle = BLACK; ctx.font = `900 44px ${heavy}`;
-    drawWrapped(`“${cardData.snarky_quote}”`, 92, 866, 896, 56, 2);
-
-    // 分工速览
-    ctx.fillStyle = BLACK; ctx.font = `700 24px ${mono}`;
-    ctx.fillText("分工速览 // WHO DOES WHAT", 56, 1002);
-    cardData.task_highlights.slice(0, 2).forEach((item, index) => {
-      const y = 1018 + index * 116;
-      roundedRect(56, y, 968, 104, 0, WHITE, BLACK, 5);
-      ctx.fillStyle = BLACK; ctx.font = `800 28px ${sans}`;
-      ctx.fillText(item.task_name, 84, y + 38);
-      ctx.font = `600 24px ${sans}`;
-      ctx.fillStyle = "#333333";
-      const aiLines = wrapLines(`AI：${item.ai_part}`, 430, 1);
-      ctx.fillText(aiLines[0] || "", 84, y + 78);
-      const humanLines = wrapLines(`人：${item.human_part}`, 400, 1);
-      ctx.fillText(humanLines[0] || "", 560, y + 78);
-    });
-
-    // 7 天下一步
-    roundedRect(56, 1256, 968, 118, 0, WHITE, BLACK, 5);
-    ctx.fillStyle = ORANGE; ctx.fillRect(56, 1256, 18, 118);
-    ctx.fillStyle = BLACK; ctx.font = `700 20px ${mono}`;
-    ctx.fillText("7 天下一步 // NEXT MOVE", 96, 1288);
-    ctx.font = `800 30px ${sans}`;
-    drawWrapped(cardData.proof_7d, 96, 1326, 900, 36, 2);
-
-    // 角落引导语与评级代码（必须完整落在画框内：底边框内缘约 y=1413，基线留足降部空间）
-    ctx.fillStyle = BLACK; ctx.font = `700 24px ${sans}`;
-    ctx.fillText("搜 欧八同学 生成自己的职业AI体检报告", 56, 1398);
-    ctx.textAlign = "right"; ctx.font = `700 19px ${mono}`;
-    ctx.fillText(`SPECIMEN CARD // ${badge} // ${roleCode}`, 1024, 1398);
-    ctx.textAlign = "left";
+    roundedRect(60, 912, 960, 210, 0, BLACK);
+    ctx.fillStyle = ORANGE; ctx.fillRect(60, 912, 12, 210);
+    ctx.fillStyle = YELLOW; ctx.font = `900 60px ${sans}`;
+    drawFitted(cardData.snarky_quote, 92, 932, 870, 170, 60, 32, 900);
+    ctx.fillStyle = BLACK; ctx.font = `600 29px ${sans}`;
+    drawFitted(cardData.value_line, 64, 1142, 920, 135, 30, 24, 600);
+    ctx.font = `500 22px ${sans}`;
+    drawFitted(cardData.confidence_label + " · " + cardData.disclaimer, 64, 1290, 920, 67, 22, 18, 500);
+    ctx.fillStyle = BLACK; ctx.fillRect(20, 1370, 1040, 50);
+    ctx.fillStyle = YELLOW; ctx.font = `700 24px ${sans}`;
+    ctx.fillText("搜", 60, 1404);
+    ctx.fillStyle = ORANGE; ctx.fillRect(103, 1378, 122, 34);
+    ctx.fillStyle = BLACK; ctx.fillText("欧八同学", 115, 1404);
+    ctx.fillStyle = YELLOW; ctx.fillText("生成自己的职业 AI 体检报告", 245, 1404);
   }
 
   function drawFailure(reason) {
     ctx.clearRect(0, 0, 1080, 1440);
     ctx.fillStyle = BLACK; ctx.fillRect(0, 0, 1080, 1440);
     ctx.fillStyle = ORANGE; ctx.font = `900 72px ${heavy}`;
-    ctx.fillText("素材加载失败", 80, 640);
+    ctx.fillText("分享卡生成失败", 80, 640);
     ctx.fillStyle = YELLOW; ctx.font = `700 34px ${sans}`;
-    drawWrapped(`角色素材解码失败，已显式中止导出：${reason}`, 80, 740, 900, 48, 3);
+    drawWrapped(`分享卡无法完整生成，已中止导出：${reason}`, 80, 740, 900, 48, 3);
     ctx.font = `700 26px ${mono}`;
     ctx.fillText("EXPORT ABORTED // NO SILENT MISSING-CHARACTER CARD", 80, 900);
   }
@@ -532,9 +494,6 @@ def _skill_card(name: str, item: dict[str, Any]) -> str:
 def _task_card(task: dict[str, Any]) -> str:
     level = task["exposure_level"]
     time_label = f"时间占比 {_e(task['time_share_percent'])}%" if task.get("time_share_percent") is not None else "等权"
-    hit_codes = task.get("role_codes") or []
-    chips = "".join(f'<span class="badge">{_e(ROLE_BY_CODE[code]["name"])}</span>' for code in hit_codes)
-    chips_block = f'<div class="role-hit-chips"><span class="badge">角色命中</span>{chips}</div>' if chips else ""
     return f"""
       <details class="task" open>
         <summary>
@@ -542,17 +501,16 @@ def _task_card(task: dict[str, Any]) -> str:
           <span class="task-meta">
             <span class="badge level-{level.lower()}">{_e(TASK_LEVEL_LABELS[level])}</span>
             <span class="badge">{time_label}</span>
-            <span class="badge">证据 {_e(task['confidence'])}</span>
+            <span class="badge">依据 {_e({"HIGH":"充分","MEDIUM":"部分明确","LOW":"待补充"}[task["confidence"]])}</span>
           </span>
         </summary>
         <div class="task-body">
           <div class="task-columns">
             <div class="machine"><h3>AI 能接手</h3><div>{_e(task['ai_can_do'])}</div></div>
-            <div class="human"><h3>你来把关</h3><div>{_e(task['human_must_do'])}</div></div>
+            <div class="human"><h3>还需要你做什么</h3><div>{_e(task['human_must_do'])}</div></div>
           </div>
           <p class="task-reason"><strong>判断理由：</strong>{_e(task['reason'])}</p>
           <div class="raw-evidence"><strong>证据原文：</strong>{_e(task['evidence'])}</div>
-          {chips_block}
         </div>
       </details>"""
 
@@ -615,7 +573,6 @@ def render_report(report: dict[str, Any]) -> str:
         .replace("__BADGE__", _json_for_script(assets["badge"]))
         .replace("__ASSET_BADGE__", _json_for_script(assets["brand_badge"]))
         .replace("__ASSET_MAIN__", _json_for_script(assets["main"]))
-        .replace("__ASSET_SHADOW__", _json_for_script(assets["shadow"]))
     )
 
     return f"""<!doctype html>
@@ -630,18 +587,19 @@ def render_report(report: dict[str, Any]) -> str:
 <body>
   <main class="report-shell">
     <div class="poster-ticker">
-      <span class="ticker-brand"><img class="ticker-badge" src="{assets['brand_badge']}" alt="mbai 徽章">mbai</span>
-      <span>WORK TASK // AI IRREPLACEABILITY INDEX</span>
-      <span class="ticker-secondary">RULE v{_e(report['rule_version'])} · {_e(assets['badge'])}</span>
-      <span class="ticker-secondary">不可替代指数量的也是任务，不是人</span>
+      <span class="ticker-brand"><img class="ticker-badge" src="{assets['brand_badge']}" alt="MBAI"</span>
+      <span>你的工作，AI 能接走多少</span>
+
+
     </div>
     <section id="hero">
       <div class="hero-grid">
         <div class="attitude-block">
+          <p class="index-heading">工作任务 AI 不可替代指数</p>
           <div class="attitude-index-row" data-irreplaceability-index="{_e(index_attr)}">
             <div class="giant-index {giant_class}" aria-label="工作任务 AI 不可替代指数 {_e(index_attr)}">{giant}</div>
             <div>
-              <span class="level-chip level-{level.lower()}">{_e(level)} · {_e(SUMMARY_LEVEL_LABELS[level])}</span>
+              <span class="level-chip level-{level.lower()}">{_e(SUMMARY_LEVEL_LABELS[level])}</span>
               <p class="index-caption">{_e(index_note)}</p>
             </div>
           </div>
@@ -650,54 +608,50 @@ def render_report(report: dict[str, Any]) -> str:
           <div class="snarky-banner">{_e(role['snarky_quote'])}</div>
         </div>
         <div class="stage-block">
-          <div class="specimen-capsule">
-            <span>{_e(assets['badge'])}</span>
-            <span>{_e(assets['code'])}</span>
-          </div>
+
           <div class="character-stage">
             <img class="character-figure" src="{assets['main']}" alt="{_e(role['name'])} 立像">
             <div class="character-plinth" aria-hidden="true"></div>
           </div>
           <div class="stage-nameplate">
-            <strong>{_e(role['name'])}</strong>
-            {_e(assets['definition'])}
             <div class="task-meta" style="margin-top:10px">{tags}</div>
           </div>
         </div>
       </div>
       <div class="situation-paper">
-        <div class="section-no">01 // SITUATION</div>
+        <h2>先说结论：你的工作会怎样变</h2>
         <p>{_e(situation)}</p>
       </div>
+      <p class="role-reason"><strong>为什么是这个角色：</strong>{_e(role["reason"])} <span class="badge">{_e({"HIGH":"任务依据清楚","MEDIUM":"按现有任务归类","LOW":"暂按现有描述归类"}[role["confidence"]])}</span></p>
       <div class="takeaway-row">
         <div class="takeaway"><strong>最受影响任务</strong><p>{_e(affected_text)}</p></div>
-        <div class="takeaway"><strong>你仍然值钱的地方</strong><p>{_e(edge_text)}</p></div>
+        <div class="takeaway"><strong>已有优势与尚缺的证据</strong><p>{_e(edge_text)}</p></div>
       </div>
-    </section>
-
-    <section id="skill-panel">
-      <div class="section-head"><div><span class="section-no">02 // ATTRIBUTES</span><h2>四维任务证据</h2></div><p class="section-note">四项只显示简历与补问中实际出现的证据；未知不是零分。</p></div>
-      <div class="skill-grid">{skills}</div>
     </section>
 
     <section id="task-breakdown">
-      <div class="section-head"><div><span class="section-no">03 // TASK ANATOMY</span><h2>哪些交给 AI、哪些还得我管</h2></div><p class="section-note">每项任务展开可见 AI 能接手的部分、你来把关的部分与原文证据。</p></div>
+      <div class="section-head"><div><span class="section-no">02 / 逐项拆开看</span><h2>哪些交给 AI、哪些还得我管</h2></div><p class="section-note">展开具体任务，查看哪些动作可由 AI 完成，以及这个判断的依据。</p></div>
       <div class="task-list">{tasks}</div>
     </section>
 
     <section id="human-edge">
-      <div class="section-head"><div><span class="section-no">04 // HUMAN EDGE</span><h2>AI 介入后，你仍然值钱的地方</h2></div><p class="section-note">值得保留和强化的具体贡献，全部来自任务证据。</p></div>
+      <div class="section-head"><div><span class="section-no">03 / 优势与边界</span><h2>AI 介入后，已有优势与尚缺的证据</h2></div><p class="section-note">值得保留和强化的具体贡献，全部来自任务证据。</p></div>
       <div class="edge-grid">{edges}</div>
     </section>
 
     <section id="action-plan">
-      <div class="section-head"><div><span class="section-no">05 // NEXT MOVES</span><h2>接下来做什么：三个行动</h2></div><p class="section-note">全部来自你的任务证据，7 天内可启动，完成标准可客观检验。</p></div>
+      <div class="section-head"><div><span class="section-no">04 / 行动清单</span><h2>接下来做什么：三个行动</h2></div><p class="section-note">全部来自你的任务证据，7 天内可启动，完成标准可客观检验。</p></div>
       <div class="action-grid">{actions}</div>
     </section>
 
+    <section id="skill-panel">
+      <div class="section-head"><div><span class="section-no">05 / 更多任务证据</span><h2>四维任务证据</h2></div><p class="section-note">四项只显示简历与补问中实际出现的证据；未知不是零分。</p></div>
+      <div class="skill-grid">{skills}</div>
+    </section>
+
     <section id="share-export">
-      <div class="section-head"><div><span class="section-no">06 // SHARE</span><h2>脱敏分享卡</h2></div><p class="section-note">PNG 只使用独立的脱敏字段，不包含姓名、联系方式、公司、学校、客户、项目名或完整简历。</p></div>
-      <div class="share-copy">下方卡片由浏览器原生 Canvas 生成，角色素材以 data URI 内嵌。点击按钮会在本机导出严格 1080 × 1440 的 PNG，无需联网；素材加载失败时导出会显式中止。</div>
+      <div class="section-head"><div><span class="section-no">06 / 分享结果</span><h2>脱敏分享卡</h2></div><p class="section-note">PNG 只使用独立的脱敏字段，不包含姓名、联系方式、公司、学校、客户、项目名或完整简历。</p></div>
+      <div class="share-copy">选一句你愿意认领的话，分享你的测评结果。卡片可离线保存；完整分析留在这份报告里。</div>
     </section>
   </main>
 
@@ -708,7 +662,7 @@ def render_report(report: dict[str, Any]) -> str:
 
   <footer id="methodology" class="methodology-shell">
     <div class="method">
-      <span class="section-no">07 // METHOD &amp; BOUNDARY</span><h2>方法与边界</h2>
+      <span class="section-no">07 / 依据与边界</span><h2>方法与边界</h2>
       <p><strong>{_e(report['methodology']['custom_rules_disclaimer'])}</strong></p>
       <ul>{sources}</ul>
       <p class="brand-lockup">{BRAND_LOCKUP}</p>
@@ -726,6 +680,8 @@ def main() -> int:
     parser.add_argument("--output", required=True, type=Path, help="Offline HTML report")
     args = parser.parse_args()
     report = json.loads(args.input.read_text(encoding="utf-8"))
+    from scripts.validate_report import assert_valid_report
+    assert_valid_report(report)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(render_report(report), encoding="utf-8")
     return 0
