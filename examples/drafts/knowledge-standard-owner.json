@@ -1,0 +1,212 @@
+{
+  "schema_version": "4.0.0",
+  "rule_version": "4.1.0",
+  "report_metadata": {
+    "report_id": "knowledge-standard-owner",
+    "generated_at": "2026-09-11T20:00:00+08:00",
+    "confidence_level": "HIGH",
+    "confidence_reason": "三项任务均有占比、产出物与责任边界。",
+    "questions_asked": [
+      "标准制定与考核拟定各占多少时间？",
+      "标准争议由谁裁定？"
+    ],
+    "questions_skipped": false
+  },
+  "source": {
+    "input_type": "TEXT",
+    "input_name": "knowledge-standard-owner.txt",
+    "privacy_entities": [
+      "虞清",
+      "澄检质量技术咨询有限公司",
+      "澄检咨询",
+      "南湖理工大学"
+    ],
+    "extraction_status": "OK"
+  },
+  "profile": {
+    "sanitized_category": "质量技术 / 标准管理",
+    "situation_paragraph": "检验报告被退回来不是因为数据错，是因为“合格”两个字在三个部门有三种含义。你的日常，是把争论变成条文。",
+    "index_note": "不可替代指数量的也是任务，不是人——分数低，说明这些机械动作 AI 现在就能接走。",
+    "role": {
+      "code": "PROOFREADER_WORKER",
+      "name": "校稿工",
+      "tags": [
+        "口径校准",
+        "标准制定"
+      ],
+      "source_task_ids": [
+        "task-inspection-standard",
+        "task-vendor-assessment"
+      ],
+      "snarky_quote": "同一句“合格”，三个部门三种理解——你把那句话写成了大家只能有一种理解的样子。"
+    }
+  },
+  "skill_panel": {
+    "execution": {
+      "score": 75,
+      "evidence": "任务流程与数字化交付证据：制定检验标准与判定口径、汇总质量数据月报",
+      "is_known": true,
+      "source_task_ids": [
+        "task-inspection-standard",
+        "task-quality-report"
+      ]
+    },
+    "discretion": {
+      "score": 67,
+      "evidence": "模糊情境中的判断证据：制定检验标准与判定口径、拟定供应商季度考核制度",
+      "is_known": true,
+      "source_task_ids": [
+        "task-inspection-standard",
+        "task-vendor-assessment",
+        "task-quality-report"
+      ]
+    },
+    "coordination": {
+      "score": 50,
+      "evidence": "跨角色协调证据：制定检验标准与判定口径",
+      "is_known": true,
+      "source_task_ids": [
+        "task-inspection-standard"
+      ]
+    },
+    "accountability": {
+      "score": 67,
+      "evidence": "结果责任证据：制定检验标准与判定口径、拟定供应商季度考核制度",
+      "is_known": true,
+      "source_task_ids": [
+        "task-inspection-standard",
+        "task-vendor-assessment",
+        "task-quality-report"
+      ]
+    }
+  },
+  "tasks": [
+    {
+      "task_id": "task-inspection-standard",
+      "task_name": "制定检验标准与判定口径",
+      "time_share_percent": 45,
+      "exposure_level": "MEDIUM",
+      "ai_can_do": "比对历史判例并起草条文。",
+      "human_must_do": "裁定口径争议并对长期生效负责。",
+      "evidence": "制定检验标准与判定口径。",
+      "reason": "口径源头与裁定责任在人。",
+      "confidence": "HIGH",
+      "signals": {
+        "judgment": 2,
+        "coordination": 1,
+        "physical_presence": 0,
+        "accountability": 2,
+        "repeatability": 1,
+        "digital_input_output": 2
+      }
+    },
+    {
+      "task_id": "task-vendor-assessment",
+      "task_name": "拟定供应商季度考核制度",
+      "time_share_percent": 30,
+      "exposure_level": "HIGH",
+      "ai_can_do": "汇总考核数据并生成评分初稿。",
+      "human_must_do": "拟定制度并解释扣分口径。",
+      "evidence": "拟定供应商季度考核制度。",
+      "reason": "制度条文结构化程度高。",
+      "confidence": "HIGH",
+      "signals": {
+        "judgment": 1,
+        "coordination": 0,
+        "physical_presence": 0,
+        "accountability": 1,
+        "repeatability": 0,
+        "digital_input_output": 2
+      }
+    },
+    {
+      "task_id": "task-quality-report",
+      "task_name": "汇总质量数据月报",
+      "time_share_percent": 25,
+      "exposure_level": "HIGH",
+      "ai_can_do": "汇总质量数据并生成月报。",
+      "human_must_do": "核对异常与对外口径。",
+      "evidence": "汇总质量数据月报。",
+      "reason": "固定数字材料适合自动化。",
+      "confidence": "HIGH",
+      "signals": {
+        "judgment": 1,
+        "coordination": 0,
+        "physical_presence": 0,
+        "accountability": 1,
+        "repeatability": 2,
+        "digital_input_output": 2
+      }
+    }
+  ],
+  "human_edge": [
+    {
+      "summary": "能把部门间的口径之争变成一条可执行的条文。",
+      "source_task_ids": [
+        "task-inspection-standard",
+        "task-vendor-assessment"
+      ]
+    }
+  ],
+  "action_plan": {
+    "hand_to_ai": {
+      "title": "把判例比对交给 AI",
+      "action": "让 AI 聚类历史判例并列出分歧点。",
+      "deliverable": "判例分歧清单",
+      "acceptance_criteria": "连续两月新判例全部归入既有口径。",
+      "human_checkpoint": "条文定稿前人工裁定。",
+      "grounded_evidence": "已有标准制定任务。",
+      "source_task_ids": [
+        "task-inspection-standard"
+      ]
+    },
+    "level_up": {
+      "title": "强化条文追溯习惯",
+      "action": "每条标准记录来源判例与生效范围。",
+      "deliverable": "标准追溯卡",
+      "acceptance_criteria": "抽三条都能回到原始判例。",
+      "human_checkpoint": "不把个人偏好写成标准。",
+      "grounded_evidence": "已有口径裁定责任。",
+      "source_task_ids": [
+        "task-inspection-standard"
+      ]
+    },
+    "proof_7d": {
+      "title": "做一份口径对照演示",
+      "action": "用虚构产品演示同指标不同口径的差别。",
+      "deliverable": "一页对照表",
+      "acceptance_criteria": "7 天内含三个指标的两种口径示例。",
+      "human_checkpoint": "数据全部虚构。",
+      "grounded_evidence": "源于月报与标准任务。",
+      "source_task_ids": [
+        "task-quality-report"
+      ]
+    }
+  },
+  "share_card": {
+    "category": "质量技术 / 标准管理",
+    "role_name": "校稿工",
+    "role_tags": [
+      "口径校准",
+      "标准制定"
+    ],
+    "confidence_label": "证据置信度：高",
+    "irreplaceability_index": null,
+    "irreplaceability_level": "UNKNOWN",
+    "snarky_quote": "同一句“合格”，三个部门三种理解——你把那句话写成了大家只能有一种理解的样子。",
+    "task_highlights": [
+      {
+        "task_name": "检验标准",
+        "ai_part": "判例比对与起草",
+        "human_part": "你裁定口径"
+      },
+      {
+        "task_name": "考核制度",
+        "ai_part": "评分汇总初稿",
+        "human_part": "你拟定并解释口径"
+      }
+    ],
+    "proof_7d": "一页对照表；7 天内含三个指标的两种口径示例。",
+    "disclaimer": "本卡的不可替代指数反映工作任务与 AI 能力的重合度，不是个人失业概率。"
+  }
+}

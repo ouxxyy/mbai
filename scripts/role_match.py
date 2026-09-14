@@ -63,8 +63,8 @@ ROLES: list[dict[str, Any]] = [
         "asset": "03_proofreader_worker.webp",
         "badge": "TW-03",
         "tags": ["口径校准", "事实把关"],
-        "verbs": ["审核", "校对", "查核", "核查", "统一口径", "校准", "把关"],
-        "objects": ["文案", "风格", "标准", "口径", "语气", "表述", "事实", "删改"],
+        "verbs": ["审核", "校对", "查核", "核查", "统一口径", "校准", "把关", "制定", "拟定"],
+        "objects": ["文案", "风格", "标准", "口径", "语气", "表述", "事实", "删改", "规范", "制度"],
         "signals": {"judgment": (1, 2), "digital_input_output": (2, 2), "accountability": (1, 2)},
     },
     {
@@ -124,8 +124,8 @@ ROLES: list[dict[str, Any]] = [
         "asset": "08_deconstructor_worker.webp",
         "badge": "TW-08",
         "tags": ["需求拆解", "模糊转清单"],
-        "verbs": ["拆解", "澄清", "细化", "转化", "梳理需求"],
-        "objects": ["模糊诉求", "一句话需求", "模糊需求", "诉求", "想法"],
+        "verbs": ["拆解", "澄清", "细化", "转化", "梳理需求", "搭建", "建立", "建设", "优化"],
+        "objects": ["模糊诉求", "一句话需求", "模糊需求", "诉求", "想法", "流程", "体系", "制度"],
         "signals": {"judgment": (1, 2), "digital_input_output": (1, 2)},
     },
     {
@@ -136,8 +136,8 @@ ROLES: list[dict[str, Any]] = [
         "asset": "09_progress_worker.webp",
         "badge": "TW-09",
         "tags": ["进度追踪", "催办推动"],
-        "verbs": ["排期", "跟进", "催办", "更新", "汇总", "推动"],
-        "objects": ["进度", "依赖", "里程碑", "延期"],
+        "verbs": ["排期", "跟进", "催办", "更新", "汇总", "推动", "规划排期", "制定排期", "调整排期"],
+        "objects": ["进度", "依赖", "里程碑", "延期", "排期"],
         "signals": {"coordination": (1, 2), "repeatability": (1, 2)},
     },
     {
@@ -160,8 +160,8 @@ ROLES: list[dict[str, Any]] = [
         "asset": "11_solver_worker.webp",
         "badge": "TW-11",
         "tags": ["客户解题", "例外处理"],
-        "verbs": ["理解场景", "处理例外", "解答", "解决客户", "答疑"],
-        "objects": ["客户", "例外"],
+        "verbs": ["理解场景", "处理例外", "解答", "解决客户", "答疑", "管理供应商", "供应商管理", "对接供应商"],
+        "objects": ["客户", "例外", "供应商"],
         "signals": {"judgment": (1, 2), "coordination": (1, 2)},
     },
     {

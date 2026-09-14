@@ -11,7 +11,7 @@ class FinalizeReportTest(unittest.TestCase):
         report = finalize_report(valid_draft())
 
         self.assertEqual(report["schema_version"], "4.0.0")
-        self.assertEqual(report["rule_version"], "4.0.0")
+        self.assertEqual(report["rule_version"], "4.1.0")
         # 内部替代 60/MEDIUM → 展示 40/MEDIUM（先取整后取补）。
         self.assertEqual(report["metrics"]["irreplaceability_index"], 40)
         self.assertEqual(report["metrics"]["irreplaceability_level"], "MEDIUM")

@@ -26,7 +26,7 @@ class LegacyDraftMigrationTest(unittest.TestCase):
 
         assert_valid_report(report)
         self.assertEqual(report["schema_version"], "4.0.0")
-        self.assertEqual(report["rule_version"], "4.0.0")
+        self.assertEqual(report["rule_version"], "4.1.0")
         self.assertIn(report["profile"]["role"]["code"], ROLE_NAMES_OK)
         # 任务级替代语义逐字段保留；raw_score 是翻转前的锚。
         for old, new in zip(legacy_tasks, report["tasks"]):

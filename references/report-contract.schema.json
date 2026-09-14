@@ -23,7 +23,8 @@
       "const": "4.0.0"
     },
     "rule_version": {
-      "const": "4.0.0"
+      "const": "4.1.0",
+      "description": "规则版本；4.1.0＝4.0.0＋动宾词表受控扩展（仅 verbs/objects，判定语义与 schema 结构不变）。"
     },
     "report_metadata": {
       "type": "object",

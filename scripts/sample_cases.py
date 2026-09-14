@@ -305,6 +305,115 @@ def case_definitions() -> list[dict[str, Any]]:
         ),
     }
 
+
+    knowledge_flow_builder = {
+        "slug": "knowledge-flow-builder",
+        "job_title": "流程管理专员",
+        "input_type": "TEXT",
+        "resume_text": """何棠｜流程管理专员｜启衡企业服务有限公司｜临江学院
+从零搭建合同审批流程并组织各环节试用，约占 40%。
+制定供应商准入规范并维护口径，约占 35%。
+对接供应商管理交付节奏，例外时协商补救，约占 25%。""",
+        "privacy_entities": ["何棠", "启衡企业服务有限公司", "启衡服务", "临江学院"],
+        "category": "企业服务 / 流程管理",
+        "role_code": "DECONSTRUCTOR_WORKER",
+        "role_tags": ["流程建设", "标准制定"],
+        "role_sources": ["task-contract-flow"],
+        "snark": "公司里没有流程的时候，你就是流程。",
+        "situation_paragraph": "合同在谁的邮箱里卡了三天没人知道——你的办法是从零搭一条审批流程，让每一步有名字、有时限、有归属。",
+        "index_note": "不可替代指数量的也是任务，不是人——分数低，说明这些机械动作 AI 现在就能接走。",
+        "confidence": "HIGH",
+        "confidence_reason": "三项知识型任务均有占比与边界证据。",
+        "questions": ["三项工作各占多少时间？", "流程上线后由谁维护？"],
+        "tasks": [
+            _task("task-contract-flow", "搭建合同审批流程", 40, "MEDIUM", "生成流程草案与环节清单。", "判断环节取舍并组织试用推广。", "从零搭建合同审批流程并组织各环节试用。", "结构设计依赖业务判断。", _signals(2, 0, 0, 1, 0, 2)),
+            _task("task-vendor-standard", "制定供应商准入规范", 35, "MEDIUM", "整理既有案例供起草参照。", "定准入口径并对长期生效负责。", "制定供应商准入规范并维护口径。", "立长期规矩属口径源头。", _signals(1, 0, 0, 1, 0, 2)),
+            _task("task-vendor-pace", "管理供应商交付例外", 25, "LOW", "整理交付差异与候选补救。", "对接供应商协商例外补救。", "对接供应商管理交付节奏，例外时协商补救。", "对外例外处理依赖关系与判断。", _signals(1, 2, 0, 1, 0, 1)),
+        ],
+        "human_edge": "能把模糊的办事习惯变成有归属、有时限的流程。",
+        "share_highlights": [
+            {"task_name": "审批流程", "ai_part": "流程草案与环节清单", "human_part": "你判断取舍并推广"},
+            {"task_name": "准入规范", "ai_part": "案例整理与对照", "human_part": "你定长期口径"},
+        ],
+        "actions": _actions(
+            ("把流程草案交给 AI", "让 AI 按访谈记录生成流程草案与环节清单。", "流程草案 + 环节清单", "连续两版环节无遗漏，你只做取舍。", "上线前与法务核对审批权限。", "已有从零搭建流程的经历。", ["task-contract-flow"]),
+            ("强化口径决策记录", "每次口径变更记背景、备选与生效范围。", "5 张口径决策卡", "每张能从争议追到定论与适用范围。", "不把暂时没吵完的写成定论。", "已制定供应商准入规范。", ["task-vendor-standard"]),
+            ("做一份流程前后对照", "用虚构审批场景演示流程搭建前后差别。", "一页说明 + 流程图", "7 天内含三个环节的前后对比。", "客户与公司名全部虚构。", "源于流程搭建任务。", ["task-contract-flow"]),
+        ),
+    }
+
+    knowledge_standard_owner = {
+        "slug": "knowledge-standard-owner",
+        "job_title": "标准与口径专员",
+        "input_type": "TEXT",
+        "resume_text": """虞清｜标准与口径专员｜澄检质量技术咨询有限公司｜南湖理工大学
+制定检验标准与判定口径，约占 45%。
+拟定供应商季度考核制度，约占 30%。
+汇总质量数据月报，约占 25%。""",
+        "privacy_entities": ["虞清", "澄检质量技术咨询有限公司", "澄检咨询", "南湖理工大学"],
+        "category": "质量技术 / 标准管理",
+        "role_code": "PROOFREADER_WORKER",
+        "role_tags": ["口径校准", "标准制定"],
+        "role_sources": ["task-inspection-standard", "task-vendor-assessment"],
+        "snark": "同一句“合格”，三个部门三种理解——你把那句话写成了大家只能有一种理解的样子。",
+        "situation_paragraph": "检验报告被退回来不是因为数据错，是因为“合格”两个字在三个部门有三种含义。你的日常，是把争论变成条文。",
+        "index_note": "不可替代指数量的也是任务，不是人——分数低，说明这些机械动作 AI 现在就能接走。",
+        "confidence": "HIGH",
+        "confidence_reason": "三项任务均有占比、产出物与责任边界。",
+        "questions": ["标准制定与考核拟定各占多少时间？", "标准争议由谁裁定？"],
+        "tasks": [
+            _task("task-inspection-standard", "制定检验标准与判定口径", 45, "MEDIUM", "比对历史判例并起草条文。", "裁定口径争议并对长期生效负责。", "制定检验标准与判定口径。", "口径源头与裁定责任在人。", _signals(2, 1, 0, 2, 1, 2)),
+            _task("task-vendor-assessment", "拟定供应商季度考核制度", 30, "HIGH", "汇总考核数据并生成评分初稿。", "拟定制度并解释扣分口径。", "拟定供应商季度考核制度。", "制度条文结构化程度高。", _signals(1, 0, 0, 1, 0, 2)),
+            _task("task-quality-report", "汇总质量数据月报", 25, "HIGH", "汇总质量数据并生成月报。", "核对异常与对外口径。", "汇总质量数据月报。", "固定数字材料适合自动化。", _signals(1, 0, 0, 1, 2, 2)),
+        ],
+        "human_edge": "能把部门间的口径之争变成一条可执行的条文。",
+        "share_highlights": [
+            {"task_name": "检验标准", "ai_part": "判例比对与起草", "human_part": "你裁定口径"},
+            {"task_name": "考核制度", "ai_part": "评分汇总初稿", "human_part": "你拟定并解释口径"},
+        ],
+        "actions": _actions(
+            ("把判例比对交给 AI", "让 AI 聚类历史判例并列出分歧点。", "判例分歧清单", "连续两月新判例全部归入既有口径。", "条文定稿前人工裁定。", "已有标准制定任务。", ["task-inspection-standard"]),
+            ("强化条文追溯习惯", "每条标准记录来源判例与生效范围。", "标准追溯卡", "抽三条都能回到原始判例。", "不把个人偏好写成标准。", "已有口径裁定责任。", ["task-inspection-standard"]),
+            ("做一份口径对照演示", "用虚构产品演示同指标不同口径的差别。", "一页对照表", "7 天内含三个指标的两种口径示例。", "数据全部虚构。", "源于月报与标准任务。", ["task-quality-report"]),
+        ),
+    }
+
+    knowledge_vendor_manager = {
+        "slug": "knowledge-vendor-manager",
+        "job_title": "供应商管理专员",
+        "input_type": "TEXT",
+        "resume_text": """岑放｜供应商管理专员｜拓链供应链管理有限公司｜西山学院
+对接供应商管理交付与例外，约占 50%。
+制定供应商准入规范，约占 25%。
+跟进采购订单进度，约占 25%。""",
+        "privacy_entities": ["岑放", "拓链供应链管理有限公司", "拓链供应链", "西山学院"],
+        "category": "供应链 / 供应商管理",
+        "role_code": "SOLVER_WORKER",
+        "role_tags": ["供应商管理", "例外处理"],
+        "role_sources": ["task-vendor-delivery"],
+        "snark": "供应商说“下周一定到”的那批货，只有你知道该提前几天开始打电话。",
+        "situation_paragraph": "交付差异没有标准答案：换货、加急还是扣款，取决于这家供应商值不值得留。你的判断写在每一次例外处理里。",
+        "index_note": "不可替代指数量的也是任务，不是人——分数低，说明这些机械动作 AI 现在就能接走。",
+        "confidence": "HIGH",
+        "confidence_reason": "三项任务均有占比与责任边界。",
+        "questions": ["交付管理与订单跟进各占多少时间？", "例外处理由谁拍板？"],
+        "tasks": [
+            _task("task-vendor-delivery", "管理供应商交付与例外", 50, "MEDIUM", "整理交付差异与候选补救方案。", "对接供应商协商例外并拍板补救。", "对接供应商管理交付与例外。", "对外例外处理依赖关系与取舍。", _signals(1, 2, 0, 1, 0, 2)),
+            _task("task-entry-standard", "制定供应商准入规范", 25, "MEDIUM", "整理准入材料清单。", "定准入口径并对长期生效负责。", "制定供应商准入规范。", "口径源头责任在人。", _signals(2, 0, 0, 2, 0, 2)),
+            _task("task-po-followup", "跟进采购订单进度", 25, "HIGH", "按订单表自动核对进度并标延期。", "对延期订单催办并升级。", "跟进采购订单进度。", "结构化进度数据适合自动化。", _signals(1, 1, 0, 1, 2, 1)),
+        ],
+        "human_edge": "能在换货、加急和扣款之间做出让供应商还愿意继续干的取舍。",
+        "share_highlights": [
+            {"task_name": "交付例外", "ai_part": "差异整理与候选方案", "human_part": "你协商并拍板"},
+            {"task_name": "订单跟进", "ai_part": "进度核对与标延期", "human_part": "你催办并升级"},
+        ],
+        "actions": _actions(
+            ("把订单核对交给 AI", "让 AI 按订单表自动标出延期与风险单。", "延期风险清单", "连续两周无漏标，你只处理例外。", "升级供应商前人工复核原因。", "已有订单跟进任务。", ["task-po-followup"]),
+            ("强化例外处理记录", "每次例外记差异、选项、决定与供应商反应。", "5 张例外处理卡", "每张能从差异追到决定与后果。", "不把一次让利写成长期政策。", "已有交付例外处理经验。", ["task-vendor-delivery"]),
+            ("做一份例外处理演示", "用虚构供应商场景演示三种补救的取舍。", "案例一页纸", "7 天内含三种补救与选择理由。", "供应商与公司名全部虚构。", "源于供应商管理任务。", ["task-vendor-delivery"]),
+        ),
+    }
+
     shallow = {
         "slug": "ops-shallow",
         "job_title": "用户运营",
@@ -423,7 +532,7 @@ def case_definitions() -> list[dict[str, Any]]:
         resume_text=operations["resume_text"] + "\n个人信息：女，29 岁，已婚，计划育儿。",
     )
 
-    return [operations, content, technical, client, project, sparse, showcase, shallow, deep, detailed, concise, injection, demographics]
+    return [operations, content, technical, client, project, sparse, showcase, shallow, deep, detailed, concise, injection, demographics, knowledge_flow_builder, knowledge_standard_owner, knowledge_vendor_manager]
 
 
 def _skill_panel(tasks: list[dict[str, Any]]) -> dict[str, Any]:

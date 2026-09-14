@@ -1,0 +1,210 @@
+{
+  "schema_version": "4.0.0",
+  "rule_version": "4.1.0",
+  "report_metadata": {
+    "report_id": "knowledge-vendor-manager",
+    "generated_at": "2026-09-11T20:00:00+08:00",
+    "confidence_level": "HIGH",
+    "confidence_reason": "三项任务均有占比与责任边界。",
+    "questions_asked": [
+      "交付管理与订单跟进各占多少时间？",
+      "例外处理由谁拍板？"
+    ],
+    "questions_skipped": false
+  },
+  "source": {
+    "input_type": "TEXT",
+    "input_name": "knowledge-vendor-manager.txt",
+    "privacy_entities": [
+      "岑放",
+      "拓链供应链管理有限公司",
+      "拓链供应链",
+      "西山学院"
+    ],
+    "extraction_status": "OK"
+  },
+  "profile": {
+    "sanitized_category": "供应链 / 供应商管理",
+    "situation_paragraph": "交付差异没有标准答案：换货、加急还是扣款，取决于这家供应商值不值得留。你的判断写在每一次例外处理里。",
+    "index_note": "不可替代指数量的也是任务，不是人——分数低，说明这些机械动作 AI 现在就能接走。",
+    "role": {
+      "code": "SOLVER_WORKER",
+      "name": "解题工",
+      "tags": [
+        "供应商管理",
+        "例外处理"
+      ],
+      "source_task_ids": [
+        "task-vendor-delivery"
+      ],
+      "snarky_quote": "供应商说“下周一定到”的那批货，只有你知道该提前几天开始打电话。"
+    }
+  },
+  "skill_panel": {
+    "execution": {
+      "score": 100,
+      "evidence": "任务流程与数字化交付证据：跟进采购订单进度",
+      "is_known": true,
+      "source_task_ids": [
+        "task-po-followup"
+      ]
+    },
+    "discretion": {
+      "score": 67,
+      "evidence": "模糊情境中的判断证据：管理供应商交付与例外、制定供应商准入规范",
+      "is_known": true,
+      "source_task_ids": [
+        "task-vendor-delivery",
+        "task-entry-standard",
+        "task-po-followup"
+      ]
+    },
+    "coordination": {
+      "score": 75,
+      "evidence": "跨角色协调证据：管理供应商交付与例外、跟进采购订单进度",
+      "is_known": true,
+      "source_task_ids": [
+        "task-vendor-delivery",
+        "task-po-followup"
+      ]
+    },
+    "accountability": {
+      "score": 67,
+      "evidence": "结果责任证据：管理供应商交付与例外、制定供应商准入规范",
+      "is_known": true,
+      "source_task_ids": [
+        "task-vendor-delivery",
+        "task-entry-standard",
+        "task-po-followup"
+      ]
+    }
+  },
+  "tasks": [
+    {
+      "task_id": "task-vendor-delivery",
+      "task_name": "管理供应商交付与例外",
+      "time_share_percent": 50,
+      "exposure_level": "MEDIUM",
+      "ai_can_do": "整理交付差异与候选补救方案。",
+      "human_must_do": "对接供应商协商例外并拍板补救。",
+      "evidence": "对接供应商管理交付与例外。",
+      "reason": "对外例外处理依赖关系与取舍。",
+      "confidence": "HIGH",
+      "signals": {
+        "judgment": 1,
+        "coordination": 2,
+        "physical_presence": 0,
+        "accountability": 1,
+        "repeatability": 0,
+        "digital_input_output": 2
+      }
+    },
+    {
+      "task_id": "task-entry-standard",
+      "task_name": "制定供应商准入规范",
+      "time_share_percent": 25,
+      "exposure_level": "MEDIUM",
+      "ai_can_do": "整理准入材料清单。",
+      "human_must_do": "定准入口径并对长期生效负责。",
+      "evidence": "制定供应商准入规范。",
+      "reason": "口径源头责任在人。",
+      "confidence": "HIGH",
+      "signals": {
+        "judgment": 2,
+        "coordination": 0,
+        "physical_presence": 0,
+        "accountability": 2,
+        "repeatability": 0,
+        "digital_input_output": 2
+      }
+    },
+    {
+      "task_id": "task-po-followup",
+      "task_name": "跟进采购订单进度",
+      "time_share_percent": 25,
+      "exposure_level": "HIGH",
+      "ai_can_do": "按订单表自动核对进度并标延期。",
+      "human_must_do": "对延期订单催办并升级。",
+      "evidence": "跟进采购订单进度。",
+      "reason": "结构化进度数据适合自动化。",
+      "confidence": "HIGH",
+      "signals": {
+        "judgment": 1,
+        "coordination": 1,
+        "physical_presence": 0,
+        "accountability": 1,
+        "repeatability": 2,
+        "digital_input_output": 1
+      }
+    }
+  ],
+  "human_edge": [
+    {
+      "summary": "能在换货、加急和扣款之间做出让供应商还愿意继续干的取舍。",
+      "source_task_ids": [
+        "task-vendor-delivery"
+      ]
+    }
+  ],
+  "action_plan": {
+    "hand_to_ai": {
+      "title": "把订单核对交给 AI",
+      "action": "让 AI 按订单表自动标出延期与风险单。",
+      "deliverable": "延期风险清单",
+      "acceptance_criteria": "连续两周无漏标，你只处理例外。",
+      "human_checkpoint": "升级供应商前人工复核原因。",
+      "grounded_evidence": "已有订单跟进任务。",
+      "source_task_ids": [
+        "task-po-followup"
+      ]
+    },
+    "level_up": {
+      "title": "强化例外处理记录",
+      "action": "每次例外记差异、选项、决定与供应商反应。",
+      "deliverable": "5 张例外处理卡",
+      "acceptance_criteria": "每张能从差异追到决定与后果。",
+      "human_checkpoint": "不把一次让利写成长期政策。",
+      "grounded_evidence": "已有交付例外处理经验。",
+      "source_task_ids": [
+        "task-vendor-delivery"
+      ]
+    },
+    "proof_7d": {
+      "title": "做一份例外处理演示",
+      "action": "用虚构供应商场景演示三种补救的取舍。",
+      "deliverable": "案例一页纸",
+      "acceptance_criteria": "7 天内含三种补救与选择理由。",
+      "human_checkpoint": "供应商与公司名全部虚构。",
+      "grounded_evidence": "源于供应商管理任务。",
+      "source_task_ids": [
+        "task-vendor-delivery"
+      ]
+    }
+  },
+  "share_card": {
+    "category": "供应链 / 供应商管理",
+    "role_name": "解题工",
+    "role_tags": [
+      "供应商管理",
+      "例外处理"
+    ],
+    "confidence_label": "证据置信度：高",
+    "irreplaceability_index": null,
+    "irreplaceability_level": "UNKNOWN",
+    "snarky_quote": "供应商说“下周一定到”的那批货，只有你知道该提前几天开始打电话。",
+    "task_highlights": [
+      {
+        "task_name": "交付例外",
+        "ai_part": "差异整理与候选方案",
+        "human_part": "你协商并拍板"
+      },
+      {
+        "task_name": "订单跟进",
+        "ai_part": "进度核对与标延期",
+        "human_part": "你催办并升级"
+      }
+    ],
+    "proof_7d": "案例一页纸；7 天内含三种补救与选择理由。",
+    "disclaimer": "本卡的不可替代指数反映工作任务与 AI 能力的重合度，不是个人失业概率。"
+  }
+}

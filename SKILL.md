@@ -81,7 +81,7 @@ python3 "${CLAUDE_SKILL_DIR}/scripts/extract_resume.py" --text "<粘贴内容>" 
 - `${CLAUDE_SKILL_DIR}/docs/INTERFACE_CONTRACT.md`
 - `${CLAUDE_SKILL_DIR}/references/report-contract.schema.json`
 - `${CLAUDE_SKILL_DIR}/references/content-baseline.md`（表达规范正反例与冻结版案例文案）
-- `${CLAUDE_SKILL_DIR}/examples/drafts/operations-repetitive.json`（字段范例；示例仅供字段结构，draft 的 `schema_version`/`rule_version` 必须写本文件 metadata 的当前版本）
+- `${CLAUDE_SKILL_DIR}/examples/drafts/operations-repetitive.json`（字段范例；示例仅供字段结构，draft 的 `schema_version`/`rule_version` 以当前契约为准——`schema_version` 同本文件 metadata，`rule_version` 同 `docs/SCORING_RULES.md` 头部）
 
 为每项任务保留原文证据、AI 可完成部分、人仍需负责部分、等级、理由、置信度、时间占比和六类信号。等级只写 `LOW`、`MEDIUM`、`HIGH`、`UNKNOWN`；不要自填 `score`、`effective_weight` 或 `metrics`，确定性脚本会计算。
 

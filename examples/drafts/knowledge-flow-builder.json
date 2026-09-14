@@ -1,0 +1,207 @@
+{
+  "schema_version": "4.0.0",
+  "rule_version": "4.1.0",
+  "report_metadata": {
+    "report_id": "knowledge-flow-builder",
+    "generated_at": "2026-09-11T20:00:00+08:00",
+    "confidence_level": "HIGH",
+    "confidence_reason": "三项知识型任务均有占比与边界证据。",
+    "questions_asked": [
+      "三项工作各占多少时间？",
+      "流程上线后由谁维护？"
+    ],
+    "questions_skipped": false
+  },
+  "source": {
+    "input_type": "TEXT",
+    "input_name": "knowledge-flow-builder.txt",
+    "privacy_entities": [
+      "何棠",
+      "启衡企业服务有限公司",
+      "启衡服务",
+      "临江学院"
+    ],
+    "extraction_status": "OK"
+  },
+  "profile": {
+    "sanitized_category": "企业服务 / 流程管理",
+    "situation_paragraph": "合同在谁的邮箱里卡了三天没人知道——你的办法是从零搭一条审批流程，让每一步有名字、有时限、有归属。",
+    "index_note": "不可替代指数量的也是任务，不是人——分数低，说明这些机械动作 AI 现在就能接走。",
+    "role": {
+      "code": "DECONSTRUCTOR_WORKER",
+      "name": "拆解工",
+      "tags": [
+        "流程建设",
+        "标准制定"
+      ],
+      "source_task_ids": [
+        "task-contract-flow"
+      ],
+      "snarky_quote": "公司里没有流程的时候，你就是流程。"
+    }
+  },
+  "skill_panel": {
+    "execution": {
+      "score": null,
+      "evidence": "简历未提及",
+      "is_known": false,
+      "source_task_ids": []
+    },
+    "discretion": {
+      "score": 67,
+      "evidence": "模糊情境中的判断证据：搭建合同审批流程、制定供应商准入规范",
+      "is_known": true,
+      "source_task_ids": [
+        "task-contract-flow",
+        "task-vendor-standard",
+        "task-vendor-pace"
+      ]
+    },
+    "coordination": {
+      "score": 100,
+      "evidence": "跨角色协调证据：管理供应商交付例外",
+      "is_known": true,
+      "source_task_ids": [
+        "task-vendor-pace"
+      ]
+    },
+    "accountability": {
+      "score": 50,
+      "evidence": "结果责任证据：搭建合同审批流程、制定供应商准入规范",
+      "is_known": true,
+      "source_task_ids": [
+        "task-contract-flow",
+        "task-vendor-standard",
+        "task-vendor-pace"
+      ]
+    }
+  },
+  "tasks": [
+    {
+      "task_id": "task-contract-flow",
+      "task_name": "搭建合同审批流程",
+      "time_share_percent": 40,
+      "exposure_level": "MEDIUM",
+      "ai_can_do": "生成流程草案与环节清单。",
+      "human_must_do": "判断环节取舍并组织试用推广。",
+      "evidence": "从零搭建合同审批流程并组织各环节试用。",
+      "reason": "结构设计依赖业务判断。",
+      "confidence": "HIGH",
+      "signals": {
+        "judgment": 2,
+        "coordination": 0,
+        "physical_presence": 0,
+        "accountability": 1,
+        "repeatability": 0,
+        "digital_input_output": 2
+      }
+    },
+    {
+      "task_id": "task-vendor-standard",
+      "task_name": "制定供应商准入规范",
+      "time_share_percent": 35,
+      "exposure_level": "MEDIUM",
+      "ai_can_do": "整理既有案例供起草参照。",
+      "human_must_do": "定准入口径并对长期生效负责。",
+      "evidence": "制定供应商准入规范并维护口径。",
+      "reason": "立长期规矩属口径源头。",
+      "confidence": "HIGH",
+      "signals": {
+        "judgment": 1,
+        "coordination": 0,
+        "physical_presence": 0,
+        "accountability": 1,
+        "repeatability": 0,
+        "digital_input_output": 2
+      }
+    },
+    {
+      "task_id": "task-vendor-pace",
+      "task_name": "管理供应商交付例外",
+      "time_share_percent": 25,
+      "exposure_level": "LOW",
+      "ai_can_do": "整理交付差异与候选补救。",
+      "human_must_do": "对接供应商协商例外补救。",
+      "evidence": "对接供应商管理交付节奏，例外时协商补救。",
+      "reason": "对外例外处理依赖关系与判断。",
+      "confidence": "HIGH",
+      "signals": {
+        "judgment": 1,
+        "coordination": 2,
+        "physical_presence": 0,
+        "accountability": 1,
+        "repeatability": 0,
+        "digital_input_output": 1
+      }
+    }
+  ],
+  "human_edge": [
+    {
+      "summary": "能把模糊的办事习惯变成有归属、有时限的流程。",
+      "source_task_ids": [
+        "task-contract-flow"
+      ]
+    }
+  ],
+  "action_plan": {
+    "hand_to_ai": {
+      "title": "把流程草案交给 AI",
+      "action": "让 AI 按访谈记录生成流程草案与环节清单。",
+      "deliverable": "流程草案 + 环节清单",
+      "acceptance_criteria": "连续两版环节无遗漏，你只做取舍。",
+      "human_checkpoint": "上线前与法务核对审批权限。",
+      "grounded_evidence": "已有从零搭建流程的经历。",
+      "source_task_ids": [
+        "task-contract-flow"
+      ]
+    },
+    "level_up": {
+      "title": "强化口径决策记录",
+      "action": "每次口径变更记背景、备选与生效范围。",
+      "deliverable": "5 张口径决策卡",
+      "acceptance_criteria": "每张能从争议追到定论与适用范围。",
+      "human_checkpoint": "不把暂时没吵完的写成定论。",
+      "grounded_evidence": "已制定供应商准入规范。",
+      "source_task_ids": [
+        "task-vendor-standard"
+      ]
+    },
+    "proof_7d": {
+      "title": "做一份流程前后对照",
+      "action": "用虚构审批场景演示流程搭建前后差别。",
+      "deliverable": "一页说明 + 流程图",
+      "acceptance_criteria": "7 天内含三个环节的前后对比。",
+      "human_checkpoint": "客户与公司名全部虚构。",
+      "grounded_evidence": "源于流程搭建任务。",
+      "source_task_ids": [
+        "task-contract-flow"
+      ]
+    }
+  },
+  "share_card": {
+    "category": "企业服务 / 流程管理",
+    "role_name": "拆解工",
+    "role_tags": [
+      "流程建设",
+      "标准制定"
+    ],
+    "confidence_label": "证据置信度：高",
+    "irreplaceability_index": null,
+    "irreplaceability_level": "UNKNOWN",
+    "snarky_quote": "公司里没有流程的时候，你就是流程。",
+    "task_highlights": [
+      {
+        "task_name": "审批流程",
+        "ai_part": "流程草案与环节清单",
+        "human_part": "你判断取舍并推广"
+      },
+      {
+        "task_name": "准入规范",
+        "ai_part": "案例整理与对照",
+        "human_part": "你定长期口径"
+      }
+    ],
+    "proof_7d": "一页说明 + 流程图；7 天内含三个环节的前后对比。",
+    "disclaimer": "本卡的不可替代指数反映工作任务与 AI 能力的重合度，不是个人失业概率。"
+  }
+}

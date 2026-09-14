@@ -58,25 +58,26 @@ class TrackedVersionStampGateTest(unittest.TestCase):
 
     def test_generate_examples_produces_current_version_stamps(self):
         # ② 生成式测试：从源头锁死，跨机器稳定（新 checkout 无 output 目录也成立）。
-        try:
-            from scripts.export_png import find_chrome
-        except ImportError:  # pragma: no cover
-            self.skipTest("导出依赖不可用")
-        if find_chrome() is None:
-            self.skipTest("Chrome/Chromium not available for PDF fixture")
-
+        # 断言对象是 drafts/manifest（纯 Python 生成）；PDF 简历夹具依赖 Chrome，
+        # 无 Chrome 时以文本替身 mock（reviewer P0 复核指出的误跳过修正），门禁不再依赖浏览器。
         import tempfile
+        from unittest import mock
 
-        from scripts.generate_examples import generate_examples
+        from scripts import generate_examples as generator
 
-        with tempfile.TemporaryDirectory() as directory:
-            manifest_path = generate_examples(Path(directory), build_outputs=False)
-            manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-            self.assertEqual(manifest["rule_version"], RULE_VERSION)
-            for entry in manifest["cases"]:
-                draft = json.loads((Path(directory) / entry["draft_path"]).read_text(encoding="utf-8"))
-                self.assertEqual(draft["schema_version"], SCHEMA_VERSION, entry["slug"])
-                self.assertEqual(draft["rule_version"], RULE_VERSION, entry["slug"])
+        def _fake_write_pdf(path, text):
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(text, encoding="utf-8")
+
+        with mock.patch.object(generator, "_write_pdf", _fake_write_pdf):
+            with tempfile.TemporaryDirectory() as directory:
+                manifest_path = generator.generate_examples(Path(directory), build_outputs=False)
+                manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+                self.assertEqual(manifest["rule_version"], RULE_VERSION)
+                for entry in manifest["cases"]:
+                    draft = json.loads((Path(directory) / entry["draft_path"]).read_text(encoding="utf-8"))
+                    self.assertEqual(draft["schema_version"], SCHEMA_VERSION, entry["slug"])
+                    self.assertEqual(draft["rule_version"], RULE_VERSION, entry["slug"])
 
     def test_no_stale_version_literals_in_scripts(self):
         # ③ 单源防回退：scripts/ 内禁止历史版本字面量（白名单＝version.py 的 SUPPORTED 历史表

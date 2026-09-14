@@ -1,6 +1,6 @@
 {
   "generated_at": "2026-09-11T20:00:00+08:00",
-  "rule_version": "4.0.0",
+  "rule_version": "4.1.0",
   "fictional_data_only": true,
   "cases": [
     {
@@ -13,46 +13,31 @@
       "draft_path": "drafts/operations-repetitive.json",
       "expected_index": 10,
       "expected_level": "LOW",
-      "is_sufficient_info": true,
-      "artifacts": {
-        "report_json": "output/operations-repetitive/report.json",
-        "report_html": "output/operations-repetitive/report.html",
-        "share_png": "output/operations-repetitive/share-card.png"
-      }
+      "is_sufficient_info": true
     },
     {
       "slug": "content-calibrator",
       "scenario": "内容编辑",
       "input_type": "DOCX",
       "resume_path": "resumes/content-calibrator.docx",
-      "resume_sha256": "fbd9b34236253ac412d41b7020ea0736d284da6a0ea9721f415b4664f77305bb",
+      "resume_sha256": "ddf35f7cbbf28e513fe61e867445b8c2ef55d4e316ce5b5bce50cb5ae1e4983e",
       "source_text_path": "source-texts/content-calibrator.txt",
       "draft_path": "drafts/content-calibrator.json",
       "expected_index": 40,
       "expected_level": "MEDIUM",
-      "is_sufficient_info": true,
-      "artifacts": {
-        "report_json": "output/content-calibrator/report.json",
-        "report_html": "output/content-calibrator/report.html",
-        "share_png": "output/content-calibrator/share-card.png"
-      }
+      "is_sufficient_info": true
     },
     {
       "slug": "technical-execution",
       "scenario": "后端开发工程师",
       "input_type": "PDF",
       "resume_path": "resumes/technical-execution.pdf",
-      "resume_sha256": "4c69e69f30a2bfa0f10ca5958d8ceda731f997885f25b08faa5387eaeb71a3bf",
+      "resume_sha256": "adc3886114299d15b5da6694cb4866ad426cdd7e570582d5c3f065d81799fe78",
       "source_text_path": "source-texts/technical-execution.txt",
       "draft_path": "drafts/technical-execution.json",
       "expected_index": 50,
       "expected_level": "MEDIUM",
-      "is_sufficient_info": true,
-      "artifacts": {
-        "report_json": "output/technical-execution/report.json",
-        "report_html": "output/technical-execution/report.html",
-        "share_png": "output/technical-execution/share-card.png"
-      }
+      "is_sufficient_info": true
     },
     {
       "slug": "client-coordination",
@@ -64,12 +49,7 @@
       "draft_path": "drafts/client-coordination.json",
       "expected_index": 75,
       "expected_level": "HIGH",
-      "is_sufficient_info": true,
-      "artifacts": {
-        "report_json": "output/client-coordination/report.json",
-        "report_html": "output/client-coordination/report.html",
-        "share_png": "output/client-coordination/share-card.png"
-      }
+      "is_sufficient_info": true
     },
     {
       "slug": "project-owner",
@@ -81,12 +61,7 @@
       "draft_path": "drafts/project-owner.json",
       "expected_index": 65,
       "expected_level": "HIGH",
-      "is_sufficient_info": true,
-      "artifacts": {
-        "report_json": "output/project-owner/report.json",
-        "report_html": "output/project-owner/report.html",
-        "share_png": "output/project-owner/share-card.png"
-      }
+      "is_sufficient_info": true
     },
     {
       "slug": "sparse-information",
@@ -98,12 +73,7 @@
       "draft_path": "drafts/sparse-information.json",
       "expected_index": null,
       "expected_level": "UNKNOWN",
-      "is_sufficient_info": false,
-      "artifacts": {
-        "report_json": "output/sparse-information/report.json",
-        "report_html": "output/sparse-information/report.html",
-        "share_png": "output/sparse-information/share-card.png"
-      }
+      "is_sufficient_info": false
     },
     {
       "slug": "risk-owner-showcase",
@@ -115,12 +85,7 @@
       "draft_path": "drafts/risk-owner-showcase.json",
       "expected_index": 85,
       "expected_level": "HIGH",
-      "is_sufficient_info": true,
-      "artifacts": {
-        "report_json": "output/risk-owner-showcase/report.json",
-        "report_html": "output/risk-owner-showcase/report.html",
-        "share_png": "output/risk-owner-showcase/share-card.png"
-      }
+      "is_sufficient_info": true
     },
     {
       "slug": "ops-shallow",
@@ -132,12 +97,7 @@
       "draft_path": "drafts/ops-shallow.json",
       "expected_index": 0,
       "expected_level": "LOW",
-      "is_sufficient_info": true,
-      "artifacts": {
-        "report_json": "output/ops-shallow/report.json",
-        "report_html": "output/ops-shallow/report.html",
-        "share_png": "output/ops-shallow/share-card.png"
-      }
+      "is_sufficient_info": true
     },
     {
       "slug": "ops-deep",
@@ -149,12 +109,7 @@
       "draft_path": "drafts/ops-deep.json",
       "expected_index": 45,
       "expected_level": "MEDIUM",
-      "is_sufficient_info": true,
-      "artifacts": {
-        "report_json": "output/ops-deep/report.json",
-        "report_html": "output/ops-deep/report.html",
-        "share_png": "output/ops-deep/share-card.png"
-      }
+      "is_sufficient_info": true
     },
     {
       "slug": "writing-detailed",
@@ -166,12 +121,7 @@
       "draft_path": "drafts/writing-detailed.json",
       "expected_index": 35,
       "expected_level": "MEDIUM",
-      "is_sufficient_info": true,
-      "artifacts": {
-        "report_json": "output/writing-detailed/report.json",
-        "report_html": "output/writing-detailed/report.html",
-        "share_png": "output/writing-detailed/share-card.png"
-      }
+      "is_sufficient_info": true
     },
     {
       "slug": "writing-concise",
@@ -183,12 +133,7 @@
       "draft_path": "drafts/writing-concise.json",
       "expected_index": 35,
       "expected_level": "MEDIUM",
-      "is_sufficient_info": true,
-      "artifacts": {
-        "report_json": "output/writing-concise/report.json",
-        "report_html": "output/writing-concise/report.html",
-        "share_png": "output/writing-concise/share-card.png"
-      }
+      "is_sufficient_info": true
     },
     {
       "slug": "operations-injection",
@@ -200,12 +145,7 @@
       "draft_path": "drafts/operations-injection.json",
       "expected_index": 10,
       "expected_level": "LOW",
-      "is_sufficient_info": true,
-      "artifacts": {
-        "report_json": "output/operations-injection/report.json",
-        "report_html": "output/operations-injection/report.html",
-        "share_png": "output/operations-injection/share-card.png"
-      }
+      "is_sufficient_info": true
     },
     {
       "slug": "operations-demographics",
@@ -217,12 +157,43 @@
       "draft_path": "drafts/operations-demographics.json",
       "expected_index": 10,
       "expected_level": "LOW",
-      "is_sufficient_info": true,
-      "artifacts": {
-        "report_json": "output/operations-demographics/report.json",
-        "report_html": "output/operations-demographics/report.html",
-        "share_png": "output/operations-demographics/share-card.png"
-      }
+      "is_sufficient_info": true
+    },
+    {
+      "slug": "knowledge-flow-builder",
+      "scenario": "流程管理专员",
+      "input_type": "TEXT",
+      "resume_path": "resumes/knowledge-flow-builder.txt",
+      "resume_sha256": "9d6f3117e208ecdfdfd7e2c77fef830905688f1f81b428922f077400a0ae42c2",
+      "source_text_path": "source-texts/knowledge-flow-builder.txt",
+      "draft_path": "drafts/knowledge-flow-builder.json",
+      "expected_index": 60,
+      "expected_level": "MEDIUM",
+      "is_sufficient_info": true
+    },
+    {
+      "slug": "knowledge-standard-owner",
+      "scenario": "标准与口径专员",
+      "input_type": "TEXT",
+      "resume_path": "resumes/knowledge-standard-owner.txt",
+      "resume_sha256": "aeee9450aae2f7893429bc2418c2bf8572a1d0de281ae3bf436bc007b80321c9",
+      "source_text_path": "source-texts/knowledge-standard-owner.txt",
+      "draft_path": "drafts/knowledge-standard-owner.json",
+      "expected_index": 20,
+      "expected_level": "LOW",
+      "is_sufficient_info": true
+    },
+    {
+      "slug": "knowledge-vendor-manager",
+      "scenario": "供应商管理专员",
+      "input_type": "TEXT",
+      "resume_path": "resumes/knowledge-vendor-manager.txt",
+      "resume_sha256": "c09aec443a84fa30829045cff637ad3614ad17bfb62019586739b40ee591dc79",
+      "source_text_path": "source-texts/knowledge-vendor-manager.txt",
+      "draft_path": "drafts/knowledge-vendor-manager.json",
+      "expected_index": 35,
+      "expected_level": "MEDIUM",
+      "is_sufficient_info": true
     }
   ]
 }
