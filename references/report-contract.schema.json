@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://local.example/ai-task-exposure/report-contract-5.0.0.schema.json",
+  "$id": "https://local.example/ai-task-exposure/report-contract-5.1.0.schema.json",
   "title": "Work Task AI Exposure Final Report",
   "type": "object",
   "additionalProperties": false,
@@ -20,10 +20,10 @@
   ],
   "properties": {
     "schema_version": {
-      "const": "5.0.0"
+      "const": "5.1.0"
     },
     "rule_version": {
-      "const": "5.0.0"
+      "const": "5.1.0"
     },
     "report_metadata": {
       "type": "object",

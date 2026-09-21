@@ -1,6 +1,6 @@
 {
-  "schema_version": "5.0.0",
-  "rule_version": "5.0.0",
+  "schema_version": "5.1.0",
+  "rule_version": "5.1.0",
   "report_metadata": {
     "report_id": "content-calibrator",
     "generated_at": "2026-09-11T20:00:00+08:00",

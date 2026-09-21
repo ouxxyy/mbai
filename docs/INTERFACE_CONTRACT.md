@@ -1,6 +1,6 @@
 # 中间接口契约
 
-契约版本：`5.0.0`，版本单一来源为 `scripts/version.py`，机器格式见 `references/report-contract.schema.json`。
+契约版本：`5.1.0`，版本单一来源为 `scripts/version.py`，机器格式见 `references/report-contract.schema.json`。
 
 ## 数据流
 

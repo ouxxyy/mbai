@@ -1,6 +1,6 @@
 {
   "generated_at": "2026-09-11T20:00:00+08:00",
-  "rule_version": "5.0.0",
+  "rule_version": "5.1.0",
   "fictional_data_only": true,
   "cases": [
     {
@@ -13,19 +13,31 @@
       "draft_path": "drafts/operations-repetitive.json",
       "expected_index": 10,
       "expected_level": "LOW",
-      "is_sufficient_info": true
+      "is_sufficient_info": true,
+      "artifacts": {
+        "report_json": "output/operations-repetitive/report.json",
+        "report_html": "output/operations-repetitive/report.html",
+        "share_png": "output/operations-repetitive/share-card.png",
+        "ocr_text": "output/operations-repetitive/share-card.ocr.txt"
+      }
     },
     {
       "slug": "content-calibrator",
       "scenario": "内容编辑",
       "input_type": "DOCX",
       "resume_path": "resumes/content-calibrator.docx",
-      "resume_sha256": "ddf35f7cbbf28e513fe61e867445b8c2ef55d4e316ce5b5bce50cb5ae1e4983e",
+      "resume_sha256": "93144704ea7d726f0c4275b850ec6a0e1b2ff8741502600d1ad569b84ddf7a05",
       "source_text_path": "source-texts/content-calibrator.txt",
       "draft_path": "drafts/content-calibrator.json",
       "expected_index": 40,
       "expected_level": "MEDIUM",
-      "is_sufficient_info": true
+      "is_sufficient_info": true,
+      "artifacts": {
+        "report_json": "output/content-calibrator/report.json",
+        "report_html": "output/content-calibrator/report.html",
+        "share_png": "output/content-calibrator/share-card.png",
+        "ocr_text": "output/content-calibrator/share-card.ocr.txt"
+      }
     },
     {
       "slug": "technical-execution",
@@ -37,7 +49,13 @@
       "draft_path": "drafts/technical-execution.json",
       "expected_index": 50,
       "expected_level": "MEDIUM",
-      "is_sufficient_info": true
+      "is_sufficient_info": true,
+      "artifacts": {
+        "report_json": "output/technical-execution/report.json",
+        "report_html": "output/technical-execution/report.html",
+        "share_png": "output/technical-execution/share-card.png",
+        "ocr_text": "output/technical-execution/share-card.ocr.txt"
+      }
     },
     {
       "slug": "client-coordination",
@@ -49,7 +67,13 @@
       "draft_path": "drafts/client-coordination.json",
       "expected_index": 75,
       "expected_level": "HIGH",
-      "is_sufficient_info": true
+      "is_sufficient_info": true,
+      "artifacts": {
+        "report_json": "output/client-coordination/report.json",
+        "report_html": "output/client-coordination/report.html",
+        "share_png": "output/client-coordination/share-card.png",
+        "ocr_text": "output/client-coordination/share-card.ocr.txt"
+      }
     },
     {
       "slug": "project-owner",
@@ -61,7 +85,13 @@
       "draft_path": "drafts/project-owner.json",
       "expected_index": 65,
       "expected_level": "HIGH",
-      "is_sufficient_info": true
+      "is_sufficient_info": true,
+      "artifacts": {
+        "report_json": "output/project-owner/report.json",
+        "report_html": "output/project-owner/report.html",
+        "share_png": "output/project-owner/share-card.png",
+        "ocr_text": "output/project-owner/share-card.ocr.txt"
+      }
     },
     {
       "slug": "sparse-information",
@@ -73,7 +103,13 @@
       "draft_path": "drafts/sparse-information.json",
       "expected_index": null,
       "expected_level": "UNKNOWN",
-      "is_sufficient_info": false
+      "is_sufficient_info": false,
+      "artifacts": {
+        "report_json": "output/sparse-information/report.json",
+        "report_html": "output/sparse-information/report.html",
+        "share_png": "output/sparse-information/share-card.png",
+        "ocr_text": "output/sparse-information/share-card.ocr.txt"
+      }
     },
     {
       "slug": "risk-owner-showcase",
@@ -85,7 +121,13 @@
       "draft_path": "drafts/risk-owner-showcase.json",
       "expected_index": 85,
       "expected_level": "HIGH",
-      "is_sufficient_info": true
+      "is_sufficient_info": true,
+      "artifacts": {
+        "report_json": "output/risk-owner-showcase/report.json",
+        "report_html": "output/risk-owner-showcase/report.html",
+        "share_png": "output/risk-owner-showcase/share-card.png",
+        "ocr_text": "output/risk-owner-showcase/share-card.ocr.txt"
+      }
     },
     {
       "slug": "ops-shallow",
@@ -97,7 +139,13 @@
       "draft_path": "drafts/ops-shallow.json",
       "expected_index": 0,
       "expected_level": "LOW",
-      "is_sufficient_info": true
+      "is_sufficient_info": true,
+      "artifacts": {
+        "report_json": "output/ops-shallow/report.json",
+        "report_html": "output/ops-shallow/report.html",
+        "share_png": "output/ops-shallow/share-card.png",
+        "ocr_text": "output/ops-shallow/share-card.ocr.txt"
+      }
     },
     {
       "slug": "ops-deep",
@@ -109,7 +157,13 @@
       "draft_path": "drafts/ops-deep.json",
       "expected_index": 45,
       "expected_level": "MEDIUM",
-      "is_sufficient_info": true
+      "is_sufficient_info": true,
+      "artifacts": {
+        "report_json": "output/ops-deep/report.json",
+        "report_html": "output/ops-deep/report.html",
+        "share_png": "output/ops-deep/share-card.png",
+        "ocr_text": "output/ops-deep/share-card.ocr.txt"
+      }
     },
     {
       "slug": "writing-detailed",
@@ -121,7 +175,13 @@
       "draft_path": "drafts/writing-detailed.json",
       "expected_index": 35,
       "expected_level": "MEDIUM",
-      "is_sufficient_info": true
+      "is_sufficient_info": true,
+      "artifacts": {
+        "report_json": "output/writing-detailed/report.json",
+        "report_html": "output/writing-detailed/report.html",
+        "share_png": "output/writing-detailed/share-card.png",
+        "ocr_text": "output/writing-detailed/share-card.ocr.txt"
+      }
     },
     {
       "slug": "writing-concise",
@@ -133,7 +193,13 @@
       "draft_path": "drafts/writing-concise.json",
       "expected_index": 35,
       "expected_level": "MEDIUM",
-      "is_sufficient_info": true
+      "is_sufficient_info": true,
+      "artifacts": {
+        "report_json": "output/writing-concise/report.json",
+        "report_html": "output/writing-concise/report.html",
+        "share_png": "output/writing-concise/share-card.png",
+        "ocr_text": "output/writing-concise/share-card.ocr.txt"
+      }
     },
     {
       "slug": "operations-injection",
@@ -145,7 +211,13 @@
       "draft_path": "drafts/operations-injection.json",
       "expected_index": 10,
       "expected_level": "LOW",
-      "is_sufficient_info": true
+      "is_sufficient_info": true,
+      "artifacts": {
+        "report_json": "output/operations-injection/report.json",
+        "report_html": "output/operations-injection/report.html",
+        "share_png": "output/operations-injection/share-card.png",
+        "ocr_text": "output/operations-injection/share-card.ocr.txt"
+      }
     },
     {
       "slug": "operations-demographics",
@@ -157,7 +229,13 @@
       "draft_path": "drafts/operations-demographics.json",
       "expected_index": 10,
       "expected_level": "LOW",
-      "is_sufficient_info": true
+      "is_sufficient_info": true,
+      "artifacts": {
+        "report_json": "output/operations-demographics/report.json",
+        "report_html": "output/operations-demographics/report.html",
+        "share_png": "output/operations-demographics/share-card.png",
+        "ocr_text": "output/operations-demographics/share-card.ocr.txt"
+      }
     },
     {
       "slug": "knowledge-flow-builder",
@@ -169,7 +247,13 @@
       "draft_path": "drafts/knowledge-flow-builder.json",
       "expected_index": 60,
       "expected_level": "MEDIUM",
-      "is_sufficient_info": true
+      "is_sufficient_info": true,
+      "artifacts": {
+        "report_json": "output/knowledge-flow-builder/report.json",
+        "report_html": "output/knowledge-flow-builder/report.html",
+        "share_png": "output/knowledge-flow-builder/share-card.png",
+        "ocr_text": "output/knowledge-flow-builder/share-card.ocr.txt"
+      }
     },
     {
       "slug": "knowledge-standard-owner",
@@ -181,7 +265,13 @@
       "draft_path": "drafts/knowledge-standard-owner.json",
       "expected_index": 20,
       "expected_level": "LOW",
-      "is_sufficient_info": true
+      "is_sufficient_info": true,
+      "artifacts": {
+        "report_json": "output/knowledge-standard-owner/report.json",
+        "report_html": "output/knowledge-standard-owner/report.html",
+        "share_png": "output/knowledge-standard-owner/share-card.png",
+        "ocr_text": "output/knowledge-standard-owner/share-card.ocr.txt"
+      }
     },
     {
       "slug": "knowledge-vendor-manager",
@@ -193,7 +283,13 @@
       "draft_path": "drafts/knowledge-vendor-manager.json",
       "expected_index": 35,
       "expected_level": "MEDIUM",
-      "is_sufficient_info": true
+      "is_sufficient_info": true,
+      "artifacts": {
+        "report_json": "output/knowledge-vendor-manager/report.json",
+        "report_html": "output/knowledge-vendor-manager/report.html",
+        "share_png": "output/knowledge-vendor-manager/share-card.png",
+        "ocr_text": "output/knowledge-vendor-manager/share-card.ocr.txt"
+      }
     }
   ]
 }

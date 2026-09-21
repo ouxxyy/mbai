@@ -3,6 +3,7 @@ import unittest
 from scripts.finalize_report import finalize_report
 from scripts.role_match import ROLE_BY_CODE
 from scripts.validate_report import ReportValidationError, assert_valid_report
+from scripts.version import RULE_VERSION, SCHEMA_VERSION
 from tests.sample_factory import valid_draft
 
 
@@ -10,8 +11,8 @@ class FinalizeReportTest(unittest.TestCase):
     def test_calculates_metrics_and_syncs_share_card(self):
         report = finalize_report(valid_draft())
 
-        self.assertEqual(report["schema_version"], "5.0.0")
-        self.assertEqual(report["rule_version"], "5.0.0")
+        self.assertEqual(report["schema_version"], SCHEMA_VERSION)
+        self.assertEqual(report["rule_version"], RULE_VERSION)
         # 内部替代 60/MEDIUM → 展示 40/MEDIUM（先取整后取补）。
         self.assertEqual(report["metrics"]["irreplaceability_index"], 40)
         self.assertEqual(report["metrics"]["irreplaceability_level"], "MEDIUM")
@@ -94,7 +95,7 @@ class ValidateReportTest(unittest.TestCase):
         report = finalize_report(valid_draft())
         report["schema_version"] = "3.0.0"
 
-        with self.assertRaisesRegex(ReportValidationError, "5.0.0"):
+        with self.assertRaisesRegex(ReportValidationError, SCHEMA_VERSION):
             assert_valid_report(report)
 
     def test_rejects_role_name_that_disagrees_with_directory(self):

@@ -11,8 +11,8 @@ class ScaffoldTest(unittest.TestCase):
         schema_path = ROOT / "references" / "report-contract.schema.json"
         schema = json.loads(schema_path.read_text(encoding="utf-8"))
 
-        self.assertEqual(schema["properties"]["schema_version"]["const"], "5.0.0")
-        from scripts.version import RULE_VERSION as _RULE
+        from scripts.version import RULE_VERSION as _RULE, SCHEMA_VERSION as _SCHEMA
+        self.assertEqual(schema["properties"]["schema_version"]["const"], _SCHEMA)
         self.assertEqual(schema["properties"]["rule_version"]["const"], _RULE)
         self.assertIn("irreplaceability_index", schema["properties"]["metrics"]["required"])
         self.assertIn("irreplaceability_level", schema["properties"]["metrics"]["required"])

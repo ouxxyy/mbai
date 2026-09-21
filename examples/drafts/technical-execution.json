@@ -1,6 +1,6 @@
 {
-  "schema_version": "5.0.0",
-  "rule_version": "5.0.0",
+  "schema_version": "5.1.0",
+  "rule_version": "5.1.0",
   "report_metadata": {
     "report_id": "technical-execution",
     "generated_at": "2026-09-11T20:00:00+08:00",
@@ -28,8 +28,8 @@
   },
   "profile": {
     "sanitized_category": "企业软件 / 后端研发",
-    "situation_paragraph": "先把每项任务说清楚：输入是什么、输出到哪、由谁确认——证据齐了，结论才站得住。",
-    "index_note": "分数越高，当前工作越依赖人的判断、协作或现场处理。",
+    "situation_paragraph": "你的工作由三块组成：45% 依据产品需求实现常规 API 与数据校验，25% 编写单元测试、接口文档和迁移说明，30% 值班处理生产故障。前两块结构化程度高，AI 能接手大部分初稿；真正离不开你的是故障处置里“结合日志在回滚与热修复之间拍板，并向业务说明影响”。优先改造切口只有一个：先改造占时 25% 的测试与文档任务——边界清楚、结果可验证，改造过程还能直接产出第一份求职作品。",
+    "index_note": "分数衡量的是任务结构与 AI 能力的重合度，不代表个人能力，也不能用来推断市场价值、失业概率或裁员风险。",
     "role": {
       "code": "GATEKEEPER_WORKER",
       "name": "上线守门员",
@@ -147,7 +147,14 @@
   ],
   "human_edge": [
     {
-      "summary": "能把日志证据、系统边界和业务损失放进同一个故障决定里。",
+      "summary": "【已有事实支持的贡献】合并前的边界检查由你本人负责（流程中明确的人工关口）；值班时结合日志在回滚与热修复之间做决定，并向业务说明影响。两项都来自工作事实本身：AI 接走初稿之后，这两个判断关口仍然落在你身上。",
+      "source_task_ids": [
+        "task-api",
+        "task-incident"
+      ]
+    },
+    {
+      "summary": "【仍需验证的能力】这些判断目前只是“做过”，还没有可出示的记录：边界检查清单、故障决策卡、改造前后的对照数据都缺失。它们能否成为面试时站得住的证据，需要先完成下面第 2、3 个行动再下结论——在此之前不把它们写成已完成的优势。",
       "source_task_ids": [
         "task-api",
         "task-incident"
@@ -156,35 +163,35 @@
   ],
   "action_plan": {
     "hand_to_ai": {
-      "title": "让 AI 先写接口测试矩阵",
-      "action": "输入接口契约，让 AI 生成正常、边界和失败路径清单。",
-      "deliverable": "测试矩阵与首版用例",
-      "acceptance_criteria": "人工补入至少 3 个真实领域边界后全部运行通过。",
-      "human_checkpoint": "必须实际运行，不能只审阅生成文本。",
-      "grounded_evidence": "已有接口测试与文档任务。",
+      "title": "改造任务：让 AI 跑通“测试与文档”",
+      "action": "以占时 25% 的测试与文档任务为对象：把接口代码和现有文档交给 AI，生成单测初稿、接口说明和迁移说明草稿；你负责补真实边界用例、实际运行验证、修正 AI 错误。",
+      "deliverable": "一套可运行的测试矩阵＋修订后的接口文档（保留 AI 草稿与人工修订的对照）",
+      "acceptance_criteria": "全部用例实际运行通过，且留下至少 3 处“AI 初稿有误、由你修正”的具体差异记录。",
+      "human_checkpoint": "每条用例必须实际运行，不得只审阅生成文本；边界用例由你手动补入并逐条确认。",
+      "grounded_evidence": "源材料事实：编写单元测试、接口文档和迁移说明，约占 25%。",
       "source_task_ids": [
         "task-tests-docs",
         "task-api"
       ]
     },
     "level_up": {
-      "title": "强化故障决策复盘",
-      "action": "为三次虚构故障写回滚阈值、证据和事后验证。",
-      "deliverable": "三张故障决策卡",
-      "acceptance_criteria": "每张含观测信号、两个选项、决定和恢复指标。",
-      "human_checkpoint": "明确哪些信息不足时必须升级。",
-      "grounded_evidence": "已有值班回滚与业务说明经验。",
+      "title": "练习关键判断：把故障处置写成决策卡",
+      "action": "取最近三次值班故障（无真实案例时用演练替代），每张卡写清：观测信号、回滚与热修复两个选项、你的决定与依据、恢复指标与事后验证。这是同一条路径的第二步：改造腾出的时间，用来练最离不开你的判断。",
+      "deliverable": "3 张故障决策卡",
+      "acceptance_criteria": "每张卡四要素齐全（信号、选项、决定、恢复验证），并完成一次同事或主管复盘，确认判断依据成立。",
+      "human_checkpoint": "每张卡必须写明“哪些信息不足时升级给谁”，不允许含糊为“看情况”。",
+      "grounded_evidence": "源材料事实：值班处理生产故障，结合日志决定回滚或热修复并向业务说明影响，约占 30%。",
       "source_task_ids": [
         "task-incident"
       ]
     },
     "proof_7d": {
-      "title": "做一个可复现的边界项目",
-      "action": "实现一个小型 API，并展示 AI 初稿与人工边界修订。",
-      "deliverable": "代码仓库 + README + 测试日志",
-      "acceptance_criteria": "7 天内可本机运行，含 8 个边界测试和一次差异说明。",
-      "human_checkpoint": "移除任何原项目代码和客户信息。",
-      "grounded_evidence": "已有 API 实现和边界检查经验。",
+      "title": "留下求职证据：7 天搭出一页“AI 改造对照”作品",
+      "action": "把行动一的改造过程整理成一页求职作品，按五要素组织：①原问题（测试与文档耗时）②AI 处理步骤 ③本人取舍（补了哪些边界、改了哪些错）④实际对照结果（用例通过数、耗时对比）⑤简历与面试使用方式。未跑完的实验一律标“待填写”，不得写成已完成成果。",
+      "deliverable": "一页作品（Markdown 或 PDF）＋一段可直接放进简历的项目描述",
+      "acceptance_criteria": "第 7 天作品五要素框架齐备，且至少“AI 处理步骤”与“实际对照结果”两栏填入实测数据；简历描述完成脱敏自查。作品不要求 7 天内全部完成。",
+      "human_checkpoint": "对外展示前脱敏：移除公司、学校、客户、项目名等全部标识；简历描述不得引用未验证的结果。",
+      "grounded_evidence": "源材料事实：实现常规 API 与数据校验，合并前本人负责边界检查，约占 45%。",
       "source_task_ids": [
         "task-api",
         "task-tests-docs"
@@ -202,7 +209,7 @@
     "irreplaceability_index": null,
     "irreplaceability_level": "UNKNOWN",
     "snarky_quote": "代码初稿越来越便宜，凌晨两点决定回滚的那五分钟反而越来越贵。",
-    "value_line": "能把日志证据、系统边界和业务损失放进同一个故障决定里。",
+    "value_line": "合并前把关边界，值班时拍板回滚：AI 接走初稿之后，这类判断仍是关口。",
     "source_task_ids": [
       "task-api",
       "task-incident"

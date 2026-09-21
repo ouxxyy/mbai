@@ -4,7 +4,7 @@ description: 基于中文工作材料（简历、年度工作总结、或一段�
 compatibility: 任意支持 Agent Skills（SKILL.md）格式的 agent 工具；任意装有 Python 3.11+ 的系统；文件型 PDF 解析依赖 macOS 系统 PDFKit，其他平台请用 DOCX/TXT/MD 或粘贴文本；命令行 PNG 需要 Chrome，HTML 内仍可纯离线导出。
 allowed-tools: Read, Write, Bash, AskUserQuestion
 metadata:
-  version: 5.0.0
+  version: 5.1.0
   language: zh-CN
 ---
 

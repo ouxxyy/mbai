@@ -1,10 +1,12 @@
 from copy import deepcopy
 
+from scripts.version import RULE_VERSION, SCHEMA_VERSION
+
 
 def valid_draft():
     draft = {
-        "schema_version": "5.0.0",
-        "rule_version": "5.0.0",
+        "schema_version": SCHEMA_VERSION,
+        "rule_version": RULE_VERSION,
         "report_metadata": {
             "report_id": "fixture-project-owner",
             "generated_at": "2026-09-11T12:00:00+08:00",

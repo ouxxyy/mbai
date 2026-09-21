@@ -33,7 +33,7 @@ SKILL_LABELS = {
     "coordination": "协作协调",
     "accountability": "责任承担",
 }
-ACTION_LABELS = {"hand_to_ai": "交给 AI", "level_up": "强化自己", "proof_7d": "拿出证据"}
+ACTION_LABELS = {"hand_to_ai": "改造任务", "level_up": "练习关键判断", "proof_7d": "留下求职证据"}
 
 
 def _e(value: Any) -> str:
@@ -630,7 +630,7 @@ def render_report(report: dict[str, Any]) -> str:
     </section>
 
     <section id="task-breakdown">
-      <div class="section-head"><div><span class="section-no">02 / 逐项拆开看</span><h2>哪些交给 AI、哪些还得我管</h2></div><p class="section-note">展开具体任务，查看哪些动作可由 AI 完成，以及这个判断的依据。</p></div>
+      <div class="section-head"><div><span class="section-no">02 / 逐项拆开看</span><h2>AI 能接手哪些，哪些还得我管</h2></div><p class="section-note">展开具体任务，查看哪些动作可由 AI 完成，以及这个判断的依据。</p></div>
       <div class="task-list">{tasks}</div>
     </section>
 

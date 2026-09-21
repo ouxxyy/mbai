@@ -209,3 +209,31 @@ class ShareCardContentTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+    def test_action_labels_use_5_1_0_display_names(self):
+        html = render_report(finalize_report(draft_for_case(
+            {case["slug"]: case for case in case_definitions()}["technical-execution"]
+        )))
+
+        for label in ("改造任务", "练习关键判断", "留下求职证据"):
+            self.assertIn(f'class="action-label">{label}</div>', html)
+        # ADR 0002：旧展示名退役，不再出现在行动卡标签位。
+        for old_label in ("交给 AI", "强化自己", "拿出证据"):
+            self.assertNotIn(f'class="action-label">{old_label}</div>', html)
+        # 02 节固定标题同步新行动词汇。
+        self.assertIn("<h2>AI 能接手哪些，哪些还得我管</h2>", html)
+        self.assertNotIn("<h2>哪些交给 AI、哪些还得我管</h2>", html)
+
+    def test_technical_case_renders_accepted_5_1_0_content(self):
+        report = finalize_report(draft_for_case(
+            {case["slug"]: case for case in case_definitions()}["technical-execution"]
+        ))
+
+        self.assertEqual(report["metrics"]["irreplaceability_index"], 50)
+        self.assertEqual(report["metrics"]["irreplaceability_level"], "MEDIUM")
+        self.assertIn("优先改造切口只有一个", report["profile"]["situation_paragraph"])
+        self.assertEqual(len(report["human_edge"]), 2)
+        self.assertIn("【已有事实支持的贡献】", report["human_edge"][0]["summary"])
+        self.assertIn("【仍需验证的能力】", report["human_edge"][1]["summary"])
+        html = render_report(report)
+        self.assertIn("待填写", html)
