@@ -1,6 +1,20 @@
-# MBAI · 工作任务 AI 不可替代指数
+# MBAI · 工作任务 AI 不可替代指数｜任务分析与替代风险自评
+
+提供简历、工作总结或任务描述，MBAI 会拆解工作中的自动化空间、个人贡献和证据缺口，输出解释性自评与行动建议；Skill 路径可生成离线报告。它用于职业反思，不预测失业或裁员。
 
 MBAI（Me, Beyond AI · 我，在 AI 之上）是测评品牌名；正式指标名是「工作任务 AI 不可替代指数」——分数越高，说明你的工作越依赖你本人。
+
+[使用示例](#quick-example) · [开始使用](#quick-start) · [English](#english-overview)
+
+<a id="quick-example"></a>
+
+## 一次使用示例
+
+**虚构输入：** 后端开发的工作由写 API（45%）、测试与文档（25%）、值班处理生产故障（30%）组成。
+
+**输出：** 分析哪些任务可先由 AI 接手、哪些判断仍需要本人，以及应补哪些贡献证据。仓库合成案例的报告和脱敏分享卡见 [结果示例](#结果示例)，该案例分数不代表你的结果。
+
+[两种用法](#quick-start) 中，Prompt 给估算结果，Skill 使用本地脚本复算。
 
 ## 适用人群
 
@@ -25,6 +39,8 @@ MBAI（Me, Beyond AI · 我，在 AI 之上）是测评品牌名；正式指标�
 </p>
 
 这份报告的结论是：不可替代指数 50，中不可替代；优先改造的是那 25% 的测试与文档任务，它边界清楚、结果可验证，改造过程本身就是第一份求职作品的素材。三个行动连成一条路径：改造任务、练习关键判断、留下求职证据，第 7 天有第一个可检查的进展。
+
+<a id="quick-start"></a>
 
 ## 两种用法
 
@@ -90,6 +106,39 @@ python3 -m scripts.build_report --draft examples/drafts/risk-owner-showcase.json
 - 分享卡只能使用脱敏字段：姓名、联系方式、公司、学校、客户、项目名命中隐私门禁时必须返工。
 - 渲染器只消费已验证的最终 JSON，不在 HTML 阶段重新分析。
 - 请勿向本仓库提交真实简历；`examples/` 中全部为虚构验收数据。
+
+## 常见问题
+
+### 这个分数能预测我会不会被裁吗？
+
+不能。这是自建、解释性的任务级评分，不是失业概率、裁员预测或个人价值判定。
+
+### 复制 Prompt 和安装 Skill 有什么区别？
+
+Prompt 路径给出未经过本地脚本校验的估算；Skill 路径按照冻结规则由本地脚本评分并生成报告。
+
+### 报告离线打开，分析也完全离线吗？
+
+离线描述的是报告浏览。材料如何被模型处理取决于所用宿主，不能因此推断分析全在本地。
+
+### 可以商用或随意处理 PDF 吗？
+
+项目采用 CC BY-NC 4.0，需署名且不可商用。文件型 PDF 的解析依赖 macOS PDFKit；其他系统使用 DOCX/TXT/MD 或粘贴文本。
+
+<a id="english-overview"></a>
+
+## English overview
+
+MBAI is a task-level AI assessment for career reflection. It identifies automatable work, personal contributions and evidence gaps, with an offline report and a redacted sharing card. The index is an explanatory rubric, not a prediction of layoffs or unemployment.
+
+Choose the [Prompt or Skill workflow](#quick-start). Prompt results are estimates; the Skill uses deterministic local scoring. Python 3.11+ is required for scripts, and file-based PDF extraction uses macOS PDFKit. Licensed under CC BY-NC 4.0: attribution is required and commercial use is not permitted.
+
+## 相关项目
+
+[欧八同学的 AI Skills 与跳槽涨薪工具合集](https://github.com/ouxxyy/ouba-classmate)，还可以接着使用：
+
+- [把已有贡献证据整理进简历](https://github.com/ouxxyy/jd-resume-match)
+- [练习讲清个人贡献](https://github.com/ouxxyy/ai-interviewer)
 
 ## 作者
 
