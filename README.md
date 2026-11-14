@@ -1,9 +1,25 @@
 # AI转型大师（mbai）｜MBAI 工作任务 AI 不可替代指数与替代风险自评
 
-> ⭐ **旗舰合集入口：本项目已收录于 [`ouxxyy/ouba-classmate`](https://github.com/ouxxyy/ouba-classmate)** [![GitHub Repo stars](https://img.shields.io/github/stars/ouxxyy/ouba-classmate?style=flat-square&logo=github&label=ouba-classmate%20Stars&color=0284c7)](https://github.com/ouxxyy/ouba-classmate)
-> - 🚀 **建议直接前往 [合集主仓 `ouba-classmate` 点 Star 收藏](https://github.com/ouxxyy/ouba-classmate)**：[一行安装全部 Skill](https://github.com/ouxxyy/ouba-classmate#install) · [查看《中文 AI 求职 Skill 公开横评》](https://github.com/ouxxyy/ouba-classmate/tree/main/benchmark)
-> - 🛡️ **免安装求职防身与自测**：[《2026 求职防身情报库：24道大厂深挖母题 × JD黑话解码 × 接Offer背调18问》](https://github.com/ouxxyy/ouba-classmate/blob/main/radar/README.md) · [⚡ 30秒在线速测：岗位 AI 不可替代指数 & 简历含金量诊断小票](https://ouxxyy.github.io/ouba-classmate/#career-radar)
-> - 💻 **终端 1 秒为开源主仓点亮 Star**：`gh api -X PUT /user/starred/ouxxyy/ouba-classmate`
+<!-- hero:start -->
+
+<p>
+  <a href="https://github.com/ouxxyy/ouba-classmate"><img src="assets/hero-card.svg" width="100%" alt="mbai — 工作任务 AI 不可替代指数与个人 AI 智囊团"></a>
+</p>
+
+**拆解你日常工作任务的「AI 不可替代指数」并识别证据缺口，同时支持召唤 4 核 AI 智囊团完成高风险职业决策复盘（用于个人职业反思，非裁员预测）。**  
+<sub>Measure task-level AI irreplaceability index and assemble a 4-perspective AI advisory board for career reflection (not a layoff predictor).</sub>
+
+<p>
+  <a href="https://github.com/ouxxyy/ouba-classmate"><img src="https://img.shields.io/badge/SUITE-ouba--classmate-1f6feb?style=for-the-badge" alt="ouba-classmate Suite"></a>
+  <a href="#quick-example"><img src="https://img.shields.io/badge/Quick_Example-0969da?style=for-the-badge" alt="Quick Example"></a>
+  <a href="#quick-start"><img src="https://img.shields.io/badge/Quick_Start-8957e5?style=for-the-badge" alt="Quick Start"></a>
+  <a href="#english-overview"><img src="https://img.shields.io/badge/English-30363d?style=for-the-badge" alt="English"></a>
+  <a href="https://github.com/ouxxyy"><img src="https://img.shields.io/badge/PROFILE-ouxxyy-30363d?style=for-the-badge" alt="Author Profile"></a>
+</p>
+
+<img src="assets/divider.svg" width="100%" alt="">
+
+<!-- hero:end -->
 
 提供简历、工作总结或任务描述，MBAI 会拆解工作中的自动化空间、个人贡献和证据缺口，输出解释性自评与行动建议；Skill 路径可生成离线报告。它用于职业反思，不预测失业或裁员。
 
@@ -141,13 +157,29 @@ MBAI is a task-level AI assessment for career reflection. It identifies automata
 
 Choose the [Prompt or Skill workflow](#quick-start). Prompt results are estimates; the Skill uses deterministic local scoring. Python 3.11+ is required for scripts, and file-based PDF extraction uses macOS PDFKit. Licensed under CC BY-NC 4.0: attribution is required and commercial use is not permitted.
 
-## 相关项目
+<!-- suite-matrix:start -->
 
-[欧八同学的 AI Skills 与跳槽涨薪工具合集](https://github.com/ouxxyy/ouba-classmate)，还可以接着使用：
+## 更多开源项目 · More from ouba-classmate Suite
 
-- [把已有贡献证据整理进简历](https://github.com/ouxxyy/jd-resume-match)
-- [练习讲清个人贡献](https://github.com/ouxxyy/ai-interviewer)
-- 全部项目与作者主页：[github.com/ouxxyy](https://github.com/ouxxyy)
+> 如果这个项目帮到了你，欢迎去旗舰合集仓 [**`ouxxyy/ouba-classmate`**](https://github.com/ouxxyy/ouba-classmate) 点一颗 Star 或一行安装全部 Skills：
+> `npx skills add ouxxyy/ouba-classmate` · `gh api -X PUT /user/starred/ouxxyy/ouba-classmate`
+
+| 仓库 · Repo | 分类 · Category | 它做什么 · What it does |
+| --- | --- | --- |
+| [`ouba-classmate`](https://github.com/ouxxyy/ouba-classmate) | SUITE · 旗舰合集 | **11 个原创项目总仓 + 一键安装全部 Skills + 在线战力测算与防身情报库**<br><sub>All-in-one Skills suite & benchmark</sub> |
+| [`jd-resume-match`](https://github.com/ouxxyy/jd-resume-match) | CAREER · 求职涨薪 | **AI 简历优化与 JD 匹配体检（确定性公式 + 行号证据）**<br><sub>Deterministic JD matching & line-cited resume audit</sub> |
+| [`ai-interviewer`](https://github.com/ouxxyy/ai-interviewer) | CAREER · 求职涨薪 | **中文语音/文字原话追问 AI 模拟面试官（含在线版）**<br><sub>Chinese voice AI mock interviewer anchored to your answers</sub> |
+| [`job-search`](https://github.com/ouxxyy/job-search) | CAREER · 求职涨薪 | **跨 5 平台实时去重筛岗，输出带来源短名单**<br><sub>5-platform source-backed job search & shortlist builder</sub> |
+| [`sherlock-company`](https://github.com/ouxxyy/sherlock-company) | CAREER · 求职涨薪 | **入职前四态证据公司背调与 Offer 核实清单**<br><sub>Pre-offer employer research with 4-state evidence boundaries</sub> |
+| [`mbai`](https://github.com/ouxxyy/mbai) · **Current** | CAREER · 求职涨薪 | **工作任务 AI 不可替代指数与 4 核决策复盘**<br><sub>Task-level AI irreplaceability index & decision reflection</sub> |
+| [`codex-gif-video`](https://github.com/ouxxyy/codex-gif-video) | CREATIVE · AI 创作 | **69 种风格原生 GIF 与静音 MP4 素材生成 Skill**<br><sub>Native GPT Image 2.6 animated GIF & MP4 generator (69 styles)</sub> |
+| [`storyboard-scavenger`](https://github.com/ouxxyy/storyboard-scavenger) | CREATIVE · AI 创作 | **可灵/即梦/Veo/Sora 七要素 AI 视频分镜工作流**<br><sub>7-element AI video storyboard skill for Kling & Seedance</sub> |
+| [`travel-art-album-skill`](https://github.com/ouxxyy/travel-art-album-skill) | CREATIVE · AI 创作 | **旅行照片艺术画册与单文件离线翻页相册 Skill**<br><sub>Art-styled travel photo proofs & standalone offline HTML flipbook</sub> |
+| [`mystery-skill`](https://github.com/ouxxyy/mystery-skill) | COGNITION · 认知框架 | **Mystery 认知框架与职场心理博弈分析 Skill**<br><sub>Cognitive framework for interview frame & decision study</sub> |
+| [`Attention`](https://github.com/ouxxyy/Attention) | LOCAL APP · 本地工具 | **ActivityWatch 本地专注力、心流时段与切换分析**<br><sub>Local ActivityWatch focus & context-switching dashboard</sub> |
+| [`postapp`](https://github.com/ouxxyy/postapp) | LOCAL APP · 本地工具 | **Chrome 本地摄像头姿态检测与坐姿提醒插件**<br><sub>On-device MoveNet Chrome posture reminder extension</sub> |
+
+<!-- suite-matrix:end -->
 
 <a id="author"></a>
 
@@ -176,3 +208,11 @@ Choose the [Prompt or Skill workflow](#quick-start). Prompt results are estimate
 - **不可商用**：不得将本项目或其改编版本用于商业目的（出售、付费服务、商业产品内置等）。
 - **需保留原作者信息**：分享或修改本项目时，必须署名「欧八同学 / MBAI」、保留 LICENSE 文件，并注明原项目地址与是否修改过内容。
 - MBAI 标识、角色形象与公众号二维码仅用于本项目原作者署名，移除或替换后不得再以 MBAI 名义分发。
+
+<!-- footer:start -->
+
+<p align="center">
+  <a href="https://github.com/ouxxyy"><img src="assets/footer.svg" width="100%" alt="欧八同学 · ouxxyy — Positioning × AI Leverage × Salary Growth"></a>
+</p>
+
+<!-- footer:end -->
