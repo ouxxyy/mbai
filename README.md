@@ -1,5 +1,20 @@
 # AI转型大师（mbai）｜MBAI 工作任务 AI 不可替代指数与替代风险自评
 
+<!-- discovery:start -->
+## 工作任务 AI 替代风险自评与职业转型
+
+**怎么判断自己的哪些工作适合用 AI，哪些贡献仍要自己负责？** 输入工作任务、简历或工作总结，拆解自动化空间、个人贡献与证据缺口，形成解释性自评和行动建议。
+
+Task-level AI automation risk self-assessment for career planning.
+
+**开始使用：** [两种使用方式](#quick-start) · [工作任务示例](#quick-example)。
+
+**使用边界：** 正式指标为“工作任务 AI 不可替代指数”，用于职业反思；不是裁员预测或就业概率。采用 CC BY-NC 4.0，限非商业使用。
+
+[按任务浏览欧八同学的全部工具](https://github.com/ouxxyy/ouba-classmate#按需求找)；如果本项目有帮助，欢迎收藏当前仓库。
+
+<!-- discovery:end -->
+
 <!-- hero:start -->
 
 <p>
