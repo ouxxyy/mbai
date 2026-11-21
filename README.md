@@ -7,12 +7,15 @@
 
 Task-level AI automation risk self-assessment for career planning.
 
+**30 秒核心结论：** 工作任务 AI 不可替代指数（先取整、后取补） · 12 个工作角色分类 · 个人贡献与 7 天内可启动作品梳理 · CC BY-NC 4.0 免费开源 0 元 · 更新于 2026-11-21。
+
+**一键安装 / 收藏：** `npx skills add ouxxyy/ouba-classmate --skill mbai` ｜ `claude plugin marketplace add ouxxyy/ouba-classmate` ｜ `gh api -X PUT /user/starred/ouxxyy/mbai`
+
 **开始使用：** [两种使用方式](#quick-start) · [工作任务示例](#quick-example)。
 
 **使用边界：** 正式指标为“工作任务 AI 不可替代指数”，用于职业反思；不是裁员预测或就业概率。采用 CC BY-NC 4.0，限非商业使用。
 
 [按任务浏览欧八同学的全部工具](https://github.com/ouxxyy/ouba-classmate#按需求找)；如果本项目有帮助，欢迎收藏当前仓库。
-
 <!-- discovery:end -->
 
 <!-- hero:start -->

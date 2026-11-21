@@ -1,0 +1,28 @@
+{
+  "name": "mbai",
+  "version": "3.0.0",
+  "description": "AI转型大师：MBAI 工作任务 AI 不可替代指数（先取整、后取补），任务分析、贡献证据与替代风险自评。",
+  "author": {
+    "name": "欧八同学 (ouxxyy)",
+    "url": "https://github.com/ouxxyy/ouba-classmate"
+  },
+  "repository": "https://github.com/ouxxyy/mbai",
+  "homepage": "https://github.com/ouxxyy/ouba-classmate",
+  "license": "CC-BY-NC-4.0",
+  "keywords": [
+    "ai-task-assessment",
+    "career-planning",
+    "self-assessment",
+    "chinese",
+    "ouba-classmate"
+  ],
+  "skills": "./",
+  "interface": {
+    "displayName": "AI转型大师",
+    "shortDescription": "AI转型大师：MBAI 工作任务 AI 不可替代指数（先取整、后取补），任务分析、贡献证据与替代风险自评。",
+    "developerName": "欧八同学 (ouxxyy)",
+    "category": "Productivity",
+    "websiteURL": "https://github.com/ouxxyy/mbai",
+    "supportURL": "https://github.com/ouxxyy/mbai/issues"
+  }
+}
